@@ -17,7 +17,12 @@ public class HelloApplication extends Application {
         stage.show();
     }
 
+    public static void shawarma(){
+        System.out.println("Hello");
+    }
+
     public static void main(String[] args) {
+        shawarma();
         launch();
     }
 }
