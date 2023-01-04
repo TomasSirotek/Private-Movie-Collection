@@ -61,7 +61,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.movie_collection.private_movie_collection/com.movie_collection.private_movie_collection.HelloApplication
+                                com.movie_collection.private_movie_collection/com.movie_collection.HelloApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

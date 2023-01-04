@@ -1,4 +1,4 @@
-package com.movie_collection.private_movie_collection;
+package com.movie_collection.gui.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

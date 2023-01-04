@@ -1,4 +1,4 @@
-package com.movie_collection.private_movie_collection;
+package com.movie_collection;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
