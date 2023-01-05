@@ -1,4 +1,4 @@
-package com.movie_collection.dal.daoInterface;
+package com.movie_collection.dal.interfaces;
 
 import com.movie_collection.be.Movie;
 

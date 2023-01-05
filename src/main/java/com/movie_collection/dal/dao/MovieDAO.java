@@ -2,7 +2,7 @@ package com.movie_collection.dal.dao;
 
 import com.movie_collection.be.Movie;
 import com.movie_collection.dal.ConnectionManager;
-import com.movie_collection.dal.daoInterface.IMovieDAO;
+import com.movie_collection.dal.interfaces.IMovieDAO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
