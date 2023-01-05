@@ -1,9 +1,11 @@
 package com.movie_collection.dal.dao;
 
-import com.microsoft.sqlserver.jdbc.SQLServerException;
 import com.movie_collection.be.Category;
+import com.movie_collection.be.Movie;
 import com.movie_collection.dal.ConnectionManager;
 import com.movie_collection.dal.interfaces.ICategoryDAO;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -50,8 +52,24 @@ public class CategoryDAO implements ICategoryDAO {
     }
 
 
-    /*public List<Movie> getAllMoviesInTheCategory(int categoryId) {
-        TODO talk to Patrik to choose wich way is better to call query for joint tables.
-    }*/
+    public List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException {
+        // TODO talk to Patrik to choose wich way is better to call query for joint tables.
+        ArrayList<Movie> movies = new ArrayList<>();
+        try (Connection connection = cm.getConnection()) {
+            String sql = "SELECT * FROM Movie INNER JOIN CatMovie ON Movie.id = CatMovie.MovieId WHERE CatMovie.CategoryId = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, categoryId);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                StringProperty title = new SimpleStringProperty(rs.getString("title"));
+                double rating = rs.getDouble("imdbRating");
+                StringProperty path = new SimpleStringProperty(rs.getString("path"));
+                Date lastview = rs.getDate("lastview");
+                movies.add(new Movie(id, title, rating, path, lastview));
+            }
+        }
+        return movies;
+    }
 
 }
