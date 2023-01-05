@@ -31,6 +31,7 @@ public class HelloApplication extends Application {
         //createMovieTest();
         //deleteMovieTest();
         //updateMovieTest();
+        //getMovieTest();
 
 
 
@@ -57,6 +58,15 @@ public class HelloApplication extends Application {
         try {
             Date date = new Date(Instant.now().toEpochMilli());
             md.updateMovie(new Movie(1041, "updateTest", 7.3, "updateTestPath", date));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void getMovieTest() {
+        try {
+            Movie movie = md.getMovie(1017);
+            System.out.println(movie);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
