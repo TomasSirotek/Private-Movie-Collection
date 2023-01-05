@@ -1,16 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.movie_collection.gui.controllers.HelloController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.baseController">
+   <children>
+      <StackPane prefHeight="600.0" prefWidth="800.0">
+         <children>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <top>
+                  <GridPane prefHeight="69.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="21.599996948242186" minHeight="0.0" prefHeight="11.200002098083495" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="69.6" minHeight="10.0" prefHeight="43.999994659423834" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="18.59999694824218" minHeight="0.0" prefHeight="15.400005340576172" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <HBox prefHeight="45.0" prefWidth="400.0" GridPane.rowIndex="1">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Private Collection">
+                                 <HBox.margin>
+                                    <Insets left="18.0" top="10.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <TextField prefHeight="26.0" prefWidth="274.0">
+                                 <HBox.margin>
+                                    <Insets left="8.0" top="8.0" />
+                                 </HBox.margin>
+                              </TextField>
+                           </children>
+                        </HBox>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="The Binary Aces" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="80.0" />
+                           </GridPane.margin>
+                        </Text>
+                     </children>
+                  </GridPane>
+               </top>
+               <left>
+                  <VBox prefHeight="530.0" prefWidth="202.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="170.0" text="All Movies">
+                           <VBox.margin>
+                              <Insets left="20.0" top="20.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="170.0" text="All Movies">
+                           <VBox.margin>
+                              <Insets left="20.0" top="20.0" />
+                           </VBox.margin>
+                        </Button>
+                        <VBox prefHeight="246.0" prefWidth="202.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Categories">
+                                 <VBox.margin>
+                                    <Insets left="20.0" top="20.0" />
+                                 </VBox.margin>
+                              </Text>
+                              <ScrollPane prefHeight="212.0" prefWidth="200.0">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                                </content>
+                                 <VBox.margin>
+                                    <Insets left="20.0" top="10.0" />
+                                 </VBox.margin>
+                              </ScrollPane>
+                           </children>
+                        </VBox>
+                        <Button mnemonicParsing="false" prefHeight="28.0" prefWidth="90.0" text="Add Movie">
+                           <VBox.margin>
+                              <Insets left="60.0" top="20.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" text="Add Category">
+                           <VBox.margin>
+                              <Insets left="60.0" top="20.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+               </left>
+            </BorderPane>
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>
