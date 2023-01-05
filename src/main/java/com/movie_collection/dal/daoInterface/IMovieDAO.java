@@ -32,7 +32,7 @@ public interface IMovieDAO {
      * @return returns a movie object with the id
      * @throws SQLException if the connection to the database fails
      */
-    Movie getMovie(int id) throws SQLException;
+    Movie getMovieById(int id) throws SQLException;
 
     /**
      * Class responsible for getting all movies from the database
