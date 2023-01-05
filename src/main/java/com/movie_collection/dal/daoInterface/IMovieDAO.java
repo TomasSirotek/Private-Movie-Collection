@@ -36,6 +36,7 @@ public interface IMovieDAO {
 
     /**
      * Class responsible for getting all movies from the database
+     *
      * @return List of all movies
      * @throws SQLException if the connection to the database fails
      */
