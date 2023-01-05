@@ -1,7 +1,8 @@
 package com.movie_collection.tests;
 
 import com.movie_collection.be.Movie;
-import com.movie_collection.dal.MovieDAO;
+import com.movie_collection.dal.dao.MovieDAO;
+import com.movie_collection.dal.daoInterface.IMovieDAO;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -10,7 +11,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class MovieTest {
-    private final MovieDAO md = new MovieDAO();
+    private final IMovieDAO md = new MovieDAO();
     public void createMovieTest() {
         try {
             Date date = new Date(Calendar.getInstance().getTime().getTime());

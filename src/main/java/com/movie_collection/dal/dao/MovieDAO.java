@@ -1,12 +1,14 @@
-package com.movie_collection.dal;
+package com.movie_collection.dal.dao;
 
 import com.movie_collection.be.Movie;
+import com.movie_collection.dal.ConnectionManager;
+import com.movie_collection.dal.daoInterface.IMovieDAO;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieDAO {
+public class MovieDAO implements IMovieDAO {
     private static final ConnectionManager cm = new ConnectionManager();
 
     public void createMovie(Movie movie) throws SQLException {
@@ -49,15 +51,13 @@ public class MovieDAO {
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                String name = rs.getString("name");
-                double rating = rs.getDouble("rating");
-                String path = rs.getString("path");
-                Date lastview = rs.getDate("lastview");
-                return new Movie(id, name, rating, path, lastview);
-            }
+            rs.next();
+            String name = rs.getString("name");
+            double rating = rs.getDouble("rating");
+            String path = rs.getString("path");
+            Date lastview = rs.getDate("lastview");
+            return new Movie(id, name, rating, path, lastview);
         }
-        return null;
     }
 
     public List<Movie> getAllMovies() throws SQLException {
