@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 
 public class HelloApplication extends Application {
+    private static final MovieDAO md = new MovieDAO();
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("views/base.fxml"));
@@ -24,12 +25,26 @@ public class HelloApplication extends Application {
 
     public static void main(String[] args) {
         //launch();
+        // createMovieTest();
+        //deleteMovieTest();
 
-        MovieDAO md = new MovieDAO();
+
+
+
+    }
+
+    private static void createMovieTest() {
         try {
             Calendar cal = Calendar.getInstance();
             //cal.set(2021, Calendar.MARCH, 1);
             md.createMovie(new com.movie_collection.be.Movie(1, "test1", 10.0, "test", cal));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+    private static void deleteMovieTest() {
+        try {
+            md.deleteMovie(1039);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

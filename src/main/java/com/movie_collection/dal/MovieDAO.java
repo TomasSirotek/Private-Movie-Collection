@@ -19,4 +19,15 @@ public class MovieDAO {
             pstmt.executeUpdate();
         }
     }
+
+    public void deleteMovie(int id) throws SQLException {
+        try (Connection con = cm.getConnection()) {
+            String sql = "DELETE FROM Movie WHERE id = ?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        }
+    }
+
+
 }
