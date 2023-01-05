@@ -12,6 +12,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.Calendar;
+import java.util.List;
 
 public class HelloApplication extends Application {
     private static final MovieDAO md = new MovieDAO();
@@ -28,14 +29,12 @@ public class HelloApplication extends Application {
 
     public static void main(String[] args) {
         //launch();
+
         //createMovieTest();
         //deleteMovieTest();
         //updateMovieTest();
         //getMovieTest();
-
-
-
-
+        //getAllMoviesTest();
     }
 
     private static void createMovieTest() {
@@ -67,6 +66,15 @@ public class HelloApplication extends Application {
         try {
             Movie movie = md.getMovie(1017);
             System.out.println(movie);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void getAllMoviesTest() {
+        try {
+            List<Movie> movies = md.getAllMovies();
+            System.out.println(movies);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

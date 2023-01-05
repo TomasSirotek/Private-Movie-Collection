@@ -3,6 +3,8 @@ package com.movie_collection.dal;
 import com.movie_collection.be.Movie;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MovieDAO {
     private static final ConnectionManager cm = new ConnectionManager();
@@ -56,5 +58,23 @@ public class MovieDAO {
             }
         }
         return null;
+    }
+
+    public List<Movie> getAllMovies() throws SQLException {
+        List<Movie> movies = new ArrayList<>();
+        try (Connection con = cm.getConnection()){
+            String sql = "SELECT * FROM Movie";
+            PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()){
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                double rating = rs.getDouble("rating");
+                String path = rs.getString("path");
+                Date lastview = rs.getDate("lastview");
+                movies.add(new Movie(id, name, rating, path, lastview));
+            }
+        }
+        return (movies);
     }
 }
