@@ -4,7 +4,7 @@ public enum ViewType {
     MAIN {
         @Override
         public String getFXMLView() {
-            return "hello-view.fxml";
+            return "views/hello-view.fxml";
         }
     },
     MOVIES{

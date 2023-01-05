@@ -8,13 +8,10 @@ module com.movie_collection.private_movie_collection {
 
     opens com.movie_collection.gui.controllers to javafx.fxml;
 
-    opens com.movie_collection to javafx.fxml;
+    opens com.movie_collection to javafx.fxml, com.google.guice;
 
-
-   // opens com.movie_collection to javafx.fxml;
     exports com.movie_collection.bll.helpers;
-   // exports com.movie_collection to com.google.guice;
 
-  //  exports com.movie_collection to com.google.guice;
+    exports com.movie_collection to javafx.graphics;
 
 }
