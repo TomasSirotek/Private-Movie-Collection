@@ -3,7 +3,6 @@ package com.movie_collection.dal;
 import com.movie_collection.be.Movie;
 
 import java.sql.*;
-import java.time.ZoneId;
 
 public class MovieDAO {
     private static final ConnectionManager cm = new ConnectionManager();
@@ -15,7 +14,7 @@ public class MovieDAO {
             pstmt.setString(1, movie.name());
             pstmt.setDouble(2, movie.rating());
             pstmt.setString(3, movie.path());
-            pstmt.setDate(4, Date.valueOf(movie.lastview().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
+            pstmt.setDate(4, movie.lastview());
             pstmt.executeUpdate();
         }
     }
@@ -36,9 +35,26 @@ public class MovieDAO {
             pstmt.setString(1, movie.name());
             pstmt.setDouble(2, movie.rating());
             pstmt.setString(3, movie.path());
-            pstmt.setDate(4, Date.valueOf(movie.lastview().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
+            pstmt.setDate(4, movie.lastview());
             pstmt.setInt(5, movie.id());
             pstmt.executeUpdate();
         }
+    }
+
+    public Movie getMovie(int id) throws SQLException {
+        try (Connection con = cm.getConnection()) {
+            String sql = "SELECT * FROM Movie WHERE id = ?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                String name = rs.getString("name");
+                double rating = rs.getDouble("rating");
+                String path = rs.getString("path");
+                Date lastview = rs.getDate("lastview");
+                return new Movie(id, name, rating, path, lastview);
+            }
+        }
+        return null;
     }
 }

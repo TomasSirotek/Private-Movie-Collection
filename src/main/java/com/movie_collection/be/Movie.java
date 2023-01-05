@@ -1,7 +1,7 @@
 package com.movie_collection.be;
 
-import java.util.Calendar;
+import java.sql.Date;
 
-public record Movie(int id, String name, double rating, String path, Calendar lastview) {
+public record Movie(int id, String name, double rating, String path, Date lastview) {
 }
 

@@ -8,7 +8,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.Calendar;
 
 public class HelloApplication extends Application {
@@ -26,9 +28,9 @@ public class HelloApplication extends Application {
 
     public static void main(String[] args) {
         //launch();
-        // createMovieTest();
+        //createMovieTest();
         //deleteMovieTest();
-        updateMovieTest();
+        //updateMovieTest();
 
 
 
@@ -37,9 +39,8 @@ public class HelloApplication extends Application {
 
     private static void createMovieTest() {
         try {
-            Calendar cal = Calendar.getInstance();
-            //cal.set(2021, Calendar.MARCH, 1);
-            md.createMovie(new com.movie_collection.be.Movie(1, "test1", 10.0, "test", cal));
+            Date date = new Date(Calendar.getInstance().getTime().getTime());
+            md.createMovie(new com.movie_collection.be.Movie(1, "testnewdate", 10.0, "test", date));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -54,9 +55,8 @@ public class HelloApplication extends Application {
 
     private static void updateMovieTest() {
         try {
-            Calendar cal = Calendar.getInstance();
-            cal.set(2000, Calendar.JULY, 4);
-            md.updateMovie(new Movie(1040, "updateTest", 7.3, "updateTestPath", cal));
+            Date date = new Date(Instant.now().toEpochMilli());
+            md.updateMovie(new Movie(1041, "updateTest", 7.3, "updateTestPath", date));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
