@@ -1,32 +1,30 @@
 package com.movie_collection;
 
-import com.google.inject.Inject;
 import com.movie_collection.bll.helpers.ViewType;
-import com.movie_collection.gui.controllers.IControllerFactory;
-import com.movie_collection.gui.controllers.RootController;
+import com.movie_collection.config.StartUp;
+import com.movie_collection.gui.controllers.abstractController.IRootController;
+import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import com.google.inject.Injector;
 
 import java.io.IOException;
 
 public class Main extends Application {
-    @Inject
-    static
-    ISceneManager sceneManager;
-
     @Override
     public void start(Stage stage) throws IOException {
-      //  StartUp.configure();
-        sceneManager.setRoot(stage);
-        sceneManager.loadView(ViewType.MAIN,"Base View");
+        StartUp.configure();
+        IControllerFactory factory = StartUp.getInjector().getInstance(IControllerFactory.class);
+        IRootController controller = factory.loadFxmlFile(ViewType.MAIN);
+
+        Scene scene = new Scene(controller.getView());
+        stage.setTitle("Hello!");
+        stage.setResizable(false);
+        stage.setScene(scene);
+        stage.show();
     }
 
     public static void main(String[] args) {
-        StartUp.configure();
-        sceneManager = StartUp.getInjector().getInstance(SceneManager.class);
         launch();
     }
 }

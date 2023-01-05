@@ -1,8 +1,8 @@
-package com.movie_collection;
+package com.movie_collection.config;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.movie_collection.gui.controllers.IControllerFactory;
+import di.ConfigModule;
 
 public class StartUp {
 
@@ -12,7 +12,6 @@ public class StartUp {
         injector = Guice.createInjector(
                 new ConfigModule()
         );
-      //  injector.getInstance(IControllerFactory.class);
     }
     public static Injector getInjector(){
         return injector;
