@@ -3,6 +3,8 @@ package com.movie_collection.dal.dao;
 import com.movie_collection.be.Movie;
 import com.movie_collection.dal.ConnectionManager;
 import com.movie_collection.dal.daoInterface.IMovieDAO;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,9 +17,9 @@ public class MovieDAO implements IMovieDAO {
         try (Connection con = cm.getConnection()) {
             String sql = "INSERT INTO Movie (name, rating, path, lastview) VALUES (?, ?, ?, ?)";
             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, movie.name());
+            pstmt.setString(1, movie.name().get());
             pstmt.setDouble(2, movie.rating());
-            pstmt.setString(3, movie.path());
+            pstmt.setString(3, movie.path().get());
             pstmt.setDate(4, movie.lastview());
             pstmt.executeUpdate();
         }
@@ -36,9 +38,9 @@ public class MovieDAO implements IMovieDAO {
         try (Connection con = cm.getConnection()) {
             String sql = "UPDATE Movie SET name = ?, rating = ?, path = ?, lastview = ? WHERE id = ?";
             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, movie.name());
+            pstmt.setString(1, movie.name().toString());
             pstmt.setDouble(2, movie.rating());
-            pstmt.setString(3, movie.path());
+            pstmt.setString(3, movie.path().toString());
             pstmt.setDate(4, movie.lastview());
             pstmt.setInt(5, movie.id());
             pstmt.executeUpdate();
@@ -52,9 +54,9 @@ public class MovieDAO implements IMovieDAO {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             rs.next();
-            String name = rs.getString("name");
+            StringProperty name = new SimpleStringProperty(rs.getString("name"));
             double rating = rs.getDouble("rating");
-            String path = rs.getString("path");
+            StringProperty path = new SimpleStringProperty(rs.getString("path"));
             Date lastview = rs.getDate("lastview");
             return new Movie(id, name, rating, path, lastview);
         }
@@ -68,9 +70,9 @@ public class MovieDAO implements IMovieDAO {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()){
                 int id = rs.getInt("id");
-                String name = rs.getString("name");
+                StringProperty name = new SimpleStringProperty(rs.getString("name"));
                 double rating = rs.getDouble("rating");
-                String path = rs.getString("path");
+                StringProperty path = new SimpleStringProperty(rs.getString("path"));
                 Date lastview = rs.getDate("lastview");
                 movies.add(new Movie(id, name, rating, path, lastview));
             }
