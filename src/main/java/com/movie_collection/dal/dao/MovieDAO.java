@@ -9,6 +9,7 @@ import javafx.beans.property.StringProperty;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MovieDAO implements IMovieDAO {
     private static final ConnectionManager cm = new ConnectionManager();
@@ -47,36 +48,45 @@ public class MovieDAO implements IMovieDAO {
         }
     }
 
-    public Movie getMovie(int id) throws SQLException {
+    public Optional<Movie> getMovieById(int id) throws SQLException {
         try (Connection con = cm.getConnection()) {
             String sql = "SELECT * FROM Movie WHERE id = ?";
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             rs.next();
-            StringProperty name = new SimpleStringProperty(rs.getString("name"));
-            double rating = rs.getDouble("rating");
-            StringProperty path = new SimpleStringProperty(rs.getString("path"));
-            Date lastview = rs.getDate("lastview");
-            return new Movie(id, name, rating, path, lastview);
+            if (rs.getRow() == 0) {
+                return Optional.empty();
+            } else {
+                StringProperty name = new SimpleStringProperty(rs.getString("name"));
+                double rating = rs.getDouble("rating");
+                StringProperty path = new SimpleStringProperty(rs.getString("path"));
+                Date lastview = rs.getDate("lastview");
+                return Optional.of(new Movie(id, name, rating, path, lastview));
+            }
+
         }
     }
 
-    public List<Movie> getAllMovies() throws SQLException {
+    public Optional<List<Movie>> getAllMovies() throws SQLException {
         List<Movie> movies = new ArrayList<>();
         try (Connection con = cm.getConnection()){
             String sql = "SELECT * FROM Movie";
             PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             ResultSet rs = pstmt.executeQuery();
-            while (rs.next()){
-                int id = rs.getInt("id");
-                StringProperty name = new SimpleStringProperty(rs.getString("name"));
-                double rating = rs.getDouble("rating");
-                StringProperty path = new SimpleStringProperty(rs.getString("path"));
-                Date lastview = rs.getDate("lastview");
-                movies.add(new Movie(id, name, rating, path, lastview));
+            if (!rs.next()) {
+                return Optional.empty();
+            } else {
+                while (rs.next()){
+                    int id = rs.getInt("id");
+                    StringProperty name = new SimpleStringProperty(rs.getString("name"));
+                    double rating = rs.getDouble("rating");
+                    StringProperty path = new SimpleStringProperty(rs.getString("path"));
+                    Date lastview = rs.getDate("lastview");
+                    movies.add(new Movie(id, name, rating, path, lastview));
+                }
+                return Optional.of(movies);
             }
         }
-        return (movies);
     }
 }
