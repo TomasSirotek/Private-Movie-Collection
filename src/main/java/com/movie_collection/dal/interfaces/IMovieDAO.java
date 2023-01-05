@@ -3,7 +3,7 @@ package com.movie_collection.dal.interfaces;
 import com.movie_collection.be.Movie;
 
 import java.sql.SQLException;
-import java.util.Optional;
+import java.util.List;
 
 public interface IMovieDAO {
     /**
@@ -32,7 +32,7 @@ public interface IMovieDAO {
      * @return returns a movie object with the id
      * @throws SQLException if the connection to the database fails
      */
-    Optional getMovieById(int id) throws SQLException;
+    Movie getMovieById(int id) throws SQLException;
 
     /**
      * Class responsible for getting all movies from the database
@@ -40,5 +40,5 @@ public interface IMovieDAO {
      * @return List of all movies
      * @throws SQLException if the connection to the database fails
      */
-    Optional getAllMovies() throws SQLException;
+    List<Movie> getAllMovies() throws SQLException;
 }
