@@ -2,6 +2,9 @@ module com.movie_collection.private_movie_collection {
     requires javafx.controls;
     requires javafx.fxml;
     requires com.google.guice;
+    requires java.sql;
+    requires com.microsoft.sqlserver.jdbc;
+    requires java.naming;
 
 
     exports com.movie_collection.gui.controllers;
