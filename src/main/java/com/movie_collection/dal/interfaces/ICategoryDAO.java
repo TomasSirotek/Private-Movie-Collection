@@ -30,5 +30,5 @@ public interface ICategoryDAO {
      * @param categoryId the id of a category we're getting the movies from
      * @return a list of all movies in a genre/category.
      */
-    //List<Category> getAllSongsInPlaylist(int categoryId);
+    //List<Category> getAllMoviesInTheCategory(int categoryId);
 }
