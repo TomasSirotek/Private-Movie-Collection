@@ -29,5 +29,16 @@ public class MovieDAO {
         }
     }
 
-
+    public void updateMovie(Movie movie) throws SQLException {
+        try (Connection con = cm.getConnection()) {
+            String sql = "UPDATE Movie SET name = ?, rating = ?, path = ?, lastview = ? WHERE id = ?";
+            PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, movie.name());
+            pstmt.setDouble(2, movie.rating());
+            pstmt.setString(3, movie.path());
+            pstmt.setDate(4, Date.valueOf(movie.lastview().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
+            pstmt.setInt(5, movie.id());
+            pstmt.executeUpdate();
+        }
+    }
 }

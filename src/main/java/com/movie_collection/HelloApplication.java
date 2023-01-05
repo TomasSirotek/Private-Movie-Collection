@@ -1,5 +1,6 @@
 package com.movie_collection;
 
+import com.movie_collection.be.Movie;
 import com.movie_collection.dal.MovieDAO;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +28,7 @@ public class HelloApplication extends Application {
         //launch();
         // createMovieTest();
         //deleteMovieTest();
+        updateMovieTest();
 
 
 
@@ -47,6 +49,16 @@ public class HelloApplication extends Application {
             md.deleteMovie(1039);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }
+    }
+
+    private static void updateMovieTest() {
+        try {
+            Calendar cal = Calendar.getInstance();
+            cal.set(2000, Calendar.JULY, 4);
+            md.updateMovie(new Movie(1040, "updateTest", 7.3, "updateTestPath", cal));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }
