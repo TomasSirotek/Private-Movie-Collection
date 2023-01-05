@@ -37,9 +37,9 @@ public class BaseController extends RootController {
      * @param actionEvent event
      */
     @FXML
-    private void displayAllMovies(ActionEvent actionEvent) throws IOException {
+    private void onActionAddMovie(ActionEvent actionEvent) throws IOException {
         Parent parent = loadNodesView(ViewType.CREATE_EDIT);
-        show(parent,"Test");
+        show(parent,"Add new Movie");
     }
 
     /**

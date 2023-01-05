@@ -83,7 +83,7 @@
                                         </ScrollPane>
                                     </children>
                                 </VBox>
-                                <Button fx:id="addMovie" onAction="#displayAllMovies" mnemonicParsing="false" prefHeight="26.0" prefWidth="170.0" text="Add Movie">
+                                <Button fx:id="addMovie" onAction="#onActionAddMovie" mnemonicParsing="false" prefHeight="26.0" prefWidth="170.0" text="Add Movie">
                                     <VBox.margin>
                                         <Insets left="20.0" top="20.0" />
                                     </VBox.margin>
