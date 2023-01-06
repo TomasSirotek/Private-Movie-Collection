@@ -30,7 +30,7 @@ public class CategoryDAO implements ICategoryDAO {
         return allCategories;
     }
 
-
+    //Return   integer from addCat
     public void addCategory(Category category) throws SQLException {
         try (Connection connection = cm.getConnection()) {
             String sql = "INSERT INTO Category (name) VALUES(?)";
@@ -39,9 +39,7 @@ public class CategoryDAO implements ICategoryDAO {
             preparedStatement.executeUpdate();
         }
     }
-
-
-    // TODO Talk to team about the delete category system and binds with tables and info.
+    //Return integer from deleteCategory for handle notifications
         public void deleteCategory(int id) throws SQLException {
         try(Connection connection = cm.getConnection()){
             String sql = "DELETE FROM Category WHERE id= ?";
@@ -50,8 +48,4 @@ public class CategoryDAO implements ICategoryDAO {
             preparedStatement.executeUpdate();
         }
     }
-
-
-
-
 }

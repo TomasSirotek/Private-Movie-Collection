@@ -33,7 +33,5 @@ public interface ICategoryDAO {
      * Retrieves all movies in a genre/category in specific
      * @param categoryId the id of a category we're getting the movies from
      * @return a list of all movies in a genre/category.
-     * TODO TALK TO TEAM ABOUT IT
      */
-    //List<Movie> getAllMoviesInTheCategory(int categoryId);
 }
