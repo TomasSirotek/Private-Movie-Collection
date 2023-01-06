@@ -79,4 +79,23 @@ public class MovieDAO implements IMovieDAO {
         }
         return (movies);
     }
+
+    public List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException {
+        ArrayList<Movie> movies = new ArrayList<>();
+        try (Connection connection = cm.getConnection()) {
+            String sql = "SELECT * FROM Movie INNER JOIN CatMovie ON Movie.id = CatMovie.MovieId WHERE CatMovie.CategoryId = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, categoryId);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                StringProperty title = new SimpleStringProperty(rs.getString("title"));
+                double rating = rs.getDouble("imdbRating");
+                StringProperty path = new SimpleStringProperty(rs.getString("path"));
+                Date lastview = rs.getDate("lastview");
+                movies.add(new Movie(id, title, rating, path, lastview));
+            }
+        }
+        return movies;
+    }
 }
