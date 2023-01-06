@@ -13,7 +13,7 @@ import java.util.List;
 public class MovieDAO implements IMovieDAO {
     private static final ConnectionManager cm = new ConnectionManager();
 
-    public void createMovie(Movie movie) throws SQLException {
+    public int createMovie(Movie movie) throws SQLException {
         try (Connection con = cm.getConnection()) {
             String sql = "INSERT INTO Movie (name, rating, path, lastview) VALUES (?, ?, ?, ?)";
             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -21,20 +21,20 @@ public class MovieDAO implements IMovieDAO {
             pstmt.setDouble(2, movie.rating());
             pstmt.setString(3, movie.path().get());
             pstmt.setDate(4, movie.lastview());
-            pstmt.executeUpdate();
+            return pstmt.executeUpdate();
         }
     }
 
-    public void deleteMovie(int id) throws SQLException {
+    public int deleteMovie(int id) throws SQLException {
         try (Connection con = cm.getConnection()) {
             String sql = "DELETE FROM Movie WHERE id = ?";
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, id);
-            pstmt.executeUpdate();
+            return pstmt.executeUpdate();
         }
     }
 
-    public void updateMovie(Movie movie) throws SQLException {
+    public int updateMovie(Movie movie) throws SQLException {
         try (Connection con = cm.getConnection()) {
             String sql = "UPDATE Movie SET name = ?, rating = ?, path = ?, lastview = ? WHERE id = ?";
             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -43,7 +43,7 @@ public class MovieDAO implements IMovieDAO {
             pstmt.setString(3, movie.path().toString());
             pstmt.setDate(4, movie.lastview());
             pstmt.setInt(5, movie.id());
-            pstmt.executeUpdate();
+            return pstmt.executeUpdate();
         }
     }
 
