@@ -1,3 +1,6 @@
 package com.movie_collection.be;
-public record Category(int id, String name) {
+
+import javafx.beans.property.StringProperty;
+
+public record Category(int id, StringProperty name) {
 }
