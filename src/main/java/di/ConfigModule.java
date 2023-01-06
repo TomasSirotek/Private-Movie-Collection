@@ -14,6 +14,9 @@ import com.movie_collection.gui.controllers.controllerFactory.ControllerFactory;
 public class ConfigModule extends AbstractModule {
     @Override
     public void configure(){
+        /*
+        * Bind the MovieDAO interface to the implementation
+         */
         bind(IMovieDAO.class).to(MovieDAO.class);
         /*
          * Injection of binding
