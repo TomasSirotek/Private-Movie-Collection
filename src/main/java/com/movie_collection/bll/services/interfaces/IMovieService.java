@@ -17,11 +17,43 @@ public interface IMovieService {
      * method to create a movie
      *
      * @param movie to be created
-     * @return created movie
+     * @return number of rows affected
+     * @throws SQLException if the connection to the database fails
      */
     int createMovie(Movie movie) throws SQLException;
+
+    /**
+     * method to update a movie
+     * @param movie to be updated with new parameters
+     * @return number of rows affected
+     * @throws SQLException if the connection to the database fails
+     */
     int updateMovie(Movie movie) throws SQLException;
+
+    /**
+     * method to delete a movie
+     *
+     * @param id of the movie to be deleted
+     * @return number of rows affected
+     * @throws SQLException if the connection to the database fails
+     */
     int deleteMovie(int id) throws SQLException;
+
+    /**
+     * method to get a movie by id
+     *
+     * @param id of the movie
+     * @return movie object
+     * @throws SQLException if the connection to the database fails
+     */
     Movie getMovieById(int id) throws SQLException;
+
+    /**
+     * method to get all movies in a category
+     *
+     * @param categoryId of the category
+     * @return List of movies in the category
+     * @throws SQLException if the connection to the database fails
+     */
     List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException;
 }
