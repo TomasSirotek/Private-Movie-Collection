@@ -22,6 +22,11 @@ public enum ViewType {
         public String getFXMLView() {
             return "views/create-edit-view.fxml";
         }
+    }, CATEGORY_ADD_EDIT {
+        @Override
+        public String getFXMLView() {
+            return "views/category-add-edit-view.fxml";
+        }
     };
     public abstract String getFXMLView();
 }

@@ -18,13 +18,11 @@ public class MovieController extends BaseController implements Initializable{
     IMovieService movieService;
 
     @Inject
-    public MovieController(ControllerFactory rootController, IMovieService movieService) {
-        super(rootController);
+    public MovieController(IMovieService movieService) {
         this.movieService = movieService;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println(movieService.getAllMovies());
     }
 }
