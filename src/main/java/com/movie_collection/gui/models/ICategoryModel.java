@@ -20,5 +20,5 @@ public interface ICategoryModel {
      */
     int createCategory(Category category);
 
-    boolean deleteCategory(int id);
+    int deleteCategory(int id);
 }

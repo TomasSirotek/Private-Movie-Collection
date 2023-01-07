@@ -24,5 +24,5 @@ public interface ICategoryService {
      * @param id of the category that will be deleted
      * @return false if not able to delete otherwise return true if successful
      */
-    boolean deleteCategory(int id);
+    int deleteCategory(int id);
 }

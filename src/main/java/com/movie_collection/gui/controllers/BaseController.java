@@ -83,13 +83,13 @@ public class BaseController extends RootController implements Initializable {
     private void setCategoriesScrollPane(List<Category> allCategories) {
         // This code is creating a new Map object that is populated with the key-value pairs of a given Map,
         //  and then returning it.
-        LinkedHashMap<Button, Button> buttonMap = allCategories.stream()
+        LinkedHashMap<Button, Button> scrollPaneContentMap = allCategories.stream()
                 .map(category -> {
-                    Button btn = new Button(category.name().getValue());
-                    Button btn2 = new Button("Delete");
+                    Button categoryBtn = new Button(category.name().getValue());
+                    Button deleteBtn = new Button("Delete");
 
                     // Setting on the action for switching views
-                    btn.setOnAction(event -> {
+                    categoryBtn.setOnAction(event -> {
                         Parent parent = null;
                         try {
                             parent = loadNodesView(ViewType.MOVIES);
@@ -98,11 +98,11 @@ public class BaseController extends RootController implements Initializable {
                         }
                         switchToView(parent); // switches into chosen view
                     });
-                    btn.setPrefWidth(140);
+                    categoryBtn.setPrefWidth(140);
 
                     // Setting delete for individual button in order to know which one it is
                     // if true then we refresh again the scroll pane
-                    btn2.setOnAction(event -> {
+                    deleteBtn.setOnAction(event -> {
                         var result =  categoryModel.deleteCategory(category.id());
                         if (result) {
                             refreshScrollPane();
@@ -110,8 +110,8 @@ public class BaseController extends RootController implements Initializable {
                             throw new RuntimeException("Could not delete category with id: " + category.id());
                         }
                     });
-                    btn2.setPrefWidth(50);
-                    return new AbstractMap.SimpleEntry<>(btn, btn2);
+                    deleteBtn.setPrefWidth(50);
+                    return new AbstractMap.SimpleEntry<>(categoryBtn, deleteBtn);
                 })
                 // (oldValue, newValue) -> oldValue - a "merge function" that is used to resolve
                 // conflicts when two keys are mapped to the same value. In this case, if there is a conflict,
@@ -122,11 +122,11 @@ public class BaseController extends RootController implements Initializable {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 
-        if (buttonMap.isEmpty()) {
+        if (scrollPaneContentMap.isEmpty()) {
             scroll_pane.setContent(new Label("Empty")); // sets content if no buttons are filled
         } else {
             VBox vBox = new VBox(); // creates new VBox and HBox in order to go <CategoryTitle> and <DeleteButton>
-            for (Map.Entry<Button, Button> entry : buttonMap.entrySet()) {
+            for (Map.Entry<Button, Button> entry : scrollPaneContentMap.entrySet()) {
                 HBox hBox = new HBox(); // creates new HBox
                 hBox.getChildren().add(entry.getKey()); // add  button Key
                 hBox.getChildren().add(entry.getValue()); // add button value

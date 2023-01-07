@@ -11,13 +11,6 @@ import java.util.List;
 
 public class CategoryService implements ICategoryService {
 
-    Category[] categories = {
-            new Category(1, new SimpleStringProperty("Action")),
-            new Category(2, new SimpleStringProperty("Horror"))
-    };
-    List<Category> list = new ArrayList<>(Arrays.asList(categories));
-
-
     @Override
     public List<Category> getAllCategories() {
         return list;
@@ -25,13 +18,12 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public int createCategory(Category category) {
-        System.out.println(category.toString());
         list.add(category);
         return 0;
     }
 
     @Override
-    public boolean deleteCategory(int id) {
+    public int deleteCategory(int id) {
         return list.removeIf(x -> x.id() == id);
     }
 }

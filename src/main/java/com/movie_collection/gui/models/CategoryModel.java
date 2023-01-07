@@ -32,7 +32,7 @@ public class CategoryModel implements ICategoryModel {
     }
 
     @Override
-    public boolean deleteCategory(int id) {
+    public int deleteCategory(int id) {
         return categoryService.deleteCategory(id);
     }
 }
