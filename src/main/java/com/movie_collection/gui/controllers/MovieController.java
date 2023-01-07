@@ -6,6 +6,7 @@ import com.movie_collection.gui.controllers.controllerFactory.ControllerFactory;
 import javafx.fxml.Initializable;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 
@@ -25,6 +26,10 @@ public class MovieController extends BaseController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println(movieService.getAllMovies());
+        try {
+            System.out.println(movieService.getAllMovies());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

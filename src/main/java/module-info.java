@@ -25,6 +25,9 @@ module com.movie_collection.private_movie_collection {
     opens com.movie_collection.config to com.google.guice, javafx.fxml;
     exports di to javafx.graphics;
     opens di to com.google.guice, javafx.fxml;
+    exports com.movie_collection.dal.dao to com.google.guice;
+    exports com.movie_collection.dal.interfaces;
+    exports com.movie_collection.be;
 
     // opens com.movie_collection.gui to com.google.guice, javafx.fxml;
 
