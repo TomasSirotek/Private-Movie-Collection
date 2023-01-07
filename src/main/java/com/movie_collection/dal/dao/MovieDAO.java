@@ -17,7 +17,7 @@ public class MovieDAO implements IMovieDAO {
     public List<Movie> getAllMovies() throws SQLException {
         List<Movie> movies = new ArrayList<>();
         try (Connection con = cm.getConnection()){
-            String sql = "SELECT * FROM Movie";
+            String sql = "SELECT (id, name, rating, path, lastview) FROM Movie";
             PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()){
@@ -26,7 +26,7 @@ public class MovieDAO implements IMovieDAO {
                 double rating = rs.getDouble("rating");
                 StringProperty path = new SimpleStringProperty(rs.getString("path"));
                 Date lastview = rs.getDate("lastview");
-                movies.add(new Movie(id, name, rating, path, getCategoriesOfMovie(id), lastview));
+                movies.add(new Movie(id, name, rating, path, getCategoriesOfMovie(id, con), lastview));
             }
         }
         return (movies);
@@ -34,9 +34,9 @@ public class MovieDAO implements IMovieDAO {
 
     public List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException {
         ArrayList<Movie> movies = new ArrayList<>();
-        try (Connection connection = cm.getConnection()) {
+        try (Connection con= cm.getConnection()) {
             String sql = "SELECT (Movie.id, Movie.title, Movie.rating, Movie.path, Movie.lastview, CatMovie.MovieId, CatMovie.CategoryId) FROM Movie INNER JOIN CatMovie ON Movie.id = CatMovie.MovieId WHERE CatMovie.CategoryId = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
             preparedStatement.setInt(1, categoryId);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
@@ -45,7 +45,7 @@ public class MovieDAO implements IMovieDAO {
                 double rating = rs.getDouble("rating");
                 StringProperty path = new SimpleStringProperty(rs.getString("path"));
                 Date lastview = rs.getDate("lastview");
-                movies.add(new Movie(id, title, rating, path, getCategoriesOfMovie(id), lastview));
+                movies.add(new Movie(id, title, rating, path, getCategoriesOfMovie(id, con), lastview));
             }
         }
         return movies;
@@ -53,7 +53,7 @@ public class MovieDAO implements IMovieDAO {
 
     public Movie getMovieById(int id) throws SQLException {
         try (Connection con = cm.getConnection()) {
-            String sql = "SELECT * FROM Movie WHERE id = ?";
+            String sql = "SELECT (id, name, rating, path, lastview)  FROM Movie WHERE id = ?";
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -62,22 +62,20 @@ public class MovieDAO implements IMovieDAO {
             double rating = rs.getDouble("rating");
             StringProperty path = new SimpleStringProperty(rs.getString("path"));
             Date lastview = rs.getDate("lastview");
-            return new Movie(id, name, rating, path, getCategoriesOfMovie(id), lastview);
+            return new Movie(id, name, rating, path, getCategoriesOfMovie(id, con), lastview);
         }
     }
 
-    private List<Category> getCategoriesOfMovie(int MovieId) throws SQLException {
+    private List<Category> getCategoriesOfMovie(int MovieId, Connection con) throws SQLException {
         ArrayList<Category> allCategories = new ArrayList<>();
-        try (Connection con = cm.getConnection()) {
-            String sql = "SELECT (Category.id, Category.name, CatMovie.CategoryId, CatMovie.MovieId) FROM Category JOIN CatMovie ON Category.id = CatMovie.CategoryId WHERE MovieId = ?";
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, MovieId);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                StringProperty name = new SimpleStringProperty(rs.getString("name"));
-                allCategories.add(new Category(id, name));
-            }
+        String sql = "SELECT (Category.id, Category.name, CatMovie.CategoryId, CatMovie.MovieId) FROM Category JOIN CatMovie ON Category.id = CatMovie.CategoryId WHERE MovieId = ?";
+        PreparedStatement pstmt = con.prepareStatement(sql);
+        pstmt.setInt(1, MovieId);
+        ResultSet rs = pstmt.executeQuery();
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            StringProperty name = new SimpleStringProperty(rs.getString("name"));
+            allCategories.add(new Category(id, name));
         }
         return allCategories;
     }
@@ -88,7 +86,7 @@ public class MovieDAO implements IMovieDAO {
             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, movie.name().get());
             pstmt.setDouble(2, movie.rating());
-            pstmt.setString(3, movie.path().get());
+            pstmt.setString(3, movie.absolutePath().get());
             pstmt.setDate(4, movie.lastview());
             return pstmt.executeUpdate();
         }
@@ -100,7 +98,7 @@ public class MovieDAO implements IMovieDAO {
             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, movie.name().get());
             pstmt.setDouble(2, movie.rating());
-            pstmt.setString(3, movie.path().get());
+            pstmt.setString(3, movie.absolutePath().get());
             pstmt.setDate(4, movie.lastview());
             pstmt.setInt(5, movie.id());
             return pstmt.executeUpdate();
