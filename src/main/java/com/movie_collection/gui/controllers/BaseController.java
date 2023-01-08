@@ -38,14 +38,14 @@ public class BaseController extends RootController implements Initializable {
     private StackPane app_content;
 
     @Inject
-    IControllerFactory rootController;
+    IControllerFactory controllerFactory;
 
     @Inject
     ICategoryModel categoryModel;
 
     @Inject
-    public BaseController(IControllerFactory rootController,ICategoryModel categoryModel) {
-        this.rootController = rootController;
+    public BaseController(IControllerFactory controllerFactory,ICategoryModel categoryModel) {
+        this.controllerFactory = controllerFactory;
         this.categoryModel = categoryModel;
     }
 
@@ -104,7 +104,7 @@ public class BaseController extends RootController implements Initializable {
                     // if true then we refresh again the scroll pane
                     deleteBtn.setOnAction(event -> {
                         var result =  categoryModel.deleteCategory(category.id());
-                        if (result) {
+                        if (result > 0) {
                             refreshScrollPane();
                         } else {
                             throw new RuntimeException("Could not delete category with id: " + category.id());
@@ -183,7 +183,7 @@ public class BaseController extends RootController implements Initializable {
      */
 
     private Parent loadNodesView(ViewType viewType) throws IOException {
-        return rootController.loadFxmlFile(viewType).getView();
+        return controllerFactory.loadFxmlFile(viewType).getView();
     }
 
     /**
