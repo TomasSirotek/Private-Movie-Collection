@@ -4,7 +4,6 @@ import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.dal.ConnectionManager;
 import com.movie_collection.dal.interfaces.IMovieDAO;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -43,7 +42,7 @@ public class MovieDAO implements IMovieDAO {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 StringProperty title = new SimpleStringProperty(rs.getString("title"));
-                double rating =  rs.getDouble("rating");
+                double rating = rs.getDouble("rating");
                 StringProperty path = new SimpleStringProperty(rs.getString("path"));
                 Date lastview = rs.getDate("lastview");
                 movies.add(new Movie(id, title, rating, path, getCategoriesOfMovie(id, con), lastview));
