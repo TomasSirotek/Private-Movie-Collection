@@ -24,7 +24,7 @@ public class MovieDAO implements IMovieDAO {
             while (rs.next()){
                 int id = rs.getInt("id");
                 StringProperty name = new SimpleStringProperty(rs.getString("name"));
-                double rating =  rs.getDouble("rating");
+                double rating = rs.getDouble("rating");
                 StringProperty path = new SimpleStringProperty(rs.getString("path"));
                 Date lastview = rs.getDate("lastview");
                 movies.add(new Movie(id, name, rating, path, getCategoriesOfMovie(id, con), lastview));
@@ -60,7 +60,7 @@ public class MovieDAO implements IMovieDAO {
             ResultSet rs = pstmt.executeQuery();
             rs.next();
             StringProperty name = new SimpleStringProperty(rs.getString("name"));
-            double rating =  rs.getDouble("rating");
+            double rating = rs.getDouble("rating");
             StringProperty path = new SimpleStringProperty(rs.getString("path"));
             Date lastview = rs.getDate("lastview");
             return new Movie(id, name, rating, path, getCategoriesOfMovie(id, con), lastview);
@@ -86,7 +86,7 @@ public class MovieDAO implements IMovieDAO {
             String sql = "INSERT INTO Movie name, rating, path, lastview VALUES (?, ?, ?, ?)";
             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, movie.name().get());
-            pstmt.setObject(2, movie.rating());
+            pstmt.setDouble(2, movie.rating());
             pstmt.setString(3, movie.absolutePath().get());
             pstmt.setDate(4, movie.lastview());
             return pstmt.executeUpdate();
@@ -98,7 +98,7 @@ public class MovieDAO implements IMovieDAO {
             String sql = "UPDATE Movie SET name = ?, rating = ?, path = ?, lastview = ? WHERE id = ?";
             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, movie.name().get());
-            pstmt.setObject(2, movie.rating());
+            pstmt.setDouble(2, movie.rating());
             pstmt.setString(3, movie.absolutePath().get());
             pstmt.setDate(4, movie.lastview());
             pstmt.setInt(5, movie.id());
