@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -12,6 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.BaseController">
@@ -22,8 +24,9 @@
                     <top>
                         <GridPane prefHeight="69.0" prefWidth="800.0" BorderPane.alignment="CENTER">
                             <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="279.4013671875" minWidth="10.0" prefWidth="195.3276824951172" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="418.6723175048828" minWidth="10.0" prefWidth="418.6723175048828" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="332.4818420410156" minWidth="10.0" prefWidth="169.19732666015625" />
                             </columnConstraints>
                             <rowConstraints>
                                 <RowConstraints maxHeight="21.599996948242186" minHeight="0.0" prefHeight="11.200002098083495" vgrow="SOMETIMES" />
@@ -31,37 +34,40 @@
                                 <RowConstraints maxHeight="18.59999694824218" minHeight="0.0" prefHeight="15.400005340576172" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <HBox prefHeight="45.0" prefWidth="400.0" GridPane.rowIndex="1">
+                                <HBox prefHeight="45.0" prefWidth="400.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                     <children>
                                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Private Collection">
                                             <HBox.margin>
                                                 <Insets left="18.0" top="10.0" />
                                             </HBox.margin>
                                         </Text>
-                                        <TextField fx:id="searchMovies" prefHeight="26.0" prefWidth="274.0">
-                                            <HBox.margin>
-                                                <Insets left="8.0" top="8.0" />
-                                            </HBox.margin>
-                                        </TextField>
                                     </children>
                                 </HBox>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="The Binary Aces" wrappingWidth="89.6383056640625" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                    <GridPane.margin>
-                                        <Insets left="80.0" />
-                                    </GridPane.margin>
-                                </Text>
+                                  <TextField fx:id="searchMovies" maxWidth="200.0" prefHeight="26.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </GridPane.margin>
+                                  </TextField>
+                        <Label prefHeight="42.0" prefWidth="210.0" text="Private Movie Collection" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="System Bold" size="17.0" />
+                           </font>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                        </Label>
                             </children>
                         </GridPane>
                     </top>
                     <left>
                         <VBox prefHeight="530.0" prefWidth="202.0" BorderPane.alignment="CENTER">
                             <children>
-                                <Button fx:id="fillAllMovies" onAction="#clickMovies" mnemonicParsing="false" prefHeight="26.0" prefWidth="170.0" text="All Movies">
+                                <Button mnemonicParsing="false" onAction="#onActionGoHome" prefHeight="26.0" prefWidth="170.0" text="Home">
                                     <VBox.margin>
                                         <Insets left="20.0" top="20.0" />
                                     </VBox.margin>
                                 </Button>
-                                <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="170.0" text="...">
+                                <Button fx:id="fillAllMovies" mnemonicParsing="false" onAction="#clickMovies" prefHeight="26.0" prefWidth="170.0" text="All Movies">
                                     <VBox.margin>
                                         <Insets left="20.0" top="20.0" />
                                     </VBox.margin>
@@ -73,23 +79,22 @@
                                                 <Insets left="70.0" top="20.0" />
                                             </VBox.margin>
                                         </Text>
-                                        <ScrollPane prefHeight="200.0" prefWidth="160.0">
-                                            <content>
-                                                <AnchorPane fx:id="categoryList" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="160.0" />
-                                            </content>
+                                        <ScrollPane fx:id="scroll_pane" prefHeight="200.0" prefWidth="160.0">
+
                                             <VBox.margin>
-                                                <Insets left="20.0" top="10.0" />
+                                                <Insets left="10.0" top="0.0" />
                                             </VBox.margin>
                                         </ScrollPane>
                                     </children>
                                 </VBox>
-                                <Button fx:id="addMovie" onAction="#onActionAddMovie" mnemonicParsing="false" prefHeight="26.0" prefWidth="170.0" text="Add Movie">
+                                <Button mnemonicParsing="false" onAction="#onActionAddMovie" prefHeight="26.0" prefWidth="170.0" text="Add Movie">
                                     <VBox.margin>
                                         <Insets left="20.0" top="20.0" />
                                     </VBox.margin>
                                 </Button>
-                                <Button fx:id="addCategory" mnemonicParsing="false" prefHeight="26.0" prefWidth="170.0" text="Add Category">
+                                <Button mnemonicParsing="false" onAction="#onActionAddCategory" prefHeight="26.0" prefWidth="170.0" text="Add Category">
                                     <VBox.margin>
+                                        <Insets left="20.0" top="20.0" />
                                         <Insets left="20.0" top="20.0" />
                                     </VBox.margin>
                                 </Button>
@@ -97,8 +102,7 @@
                         </VBox>
                     </left>
                     <center>
-                        <StackPane fx:id="app_content" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER"
-                        >
+                        <StackPane fx:id="app_content" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                         <children>
                             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to the paradise">
                             </Text>
