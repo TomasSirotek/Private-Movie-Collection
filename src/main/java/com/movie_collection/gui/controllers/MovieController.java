@@ -12,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.text.TextFlow;
-
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -100,16 +99,39 @@ public class MovieController extends BaseController implements Initializable{
             });
             return new SimpleObjectProperty<>(editButton);
         });
+
         colDeleteMovie.setCellValueFactory(col -> {
             Button deleteButton = new Button("❌");
             deleteButton.setOnAction(e -> {
-               // needs to get the id of the row
-                // service to delete
-                // call to refresh
+                Movie movie = col.getValue();
+                if (movie != null) {
+                    tryDeleteMovie(movie.id());
+                    // refresh table or perform delete operation this is implemented in another commit i believe
+                } else {
+                    System.out.println("Movie not selected");
+                }
             });
             return new SimpleObjectProperty<>(deleteButton);
         });
         moviesTable.getItems().setAll(movieService.getAllMovies());
+    }
+
+    /**
+     * method that tries to delete movie by id
+     * @param id of movie that will be deleted
+     */
+    private void tryDeleteMovie(int id) {
+        int result = 0;
+        try {
+            result = movieService.deleteMovie(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        if(result > 0){
+            System.out.println("Successfully deleted movie with id: " + id); // place for our notification
+        }else {
+            System.out.println("Could not delete movie with id: " + id); // place for our notification
+        }
     }
 
 
