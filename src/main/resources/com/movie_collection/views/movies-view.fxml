@@ -117,7 +117,7 @@
                                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                         </rowConstraints>
                                                          <children>
-                                                            <Label text="IMDB Rating" />
+                                                            <Label fx:id="descrIMDBRating" text="IMDB Rating" />
                                                             <Label text="Category" GridPane.rowIndex="1" />
                                                             <Label text="Label" GridPane.rowIndex="2" />
                                                             <Label fx:id="descrMovieCategory" GridPane.columnIndex="1" GridPane.rowIndex="1" />

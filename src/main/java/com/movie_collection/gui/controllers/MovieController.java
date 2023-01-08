@@ -6,12 +6,9 @@ import com.movie_collection.be.Movie;
 import com.movie_collection.bll.services.interfaces.IMovieService;
 import com.movie_collection.gui.controllers.controllerFactory.ControllerFactory;
 import javafx.beans.property.*;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.text.TextFlow;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -23,7 +20,7 @@ import java.util.stream.Collectors;
 public class MovieController extends BaseController implements Initializable{
 
     @FXML
-    private Label descrMovieTitle;
+    private Label descrMovieTitle,descrIMDBRating;
     @FXML
     private TableView<Movie> moviesTable;
     @FXML
@@ -31,7 +28,7 @@ public class MovieController extends BaseController implements Initializable{
     @FXML
     private TableColumn<Movie,String> colMovieTitle,movieYear,colMovieCategory;
     @FXML
-    private TableColumn<Movie,Void> colMovieRating;
+    private TableColumn<Movie,String> colMovieRating;
 
     @Inject
     IMovieService movieService;
@@ -45,24 +42,28 @@ public class MovieController extends BaseController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        fillTableWithData();
         listenToClickRow();
-        try {
-            fillTableWithData();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
+    /**
+     * method that check which row is selected and sets description
+     */
     private void listenToClickRow() {
         moviesTable.setOnMouseClicked(event -> {
             Movie selectedMovie = moviesTable.getSelectionModel().getSelectedItem();
             if (selectedMovie != null) {
                 descrMovieTitle.setText(selectedMovie.name().getValue());
+                descrIMDBRating.setText(String.valueOf(selectedMovie.rating()));
             }
         });
     }
 
-    private void fillTableWithData() throws SQLException {
+    /**
+     * method to fill table with initial data by the model
+     */
+    private void fillTableWithData(){
+        // sets value factory for play column
         colPlayMovie.setCellValueFactory(col -> {
             Button playButton = new Button("▶️");
             playButton.setOnAction(e -> {
@@ -70,28 +71,17 @@ public class MovieController extends BaseController implements Initializable{
             });
             return new SimpleObjectProperty<>(playButton);
         });
-        colMovieTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().name().getValue()));
+        colMovieTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().name().getValue())); // set movie title
         movieYear.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().name().getValue())); // does not have anything now from model
+        colMovieRating.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().rating())));
 
-
-        // FOR NOW THIS IS JUST GETTING THE INDEX OF EACH ONE
-        colMovieRating.setCellFactory(col -> new TableCell<Movie, Void>() {
-            @Override
-            public void updateIndex(int index) {
-                super.updateIndex(index);
-                if (isEmpty() || index < 0) {
-                    setText(null);
-                } else {
-                    setText(Integer.toString(index));
-                }
-            }
-        });
-
+        // sets value factory for movie category column data are collected by name and joined by "," -> action,horror
         colMovieCategory.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().categories().stream()
                 .map(Category::name)
                 .map(StringProperty::getValue)
                 .collect(Collectors.joining(","))
         ));
+        // sets value factory for edit column
         colEditMovies.setCellValueFactory(col -> {
             Button editButton = new Button("⚙️");
             editButton.setOnAction(e -> {
@@ -99,25 +89,29 @@ public class MovieController extends BaseController implements Initializable{
             });
             return new SimpleObjectProperty<>(editButton);
         });
-
+        // sets value factory for delete  column
         colDeleteMovie.setCellValueFactory(col -> {
             Button deleteButton = new Button("❌");
             deleteButton.setOnAction(e -> {
-                Movie movie = col.getValue();
+                Movie movie = col.getValue(); // get movie object from the current row
                 if (movie != null) {
-                    tryDeleteMovie(movie.id());
-                    // refresh table or perform delete operation this is implemented in another commit i believe
-                } else {
-                    System.out.println("Movie not selected");
+                    tryDeleteMovie(movie.id()); // tries to delete movie by id inside the row
+                    //TODO: refresh table or perform delete operation this is implemented in another commit I believe
                 }
             });
             return new SimpleObjectProperty<>(deleteButton);
         });
-        moviesTable.getItems().setAll(movieService.getAllMovies());
+        // tries to call movie service and set all items
+        try {
+            moviesTable.getItems().setAll(movieService.getAllMovies());
+        } catch (SQLException e) {
+            throw new RuntimeException(e); //TODO: Lets look at this later to fi it
+        }
     }
 
     /**
      * method that tries to delete movie by id
+     * result success if > 0 ... else err display/handel
      * @param id of movie that will be deleted
      */
     private void tryDeleteMovie(int id) {
@@ -128,7 +122,7 @@ public class MovieController extends BaseController implements Initializable{
             throw new RuntimeException(e);
         }
         if(result > 0){
-            System.out.println("Successfully deleted movie with id: " + id); // place for our notification
+            System.out.println("Successfully deleted movie with id: " + id); // place for our notification not sout !
         }else {
             System.out.println("Could not delete movie with id: " + id); // place for our notification
         }
