@@ -6,10 +6,14 @@ import com.movie_collection.bll.services.CategoryService;
 import com.movie_collection.bll.services.MovieService;
 import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.bll.services.interfaces.IMovieService;
+import com.movie_collection.gui.controllers.BaseController;
+import com.movie_collection.gui.controllers.CategoryAddEditController;
 import com.movie_collection.dal.dao.MovieDAO;
 import com.movie_collection.dal.interfaces.IMovieDAO;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
 import com.movie_collection.gui.controllers.controllerFactory.ControllerFactory;
+import com.movie_collection.gui.models.CategoryModel;
+import com.movie_collection.gui.models.ICategoryModel;
 
 public class ConfigModule extends AbstractModule {
     @Override
@@ -32,5 +36,16 @@ public class ConfigModule extends AbstractModule {
          * Injection of movie service
          */
         bind(ICategoryService.class).to(CategoryService.class).in(Singleton.class);
+        
+        /*
+         * Injection of movie service
+         */
+        bind(ICategoryModel.class).to(CategoryModel.class).in(Singleton.class);
+
+        /*
+         * Injection of base controller
+         */
+        bind(BaseController.class).in(Singleton.class);
+
     }
 }
