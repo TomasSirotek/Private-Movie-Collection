@@ -114,7 +114,7 @@ public class BaseController extends RootController implements Initializable {
                         } catch (SQLException e) {
                             throw new RuntimeException(e);
                         }
-                        if (result > 1) {
+                        if (result >= 1) {
                             try {
                                 refreshScrollPane();
                             } catch (SQLException e) {
