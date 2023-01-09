@@ -6,8 +6,9 @@ import com.movie_collection.bll.services.CategoryService;
 import com.movie_collection.bll.services.MovieService;
 import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.bll.services.interfaces.IMovieService;
+import com.movie_collection.dal.dao.CategoryDAO;
+import com.movie_collection.dal.interfaces.ICategoryDAO;
 import com.movie_collection.gui.controllers.BaseController;
-import com.movie_collection.gui.controllers.CategoryAddEditController;
 import com.movie_collection.dal.dao.MovieDAO;
 import com.movie_collection.dal.interfaces.IMovieDAO;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
@@ -22,6 +23,10 @@ public class ConfigModule extends AbstractModule {
         * Bind the MovieDAO interface to the implementation
          */
         bind(IMovieDAO.class).to(MovieDAO.class);
+        /*
+         * Bind the CategoryDAO interface to the implementation
+         */
+        bind(ICategoryDAO.class).to(CategoryDAO.class);
         /*
          * Injection of binding
          */
