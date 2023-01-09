@@ -55,7 +55,7 @@ public class CreateMovieController extends RootController implements Initializab
             Movie movie = new Movie(
                     0,
                     new SimpleStringProperty(movieName.getText().trim()),
-                    personalRatingSpin.getValue(),
+                    3.3,
                     new SimpleStringProperty(path.getText().trim()),
                     categoryChoiceBox.getItems(),
                     null);

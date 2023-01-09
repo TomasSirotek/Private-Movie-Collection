@@ -82,7 +82,7 @@ public class MovieDAO implements IMovieDAO {
 
     public int createMovie(Movie movie) throws SQLException {
         try (Connection con = cm.getConnection()) {
-            String sql = "INSERT INTO Movie name, rating, path, lastview VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO Movie (name, rating, path, lastview) VALUES (?, ?, ?, ?)";
             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, movie.name().get());
             pstmt.setDouble(2, movie.rating());
