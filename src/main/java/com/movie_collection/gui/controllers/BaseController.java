@@ -39,14 +39,14 @@ public class BaseController extends RootController implements Initializable {
     private StackPane app_content;
 
     @Inject
-    IControllerFactory rootController;
+    IControllerFactory controllerFactory;
 
     @Inject
     ICategoryModel categoryModel;
 
     @Inject
-    public BaseController(IControllerFactory rootController,ICategoryModel categoryModel) {
-        this.rootController = rootController;
+    public BaseController(IControllerFactory controllerFactory,ICategoryModel categoryModel) {
+        this.controllerFactory = controllerFactory;
         this.categoryModel = categoryModel;
     }
 
@@ -114,12 +114,14 @@ public class BaseController extends RootController implements Initializable {
                         } catch (SQLException e) {
                             throw new RuntimeException(e);
                         }
-                        if (result >= 1) {
+                        // TODO: check working resfresh and why does it have to be in try catch block
+                        if (result > 0) {
                             try {
                                 refreshScrollPane();
                             } catch (SQLException e) {
                                 throw new RuntimeException(e);
                             }
+
                         } else {
                             throw new RuntimeException("Could not delete category with id: " + category.id());
                         }
@@ -197,7 +199,7 @@ public class BaseController extends RootController implements Initializable {
      */
 
     private Parent loadNodesView(ViewType viewType) throws IOException {
-        return rootController.loadFxmlFile(viewType).getView();
+        return controllerFactory.loadFxmlFile(viewType).getView();
     }
 
     /**
