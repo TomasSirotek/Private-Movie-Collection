@@ -4,16 +4,24 @@ import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.gui.controllers.abstractController.RootController;
+import com.movie_collection.gui.models.ICategoryModel;
 import com.movie_collection.gui.models.IMovieModel;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CreateMovieController extends RootController implements Initializable {
     @FXML
@@ -25,23 +33,56 @@ public class CreateMovieController extends RootController implements Initializab
     @FXML
     public Button onClickSelectFile,deleteOnAction,confirm_action,cancelOnAction;
     @FXML
-    private ChoiceBox<Category> categoryChoiceBox;
+    private MenuButton categoryMenuButton;
 
     private boolean isEditable = false;
     private final IMovieModel movieModel;
+    private final ICategoryModel categoryModel;
     private final MovieController movieController;
 
     @Inject
-    public CreateMovieController(IMovieModel movieModel, MovieController controller) {
+    public CreateMovieController(IMovieModel movieModel, ICategoryModel categoryModel, MovieController controller) {
         this.movieModel = movieModel;
+        this.categoryModel = categoryModel;
         this.movieController = controller;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        fillCategorySelection();
+        setComponentRules();
+        onClickSelectFile.setOnAction(this::selectFileChooser);
+
         confirm_action.setOnAction(this::movieOnClickAction);
 
         cancelOnAction.setOnAction(e -> getStage().close()); // sets to close stage on action
+    }
+
+    private void selectFileChooser(ActionEvent actionEvent) {
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("VideoFiles (*.mp4,*.mpeg4)", "*.mp4", "*.mpeg4");
+       // chooseFile.getExtensionFilters().add(extFilter);
+    }
+
+    private void setComponentRules() {
+        SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(1.0, 10.0,1.0, 0.5);
+        personalRatingSpin.setValueFactory(valueFactory);
+    }
+
+    private void fillCategorySelection() {
+        List<Category> categoryList = tryToGetCategory();
+        categoryList.stream().map(category -> {
+            CheckMenuItem menuItem = new CheckMenuItem();
+            menuItem.setText(category.toString());
+            return menuItem;
+        }).forEach(menuItem -> categoryMenuButton.getItems().add(menuItem));
+    }
+
+    private List<Category> tryToGetCategory() {
+        try {
+            return categoryModel.getAllCategories();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -51,17 +92,23 @@ public class CreateMovieController extends RootController implements Initializab
      */
     private void movieOnClickAction(ActionEvent e) {
         if(!isEditable){
+            List<String> selectedCategories = categoryMenuButton.getItems().stream()
+                    .filter(item -> item instanceof CheckMenuItem)
+                    .map(CheckMenuItem.class::cast)
+                    .filter(CheckMenuItem::isSelected)
+                    .map(CheckMenuItem::getText)
+                    .toList();
 
             Movie movie = new Movie(
                     0,
                     new SimpleStringProperty(movieName.getText().trim()),
-                    3.3,
+                    personalRatingSpin.getValue(),
                     new SimpleStringProperty(path.getText().trim()),
-                    categoryChoiceBox.getItems(),
+                    selectedCategories,
                     null);
-
+//
             int result = tryCreateMovie(movie);
-            closeAndUpdate(result,movie.id());
+           closeAndUpdate(result,movie.id());
         }else {
             // update movie here
         }
