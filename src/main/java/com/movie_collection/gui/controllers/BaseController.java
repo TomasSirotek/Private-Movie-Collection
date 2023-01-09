@@ -2,10 +2,17 @@ package com.movie_collection.gui.controllers;
 
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
+import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
 import com.movie_collection.gui.models.ICategoryModel;
+import com.movie_collection.gui.models.IMovieModel;
+import com.movie_collection.gui.models.MovieModel;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,11 +21,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import com.movie_collection.bll.util.Filter;
 
 import java.io.IOException;
 import java.net.URL;
@@ -38,11 +47,21 @@ public class BaseController extends RootController implements Initializable {
     @FXML
     private StackPane app_content;
 
+    @FXML
+    private TextField searchMovies;
+
+    private Filter filter = new Filter();
+
+    private ObservableList<Movie> movies = FXCollections.observableArrayList();
+
     @Inject
     IControllerFactory controllerFactory;
 
     @Inject
     ICategoryModel categoryModel;
+
+    @Inject
+    IMovieModel movieModel;
 
     @Inject
     public BaseController(IControllerFactory controllerFactory,ICategoryModel categoryModel) {
@@ -61,6 +80,7 @@ public class BaseController extends RootController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         try {
             setCategoriesScrollPane(categoryModel.getAllCategories());
+            filterBar();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -232,6 +252,28 @@ public class BaseController extends RootController implements Initializable {
         Parent parent = loadNodesView(ViewType.CATEGORY_ADD_EDIT);
         show(parent,"Add new Category");
     }
+
+    private void filterBar() throws SQLException {
+        System.out.println(movieModel.getAllMovies());
+        System.out.println("TEST");
+        searchMovies.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                movies.clear();
+                System.out.println("TEST");
+                try {
+                    movies.addAll(filter.filteringMovies(newValue));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+        });
+    }
+    //Force one of the tables and change the Content/Info
+
+
+
 
 
     /** TODO:

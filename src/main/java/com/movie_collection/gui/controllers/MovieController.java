@@ -6,6 +6,8 @@ import com.movie_collection.be.Movie;
 import com.movie_collection.bll.services.interfaces.IMovieService;
 import com.movie_collection.gui.controllers.controllerFactory.ControllerFactory;
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -107,6 +109,8 @@ public class MovieController extends BaseController implements Initializable{
             throw new RuntimeException(e); //TODO: Lets look at this later to fi it
         }
     }
+
+
 
     /**
      * method that tries to delete movie by id
