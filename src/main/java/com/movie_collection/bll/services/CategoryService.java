@@ -1,38 +1,34 @@
 package com.movie_collection.bll.services;
 
+import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.bll.services.interfaces.ICategoryService;
-import javafx.beans.property.SimpleStringProperty;
+import com.movie_collection.dal.interfaces.ICategoryDAO;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.sql.SQLException;
 import java.util.List;
 
 public class CategoryService implements ICategoryService {
 
-    Category[] categories = {
-            new Category(1, new SimpleStringProperty("Action")),
-            new Category(2, new SimpleStringProperty("Horror"))
-    };
-    List<Category> list = new ArrayList<>(Arrays.asList(categories));
-    @Override
-    public List<Category> getAllCategories() {
-        return list;
+    private final ICategoryDAO categoryDAO;
+
+    @Inject
+    public CategoryService(ICategoryDAO categoryDAO) {
+        this.categoryDAO = categoryDAO;
     }
 
     @Override
-    public int createCategory(Category category) {
-        list.add(category);
-        return 1; // always comes thru just testing
+    public List<Category> getAllCategories() throws SQLException {
+        return categoryDAO.getAllCategories();
     }
 
     @Override
-    public int deleteCategory(int id) {
-        var result =  list.removeIf(x -> x.id() == id);
-        if(result){
-            return 1;
-        }else {
-            return 0;
-        }
+    public int createCategory(Category category) throws SQLException {
+        return categoryDAO.addCategory(category);
+    }
+
+    @Override
+    public int deleteCategory(int id) throws SQLException {
+        return categoryDAO.deleteCategory(id);
     }
 }

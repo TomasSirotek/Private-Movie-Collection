@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Objects;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -34,11 +35,17 @@ public class CategoryAddEditController extends RootController implements Initial
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        add_category.setOnAction(e -> createCategoryOnAction(category_name.getText()));
+        add_category.setOnAction(e -> {
+            try {
+                createCategoryOnAction(category_name.getText());
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
     }
 
     // method that for now is randomly setting ID and creates category, refreshed the pane and closes the stage
-    private void createCategoryOnAction(String categoryName){
+    private void createCategoryOnAction(String categoryName) throws SQLException {
         Objects.requireNonNull(categoryName,"Category name cannot be empty");
         Random id = new Random();
         // TODO: just for testing now since we dont have actual dao to get

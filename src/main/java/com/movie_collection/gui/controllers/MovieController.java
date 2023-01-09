@@ -1,19 +1,34 @@
 package com.movie_collection.gui.controllers;
 
 import com.google.inject.Inject;
+import com.movie_collection.be.Category;
+import com.movie_collection.be.Movie;
 import com.movie_collection.bll.services.interfaces.IMovieService;
 import com.movie_collection.gui.controllers.controllerFactory.ControllerFactory;
+import javafx.beans.property.*;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-
+import javafx.scene.control.*;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-
+import java.util.stream.Collectors;
 
 /**
  * Controller for Movies with the view
  */
 public class MovieController extends BaseController implements Initializable{
+
+    @FXML
+    private Label descrMovieTitle,descrIMDBRating;
+    @FXML
+    private TableView<Movie> moviesTable;
+    @FXML
+    private TableColumn<Movie, Button> colPlayMovie,colEditMovies,colDeleteMovie;
+    @FXML
+    private TableColumn<Movie,String> colMovieTitle,movieYear,colMovieCategory;
+    @FXML
+    private TableColumn<Movie,String> colMovieRating;
 
     @Inject
     IMovieService movieService;
@@ -21,14 +36,96 @@ public class MovieController extends BaseController implements Initializable{
     @Inject
     public MovieController(IMovieService movieService) {
         this.movieService = movieService;
+
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        fillTableWithData();
+        listenToClickRow();
+    }
+
+    /**
+     * method that check which row is selected and sets description
+     */
+    private void listenToClickRow() {
+        moviesTable.setOnMouseClicked(event -> {
+            Movie selectedMovie = moviesTable.getSelectionModel().getSelectedItem();
+            if (selectedMovie != null) {
+                descrMovieTitle.setText(selectedMovie.name().getValue());
+                descrIMDBRating.setText(String.valueOf(selectedMovie.rating()));
+            }
+        });
+    }
+
+    /**
+     * method to fill table with initial data by the model
+     */
+    private void fillTableWithData(){
+        // sets value factory for play column
+        colPlayMovie.setCellValueFactory(col -> {
+            Button playButton = new Button("▶️");
+            playButton.setOnAction(e -> {
+                //- > invoking to play movie in local player
+            });
+            return new SimpleObjectProperty<>(playButton);
+        });
+        colMovieTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().name().getValue())); // set movie title
+        movieYear.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().name().getValue())); // does not have anything now from model
+        colMovieRating.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().rating())));
+
+        // sets value factory for movie category column data are collected by name and joined by "," -> action,horror
+        colMovieCategory.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().categories().stream()
+                .map(Category::name)
+                .map(StringProperty::getValue)
+                .collect(Collectors.joining(","))
+        ));
+        // sets value factory for edit column
+        colEditMovies.setCellValueFactory(col -> {
+            Button editButton = new Button("⚙️");
+            editButton.setOnAction(e -> {
+                // _> edit functionality here
+            });
+            return new SimpleObjectProperty<>(editButton);
+        });
+        // sets value factory for delete  column
+        colDeleteMovie.setCellValueFactory(col -> {
+            Button deleteButton = new Button("❌");
+            deleteButton.setOnAction(e -> {
+                Movie movie = col.getValue(); // get movie object from the current row
+                if (movie != null) {
+                    tryDeleteMovie(movie.id()); // tries to delete movie by id inside the row
+                    //TODO: refresh table or perform delete operation this is implemented in another commit I believe
+                }
+            });
+            return new SimpleObjectProperty<>(deleteButton);
+        });
+        // tries to call movie service and set all items
         try {
-            System.out.println(movieService.getAllMovies());
+            moviesTable.getItems().setAll(movieService.getAllMovies());
+        } catch (SQLException e) {
+            throw new RuntimeException(e); //TODO: Lets look at this later to fi it
+        }
+    }
+
+    /**
+     * method that tries to delete movie by id
+     * result success if > 0 ... else err display/handel
+     * @param id of movie that will be deleted
+     */
+    private void tryDeleteMovie(int id) {
+        int result = 0;
+        try {
+            result = movieService.deleteMovie(id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        if(result > 0){
+            System.out.println("Successfully deleted movie with id: " + id); // place for our notification not sout !
+        }else {
+            System.out.println("Could not delete movie with id: " + id); // place for our notification
+        }
     }
+
+
 }

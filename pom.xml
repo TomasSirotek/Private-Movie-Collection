@@ -15,7 +15,6 @@
     </properties>
 
     <dependencies>
-
         <!-- https://mvnrepository.com/artifact/com.google.inject/guice -->
         <dependency>
             <groupId>com.google.inject</groupId>
@@ -52,7 +51,6 @@
             <artifactId>mssql-jdbc</artifactId>
             <version>11.2.2.jre18</version>
         </dependency>
-
     </dependencies>
 
 
