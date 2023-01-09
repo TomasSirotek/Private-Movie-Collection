@@ -15,9 +15,9 @@ public interface ICategoryDAO {
 
     /**
      * Saves the new information about a new Caterogy into the database
-     * @param categoryName the Category name to be added
+     * @param category the Category name to be added
      */
-    int addCategory(Category categoryName) throws SQLException;
+    int addCategory(Category category) throws SQLException;
 
     /**
      * Deletes the desired Category from the Category database
