@@ -95,35 +95,21 @@ public class BaseController extends RootController implements Initializable {
 
                     // Setting on the action for switching views
                     categoryBtn.setOnAction(event -> {
-                        Parent parent = null;
-                        try {
-                            parent = loadNodesView(ViewType.MOVIES);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+                        Parent parent = tryToLoadView();
                         switchToView(parent); // switches into chosen view
                     });
                     categoryBtn.setPrefWidth(140);
 
-                    // Setting delete for individual button in order to know which one it is
-                    // if true then we refresh again the scroll pane
                     deleteBtn.setOnAction(event -> {
-                        int result = 0;
-                        try {
-                            result = categoryModel.deleteCategory(category.id());
-                        } catch (SQLException e) {
-                            throw new RuntimeException(e);
-                        }
-                        // TODO: check working resfresh and why does it have to be in try catch block
+                        int result = tryToDeleteCategory(category.id());
                         if (result > 0) {
                             try {
                                 refreshScrollPane();
                             } catch (SQLException e) {
                                 throw new RuntimeException(e);
                             }
-
                         } else {
-                            throw new RuntimeException("Could not delete category with id: " + category.id());
+                            throw new RuntimeException("Could not delete category with id: " + category.id()); // TODO: Fix to have better handeling
                         }
                     });
                     deleteBtn.setPrefWidth(50);
@@ -149,6 +135,31 @@ public class BaseController extends RootController implements Initializable {
                 vBox.getChildren().add(hBox); // sets the vbox to hold HBox
             }
             scroll_pane.setContent(vBox); // finally sets the content into the scroll pane
+        }
+    }
+
+    /**
+     * method that tries to delete category by id
+     * @param id
+     * @return for now int that must be > 0 in order to successfully delete it
+     */
+    private int tryToDeleteCategory(int id) {
+        try {
+            return categoryModel.deleteCategory(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * method that tries to load the view
+     * @return parent that will be loaded
+     */
+    private Parent tryToLoadView() {
+        try {
+            return loadNodesView(ViewType.MOVIES);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
