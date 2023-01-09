@@ -6,30 +6,27 @@ import com.movie_collection.be.Movie;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.models.ICategoryModel;
 import com.movie_collection.gui.models.IMovieModel;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
-
+import javafx.stage.Stage;
+import javafx.scene.media.Media;
+import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class CreateMovieController extends RootController implements Initializable {
+
     @FXML
     private Label labelUserAction;
     @FXML
     private Spinner<Double> personalRatingSpin;
     @FXML
-    private TextField movieName,path;
+    private TextField movieName,path,durationField;
     @FXML
     public Button onClickSelectFile,deleteOnAction,confirm_action,cancelOnAction;
     @FXML
@@ -52,17 +49,29 @@ public class CreateMovieController extends RootController implements Initializab
         fillCategorySelection();
         setComponentRules();
         onClickSelectFile.setOnAction(this::selectFileChooser);
-
         confirm_action.setOnAction(this::movieOnClickAction);
-
         cancelOnAction.setOnAction(e -> getStage().close()); // sets to close stage on action
     }
 
     private void selectFileChooser(ActionEvent actionEvent) {
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("VideoFiles (*.mp4,*.mpeg4)", "*.mp4", "*.mpeg4");
-       // chooseFile.getExtensionFilters().add(extFilter);
+        var chooseFile = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("SoundFiles files (*.mp4,*.mpeg4)", "*.mp4", "*.mpeg4");
+        chooseFile.getExtensionFilters().add(extFilter);
+
+        File selectedMovieFile = chooseFile.showOpenDialog(new Stage());
+        if (selectedMovieFile != null) {
+            path.setText(selectedMovieFile.toURI().toString());
+            var media = new Media(selectedMovieFile.toURI().toString().replace("\\", "/"));
+            var duration = (int) media.getDuration().toSeconds();
+            durationField.setText(duration / 60 + ":" + duration % 60);
+            if (movieName.getText().isBlank())
+                movieName.setText(selectedMovieFile.getName());
+        }
     }
 
+    /**
+     * takes care of the value factory for spinner once instantiated
+     */
     private void setComponentRules() {
         SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(1.0, 10.0,1.0, 0.5);
         personalRatingSpin.setValueFactory(valueFactory);
@@ -72,11 +81,15 @@ public class CreateMovieController extends RootController implements Initializab
         List<Category> categoryList = tryToGetCategory();
         categoryList.stream().map(category -> {
             CheckMenuItem menuItem = new CheckMenuItem();
-            menuItem.setText(category.toString());
+            menuItem.setText(category.name().getValue());
             return menuItem;
         }).forEach(menuItem -> categoryMenuButton.getItems().add(menuItem));
     }
 
+    /**
+     * tries to get the List of categories
+     * @return list of Categories with id,name
+     */
     private List<Category> tryToGetCategory() {
         try {
             return categoryModel.getAllCategories();
@@ -91,29 +104,50 @@ public class CreateMovieController extends RootController implements Initializab
      * @param e action event
      */
     private void movieOnClickAction(ActionEvent e) {
-        if(!isEditable){
-            List<String> selectedCategories = categoryMenuButton.getItems().stream()
-                    .filter(item -> item instanceof CheckMenuItem)
-                    .map(CheckMenuItem.class::cast)
-                    .filter(CheckMenuItem::isSelected)
-                    .map(CheckMenuItem::getText)
-                    .toList();
-
+        if(!isEditable && isValidatedInput()){
+            var collectedCategory = mapSelectedCategories();
             Movie movie = new Movie(
                     0,
                     new SimpleStringProperty(movieName.getText().trim()),
                     personalRatingSpin.getValue(),
                     new SimpleStringProperty(path.getText().trim()),
-                    selectedCategories,
+                    collectedCategory,
                     null);
-//
+
             int result = tryCreateMovie(movie);
            closeAndUpdate(result,movie.id());
         }else {
-            // update movie here
+            // update logic  here
         }
     }
 
+    /**
+     * validates user input
+     * @return false is requirements not met
+     */
+    private boolean isValidatedInput() {
+        boolean isValidated = false;
+        if(movieName.getText().isEmpty() || mapSelectedCategories().isEmpty() || path.getText().isEmpty()){
+            System.out.println("Please fill all the field! You get the drill" );            // -> notify user that something went wrong
+        }else  {
+            isValidated = true;
+        }
+        return isValidated;
+    }
+
+    /**
+     * maps selected categories
+     * @return list of Categories
+     */
+    private List<Category> mapSelectedCategories() {
+        return categoryMenuButton.getItems().stream()
+                .filter(item -> item instanceof CheckMenuItem)
+                .map(CheckMenuItem.class::cast)
+                .filter(CheckMenuItem::isSelected)
+                .map(button -> new Category(0,new SimpleStringProperty(button.getText())))
+                .toList();
+
+    }
 
     /**
      * method to check if result was > 0 and decide if refresh table and close or notifies user that something went wrong

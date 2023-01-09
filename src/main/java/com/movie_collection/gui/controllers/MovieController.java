@@ -110,7 +110,7 @@ public class MovieController extends BaseController implements Initializable{
 
     private void refreshTableAndNotify(int result,int id) {
         if(result > 0){
-           refreshTable();
+            refreshTable();
             System.out.println("Successfully deleted movie with id: "+ id); // place for out notification
         }else {
             System.out.println("Could not delete movie with id: " + id); // place for our notification
@@ -121,12 +121,14 @@ public class MovieController extends BaseController implements Initializable{
      * method that clears table items if they are not null and sets it back to required values
      */
     protected void refreshTable() {
-        if(moviesTable.getItems() != null){
-            moviesTable.getItems().clear();
-            try {
-                moviesTable.getItems().setAll(movieService.getAllMovies());
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+        if(moviesTable != null){
+            if(moviesTable.getItems() != null){
+                moviesTable.getItems().clear();
+                try {
+                    moviesTable.getItems().setAll(movieService.getAllMovies());
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
