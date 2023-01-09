@@ -70,7 +70,7 @@ public class BaseController extends RootController implements Initializable {
      * void method that invokes scroll pane to clean content first
      * and then set it back to all categories
      */
-    public void refreshScrollPane() throws SQLException {
+    protected void refreshScrollPane() throws SQLException {
         if(scroll_pane.getContent() != null){
             scroll_pane.setContent(null);
             setCategoriesScrollPane(categoryModel.getAllCategories());
@@ -171,6 +171,7 @@ public class BaseController extends RootController implements Initializable {
     private void onActionAddMovie(ActionEvent actionEvent) throws IOException {
         Parent parent = loadNodesView(ViewType.CREATE_EDIT);
         show(parent,"Add new Movie");
+        actionEvent.consume();
     }
 
     /**
@@ -231,6 +232,7 @@ public class BaseController extends RootController implements Initializable {
     private void onActionAddCategory(ActionEvent actionEvent) throws IOException {
         Parent parent = loadNodesView(ViewType.CATEGORY_ADD_EDIT);
         show(parent,"Add new Category");
+        actionEvent.consume();
     }
 
 
