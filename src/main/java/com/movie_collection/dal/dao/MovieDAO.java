@@ -26,10 +26,6 @@ public class MovieDAO implements IMovieDAO {
             PreparedStatement pstmt = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = pstmt.executeQuery();
 
-//            sql = "SELECT C.id, C.name, CM.movieId, CM.categoryId FROM Category C INNER JOIN CatMovie CM on C.id = CM.CategoryId ORDER BY CM.movieID ASC ";
-//            PreparedStatement pstmt2 = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-//            ResultSet rs2 = pstmt2.executeQuery();
-
             // used for adding categories to movie
             while (rs.next()) {
                 int id = rs.getInt("id");
