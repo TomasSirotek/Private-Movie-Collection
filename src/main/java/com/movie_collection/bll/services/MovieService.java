@@ -1,7 +1,9 @@
 package com.movie_collection.bll.services;
 
 import com.google.inject.Inject;
+import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
+import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.bll.services.interfaces.IMovieService;
 import com.movie_collection.dal.interfaces.IMovieDAO;
 
@@ -10,10 +12,12 @@ import java.util.List;
 
 public class MovieService implements IMovieService {
     private final IMovieDAO movieDAO;
+    private final ICategoryService categoryService;
 
     @Inject
-    public MovieService(IMovieDAO movieDAO) {
+    public MovieService(IMovieDAO movieDAO, ICategoryService categoryService) {
         this.movieDAO = movieDAO;
+        this.categoryService = categoryService;
     }
 
     @Override
@@ -23,7 +27,13 @@ public class MovieService implements IMovieService {
 
     @Override
     public int createMovie(Movie movie) throws SQLException {
-        return movieDAO.createMovie(movie);
+        List<Category> categories = movie.categories();
+        for (int i = 0; i < categories.size(); i++) {
+            String catName = categories.get(i).name().get();
+            Category category = categoryService.getCategoryByName(catName);
+            categories.set(i, category);
+        }
+        return movieDAO.createMovie(new Movie(movie.id(), movie.name(), movie.rating(), movie.absolutePath(), categories, movie.lastview()));
     }
 
     @Override
