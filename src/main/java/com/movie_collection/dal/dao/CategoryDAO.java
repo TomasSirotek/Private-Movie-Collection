@@ -1,7 +1,6 @@
 package com.movie_collection.dal.dao;
 
 import com.movie_collection.be.Category;
-import com.movie_collection.be.Movie;
 import com.movie_collection.dal.interfaces.ICategoryDAO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -39,13 +38,13 @@ public class CategoryDAO implements ICategoryDAO {
             preparedStatement.executeUpdate();
         }
     }
-    //Return integer from deleteCategory for handle notifications
-    public void deleteCategory(int id) throws SQLException {
+    public int deleteCategory(int id) throws SQLException {
         try(Connection connection = cm.getConnection()){
             String sql = "DELETE FROM Category WHERE id= ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
+            int rs = preparedStatement.executeUpdate();
+            return rs;
         }
     }
 }

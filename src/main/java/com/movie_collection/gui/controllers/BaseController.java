@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -58,14 +59,18 @@ public class BaseController extends RootController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setCategoriesScrollPane(categoryModel.getAllCategories());
+        try {
+            setCategoriesScrollPane(categoryModel.getAllCategories());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * void method that invokes scroll pane to clean content first
      * and then set it back to all categories
      */
-    public void refreshScrollPane(){
+    public void refreshScrollPane() throws SQLException {
         if(scroll_pane.getContent() != null){
             scroll_pane.setContent(null);
             setCategoriesScrollPane(categoryModel.getAllCategories());
@@ -103,9 +108,18 @@ public class BaseController extends RootController implements Initializable {
                     // Setting delete for individual button in order to know which one it is
                     // if true then we refresh again the scroll pane
                     deleteBtn.setOnAction(event -> {
-                        var result =  categoryModel.deleteCategory(category.id());
-                        if (result) {
-                            refreshScrollPane();
+                        int result = 0;
+                        try {
+                            result = categoryModel.deleteCategory(category.id());
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
+                        if (result > 1) {
+                            try {
+                                refreshScrollPane();
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                         } else {
                             throw new RuntimeException("Could not delete category with id: " + category.id());
                         }

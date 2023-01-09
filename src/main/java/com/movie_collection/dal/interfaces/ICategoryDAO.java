@@ -1,6 +1,5 @@
 package com.movie_collection.dal.interfaces;
 
-import com.microsoft.sqlserver.jdbc.SQLServerException;
 import com.movie_collection.be.Category;
 
 import java.sql.SQLException;
@@ -26,8 +25,10 @@ public interface ICategoryDAO {
      */
     /**
      * NEED TO DISCUSS WITH TEAM
+     *
+     * @return
      */
-    void deleteCategory(int id) throws SQLException;
+    int deleteCategory(int id) throws SQLException;
 
     /**
      * Retrieves all movies in a genre/category in specific
