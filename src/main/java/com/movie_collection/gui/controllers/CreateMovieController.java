@@ -19,7 +19,9 @@ import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 
 import java.net.URL;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -56,6 +58,10 @@ public class CreateMovieController extends RootController implements Initializab
         confirm_action.setOnAction(this::movieOnClickAction);
 
         cancelOnAction.setOnAction(e -> getStage().close()); // sets to close stage on action
+        // test
+        List<Category> categories = new ArrayList<>();
+        categories.add(new Category(0, new SimpleStringProperty("action")));
+        tryCreateMovie(new com.movie_collection.be.Movie(1, new SimpleStringProperty("testnewdate"), 10.0, new SimpleStringProperty("test"), categories, new Date(Instant.now().toEpochMilli())));
     }
 
     private void selectFileChooser(ActionEvent actionEvent) {
@@ -99,16 +105,16 @@ public class CreateMovieController extends RootController implements Initializab
                     .map(CheckMenuItem::getText)
                     .toList();
 
-            Movie movie = new Movie(
-                    0,
-                    new SimpleStringProperty(movieName.getText().trim()),
-                    personalRatingSpin.getValue(),
-                    new SimpleStringProperty(path.getText().trim()),
-                    selectedCategories,
-                    null);
-//
-            int result = tryCreateMovie(movie);
-           closeAndUpdate(result,movie.id());
+//            Movie movie = new Movie(
+//                    0,
+//                    new SimpleStringProperty(movieName.getText().trim()),
+//                    personalRatingSpin.getValue(),
+//                    new SimpleStringProperty(path.getText().trim()),
+//                    selectedCategories,
+//                    null);
+////
+//            int result = tryCreateMovie(movie);
+//           closeAndUpdate(result,movie.id());
         }else {
             // update movie here
         }
