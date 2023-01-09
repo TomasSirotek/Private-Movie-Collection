@@ -17,7 +17,7 @@ public class CategoryDAO implements ICategoryDAO {
     public List<Category> getAllCategories() throws SQLException {
         ArrayList<Category> allCategories = new ArrayList<>();
         try (Connection connection = cm.getConnection()) {
-            String sql = "SELECT * FROM Category order By id asc";
+            String sql = "SELECT id,name FROM Category order By id asc";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
