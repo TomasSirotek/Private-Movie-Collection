@@ -17,7 +17,7 @@ public class CategoryDAO implements ICategoryDAO {
     public List<Category> getAllCategories() throws SQLException {
         ArrayList<Category> allCategories = new ArrayList<>();
         try (Connection connection = cm.getConnection()) {
-            String sql = "SELECT * FROM ALL_PLAYLISTS order By id asc";
+            String sql = "SELECT * FROM Category order By id asc";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -30,12 +30,13 @@ public class CategoryDAO implements ICategoryDAO {
     }
 
     //Return   integer from addCat
-    public void addCategory(Category category) throws SQLException {
+    public int addCategory(Category category) throws SQLException {
         try (Connection connection = cm.getConnection()) {
             String sql = "INSERT INTO Category (name) VALUES(?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, category.name().get());
-            preparedStatement.executeUpdate();
+            int rs = preparedStatement.executeUpdate();
+            return rs;
         }
     }
     public int deleteCategory(int id) throws SQLException {
