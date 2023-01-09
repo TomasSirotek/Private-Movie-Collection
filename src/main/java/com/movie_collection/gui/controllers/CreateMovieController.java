@@ -19,7 +19,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
-public class CreateMovieController extends RootController implements Initializable {
+public class CreateMovieController extends BaseController implements Initializable {
 
     @FXML
     private Label labelUserAction;
