@@ -123,31 +123,47 @@ public class MovieDAO implements IMovieDAO {
             rs.next();
             int id = rs.getInt("id");
 
-
-            for (Category c : movie.categories()) {
-                sql = "INSERT INTO CatMovie (categoryId, movieId) VALUES (?, ?)";
-                pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                pstmt.setInt(1, c.id());
-                pstmt.setInt(2, id);
-                rowsAffected += pstmt.executeUpdate();
-            }
+            rowsAffected = linkMovieCategories(movie, rowsAffected, con, id);
         }
         return rowsAffected + 1;
     }
 
     public int updateMovie(Movie movie) throws SQLException {
-        int rowsAffected;
+        int rowsAffected = 1;
         try (Connection con = cm.getConnection()) {
-            String sql = "UPDATE Movie SET name = ?, rating = ?, path = ?, lastview = ? WHERE id = ?";
+            String sql = "UPDATE Movie SET name = ?, rating = ?, path = ?, lastview = ? OUTPUT INSERTED.id WHERE name = (?) ";
             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, movie.name().get());
             pstmt.setDouble(2, movie.rating());
             pstmt.setString(3, movie.absolutePath().get());
             pstmt.setDate(4, movie.lastview());
-            pstmt.setInt(5, movie.id());
-            rowsAffected = pstmt.executeUpdate();
+            pstmt.setString(5, movie.name().get());
+            ResultSet rs = pstmt.executeQuery();
+            rs.next();
+            int id = rs.getInt("id");
 
+            sql = "DELETE FROM CatMovie WHERE movieId = ?;";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+
+            rowsAffected = linkMovieCategories(movie, rowsAffected, con, id);
         }
+        return rowsAffected;
+    }
+
+    private int linkMovieCategories(Movie movie, int rowsAffected, Connection con, int id) throws SQLException {
+        String sql;
+        PreparedStatement pstmt;
+        sql = "INSERT INTO CatMovie (categoryId, movieId) VALUES (?, ?);";
+        pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        for (Category c : movie.categories()) {
+            pstmt.setInt(1, c.id());
+            pstmt.setInt(2, id);
+            pstmt.addBatch();
+            rowsAffected++;
+        }
+        pstmt.executeBatch();
         return rowsAffected;
     }
 
