@@ -39,10 +39,10 @@ public class BaseController extends RootController implements Initializable {
     private StackPane app_content;
 
     @Inject
-    IControllerFactory controllerFactory;
+    private IControllerFactory controllerFactory;
 
     @Inject
-    ICategoryModel categoryModel;
+    private ICategoryModel categoryModel;
 
     @Inject
     public BaseController(IControllerFactory controllerFactory,ICategoryModel categoryModel) {

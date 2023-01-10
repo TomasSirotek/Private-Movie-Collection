@@ -4,11 +4,16 @@ import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.services.interfaces.IMovieService;
-import com.movie_collection.gui.controllers.controllerFactory.ControllerFactory;
-import javafx.beans.property.*;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -31,7 +36,7 @@ public class MovieController extends BaseController implements Initializable{
     private TableColumn<Movie,String> colMovieRating;
 
     @Inject
-    IMovieService movieService;
+    private IMovieService movieService;
 
     @Inject
     public MovieController(IMovieService movieService) {
