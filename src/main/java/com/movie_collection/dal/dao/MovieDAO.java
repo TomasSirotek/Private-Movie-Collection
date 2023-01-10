@@ -57,6 +57,7 @@ public class MovieDAO implements IMovieDAO {
                         categories = catName != null ? List.of(new Category(rs.getInt("C_id"), new SimpleStringProperty(catName))) : new ArrayList<>();
                     }
                     movies.add(new Movie(id, name, rating, path, new ArrayList<>(categories), lastview));
+
                 }
             }
         }

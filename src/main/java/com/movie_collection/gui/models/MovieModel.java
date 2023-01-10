@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class MovieModel implements IMovieModel{
     private final IMovieService movieService;
@@ -30,17 +31,22 @@ public class MovieModel implements IMovieModel{
     }
 
     @Override
+    public ObservableList<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException{
+        return FXCollections.observableArrayList(
+                movieService.getAllMoviesInTheCategory(categoryId)
+        );
+    }
+
+    @Override
     public int createMovie(Movie movie) throws SQLException {
         return movieService.createMovie(movie);
     }
-
-    @Override
-    public int deleteMovie(int id) throws SQLException {
-        return movieService.deleteMovie(id);
-    }
-
     @Override
     public int updateMovie(Movie movie) throws SQLException {
         return movieService.updateMovie(movie);
+    }
+    @Override
+    public int deleteMovie(int id) throws SQLException {
+        return movieService.deleteMovie(id);
     }
 }

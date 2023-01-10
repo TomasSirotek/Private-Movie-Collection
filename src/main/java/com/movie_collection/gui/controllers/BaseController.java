@@ -48,12 +48,7 @@ public class BaseController extends RootController implements Initializable {
         this.categoryModel = categoryModel;
     }
 
-    //  TODO: an empty constructor that is always created
-    // whenever we specify but in this case it wa
-    // s doing some not good stuff with injection
-    // but lets look into the di AND MODULE-INFO LATER
-    public BaseController() {
-    }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -93,8 +88,9 @@ public class BaseController extends RootController implements Initializable {
 
                     // Setting on the action for switching views
                     categoryBtn.setOnAction(event -> {
-                        Parent parent = tryToLoadView();
-                        switchToView(parent); // switches into chosen view
+                        MovieController parent = (MovieController) tryToLoadView();
+                        parent.setIsCategoryView(category.id());
+                        switchToView(parent.getView()); // switches into chosen view
                     });
                     categoryBtn.setPrefWidth(140);
 
@@ -153,7 +149,7 @@ public class BaseController extends RootController implements Initializable {
      * method that tries to load the view
      * @return parent that will be loaded
      */
-    private Parent tryToLoadView() {
+    private RootController tryToLoadView() {
         try {
             return loadNodesView(ViewType.MOVIES);
         } catch (IOException e) {
@@ -167,8 +163,8 @@ public class BaseController extends RootController implements Initializable {
      */
     @FXML
     private void onActionAddMovie(ActionEvent actionEvent) throws IOException {
-        Parent parent = loadNodesView(ViewType.CREATE_EDIT);
-        show(parent,"Add new Movie");
+        RootController parent = loadNodesView(ViewType.CREATE_EDIT);
+        show(parent.getView(),"Add new Movie");
         actionEvent.consume();
     }
 
@@ -197,8 +193,8 @@ public class BaseController extends RootController implements Initializable {
      */
     @FXML
     private void clickMovies(ActionEvent e) throws IOException {
-        Parent parent = loadNodesView(ViewType.MOVIES);
-        switchToView(parent);
+        RootController parent = loadNodesView(ViewType.MOVIES);
+        switchToView(parent.getView());
         e.consume();
     }
 
@@ -208,8 +204,8 @@ public class BaseController extends RootController implements Initializable {
      * @return parent loaded from factory
      */
 
-    private Parent loadNodesView(ViewType viewType) throws IOException {
-        return controllerFactory.loadFxmlFile(viewType).getView();
+    private RootController loadNodesView(ViewType viewType) throws IOException {
+        return controllerFactory.loadFxmlFile(viewType);
     }
 
     /**
@@ -228,8 +224,8 @@ public class BaseController extends RootController implements Initializable {
      */
     @FXML
     private void onActionAddCategory(ActionEvent actionEvent) throws IOException {
-        Parent parent = loadNodesView(ViewType.CATEGORY_ADD_EDIT);
-        show(parent,"Add new Category");
+        RootController parent = loadNodesView(ViewType.CATEGORY_ADD_EDIT);
+        show(parent.getView(),"Add new Category");
         actionEvent.consume();
     }
 
@@ -242,8 +238,8 @@ public class BaseController extends RootController implements Initializable {
      */
     @FXML
     private void onActionGoHome(ActionEvent actionEvent) throws IOException {
-        Parent parent = loadNodesView(ViewType.MOVIES);
-        switchToView(parent);
+        RootController parent = loadNodesView(ViewType.MOVIES);
+        switchToView(parent.getView());
         actionEvent.consume();
     }
 }

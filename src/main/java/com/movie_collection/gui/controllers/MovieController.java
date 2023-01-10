@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -44,6 +45,10 @@ public class MovieController extends RootController implements Initializable{
     private final IMovieModel movieModel;
 
     private final IControllerFactory controllerFactory;
+
+    private boolean isCategoryView = false;
+
+    private int categoryId;
 
     @Inject
     public MovieController(IMovieModel movieService, IControllerFactory controllerFactory) {
@@ -117,8 +122,22 @@ public class MovieController extends RootController implements Initializable{
             });
             return new SimpleObjectProperty<>(deleteButton);
         });
-        // tries to call movie service and set all items
+
+
         trySetTableWithMovies();
+
+
+
+    }
+
+    protected void setIsCategoryView(int categoryId){
+        this.isCategoryView = true;
+        this.categoryId = categoryId;
+
+        if(moviesTable != null){
+            moviesTable.getItems().clear();
+            trySetTableByCategory(categoryId);
+        }
     }
 
 
@@ -173,6 +192,23 @@ public class MovieController extends RootController implements Initializable{
                     throw new RuntimeException(e);
                 }
             }
+        }
+    }
+
+
+    private void trySetTableByCategory(int categoryId){
+        javafx.collections.ObservableList<Movie> test;
+        try {
+            test = movieModel.getAllMoviesInTheCategory(categoryId);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e); //TODO: Lets look at this later to fix it                no result rows
+        }
+        if(test.size() > 0){
+           moviesTable.getItems().setAll(test);
+        } else {
+            List<Movie> moviesEmpty =  List.of();
+            moviesTable.getItems().setAll(moviesEmpty);
         }
     }
 
