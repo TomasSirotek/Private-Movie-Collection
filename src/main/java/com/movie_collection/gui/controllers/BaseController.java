@@ -254,7 +254,7 @@ public class BaseController extends RootController implements Initializable {
     }
 
     private void filterBar() throws SQLException {
-        System.out.println(movieModel.getAllMovies());
+        //System.out.println(movieModel.getAllMovies());
         System.out.println("TEST");
         searchMovies.textProperty().addListener(new ChangeListener<String>() {
             @Override
