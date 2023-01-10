@@ -3,6 +3,7 @@ package com.movie_collection.gui.controllers;
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
+import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.models.ICategoryModel;
 import com.movie_collection.gui.models.IMovieModel;
@@ -52,10 +53,13 @@ public class CreateMovieController extends RootController implements Initializab
         fillCategorySelection();
         setComponentRules();
         onClickSelectFile.setOnAction(this::selectFileChooser);
-        confirm_action.setOnAction(this::movieOnClickAction);
-        cancelOnAction.setOnAction(e -> getStage().close()); // sets to close stage on action
+        cancelOnAction.setOnAction(e -> getStage().close());
     }
 
+    /**
+     * method that takes care of setting the file chooser to be active
+     * @param actionEvent triggered event
+     */
     private void selectFileChooser(ActionEvent actionEvent) {
         var chooseFile = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("SoundFiles files (*.mp4,*.mpeg4)", "*.mp4", "*.mpeg4");
@@ -80,6 +84,9 @@ public class CreateMovieController extends RootController implements Initializab
         personalRatingSpin.setValueFactory(valueFactory);
     }
 
+    /**
+     * fill all the categories from all available categories
+     */
     private void fillCategorySelection() {
         List<Category> categoryList = tryToGetCategory();
         if(categoryMenuButton.getItems() != null){
@@ -96,50 +103,50 @@ public class CreateMovieController extends RootController implements Initializab
     }
 
     /**
-     * tries to get the List of categories
-     * @return list of Categories with id,name
-     */
-    private List<Category> tryToGetCategory() {
-        try {
-            return categoryModel.getAllCategories();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
      * method that will construct new Movie from user input and tries to create it
      * this is two way purpose and the whole logic depends on the boolean value of editable
      * @param e action event
      */
+    @FXML
     private void movieOnClickAction(ActionEvent e) {
-        if(!isEditable && isValidatedInput()){
-            var collectedCategory = mapSelectedCategories();
-            Movie movie = new Movie(
-                    0,
-                    new SimpleStringProperty(movieName.getText().trim()),
-                    personalRatingSpin.getValue(),
-                    new SimpleStringProperty(path.getText().trim()),
-                    collectedCategory,
-                    null);
+        if(!isEditable){
+            if(isValidatedInput()){
+                var collectedCategory = mapSelectedCategories();
+                Movie movie = new Movie(
+                        0,
+                        new SimpleStringProperty(movieName.getText().trim()),
+                        personalRatingSpin.getValue(),
+                        new SimpleStringProperty(path.getText().trim()),
+                        collectedCategory,
+                        null);
 
-            int result = tryCreateMovie(movie);
-            closeAndUpdate(result,movie.id());
+                int result = tryCreateMovie(movie);
+                closeAndUpdate(result,movie.id());
+                e.consume();
+            }
         }else {
-            var collectedCategory = mapSelectedCategories();
-            Movie movie = new Movie(
-                    0,
-                    new SimpleStringProperty(movieName.getText().trim()),
-                    personalRatingSpin.getValue(),
-                    new SimpleStringProperty(path.getText().trim()),
-                    collectedCategory,
-                    null);
+            if(isValidatedInput()){
+                var collectedCategory = mapSelectedCategories();
+                Movie movie = new Movie(
+                        editableMovie.id(),
+                        new SimpleStringProperty(movieName.getText().trim()),
+                        personalRatingSpin.getValue(),
+                        new SimpleStringProperty(path.getText().trim()),
+                        collectedCategory,
+                        editableMovie.lastview());
 
-            int result = tryUpdateMovie(movie);
-            closeAndUpdate(result,movie.id());
+                int result = tryUpdateMovie(movie);
+                closeAndUpdate(result,movie.id());
+                e.consume();
+            }
+
         }
     }
 
+    /**
+     * method that sets movie to be editable from passed movie object
+     * @param movie object that will be displayed to be edited
+     */
     protected void setEditableView(Movie movie){
         isEditable = true;
         editableMovie = movie;
@@ -152,28 +159,33 @@ public class CreateMovieController extends RootController implements Initializab
 
         if(categoryMenuButton.getItems() != null){
             categoryMenuButton.getItems().clear();
-            List<Category> categoryList = tryToGetCategory();
-            Set<String> categorySet = editableMovie.categories().stream().map(category -> category.name().getValue()).collect(Collectors.toSet());
+            setEditableCategories();
 
-            categoryList.stream()
-                    .map(category -> {
-                        CheckMenuItem menuItem = new CheckMenuItem();
-                        menuItem.setText(category.name().getValue());
-
-                        if(categorySet.contains(category.name().getValue())){
-                            menuItem.setSelected(true);
-                        }
-
-                        return menuItem;
-                    })
-                    .forEach(menuItem -> categoryMenuButton.getItems().add(menuItem));
         }
-
         confirm_action.setText("Update");
         labelMovieWindow.setText("Update Movie");
     }
 
+    /**
+     * load and sets correctly all the categories depends if movie has them
+     */
+    private void setEditableCategories() {
+        List<Category> categoryList = tryToGetCategory();
+        Set<String> categorySet = editableMovie.categories().stream().map(category -> category.name().getValue()).collect(Collectors.toSet());
 
+        categoryList.stream()
+                .map(category -> {
+                    CheckMenuItem menuItem = new CheckMenuItem();
+                    menuItem.setText(category.name().getValue());
+
+                    if(categorySet.contains(category.name().getValue())){
+                        menuItem.setSelected(true);
+                    }
+
+                    return menuItem;
+                })
+                .forEach(menuItem -> categoryMenuButton.getItems().add(menuItem));
+    }
 
     /**
      * validates user input
@@ -182,7 +194,7 @@ public class CreateMovieController extends RootController implements Initializab
     private boolean isValidatedInput() {
         boolean isValidated = false;
         if(movieName.getText().isEmpty() || mapSelectedCategories().isEmpty() || path.getText().isEmpty()){
-            System.out.println("Please fill all the field! You get the drill" );            // -> notify user that something went wrong
+            AlertHelper.showDefaultAlert("Please fill all the field! You get the drill" , Alert.AlertType.ERROR);
         }else  {
             isValidated = true;
         }
@@ -200,7 +212,6 @@ public class CreateMovieController extends RootController implements Initializab
                 .filter(CheckMenuItem::isSelected)
                 .map(button -> new Category(0,new SimpleStringProperty(button.getText())))
                 .toList();
-
     }
 
     /**
@@ -212,9 +223,9 @@ public class CreateMovieController extends RootController implements Initializab
         if(result > 0){
             movieController.refreshTable();
             getStage().close();
-            System.out.println("Successfully created movie with id: " + id );
+            AlertHelper.showDefaultAlert("Success with id: "+ id, Alert.AlertType.INFORMATION);
         }else {
-            System.out.println("Could not update movie with id: " + id);
+            AlertHelper.showDefaultAlert("Successfully error occurred with id: "+ id, Alert.AlertType.ERROR);
         }
 
     }
@@ -232,11 +243,29 @@ public class CreateMovieController extends RootController implements Initializab
         }
     }
 
+    /**
+     * method that tries to pass movie object and update it in database
+     * @param movie object that will be updated
+     * @return 0 or 1 where 0 is fail and 1 is success
+     */
+
     private int tryUpdateMovie(Movie movie) {
         try {
             return movieModel.updateMovie(movie);
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
+        }
+    }
+
+    /**
+     * tries to get the List of categories
+     * @return list of Categories with id,name
+     */
+    private List<Category> tryToGetCategory() {
+        try {
+            return categoryModel.getAllCategories();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

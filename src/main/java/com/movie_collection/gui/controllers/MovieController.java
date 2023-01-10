@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.ViewType;
+import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
 import com.movie_collection.gui.models.IMovieModel;
@@ -14,10 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -110,19 +108,19 @@ public class MovieController extends RootController implements Initializable{
             deleteButton.setOnAction(e -> {
                 Movie movie = col.getValue(); // get movie object from the current row
                 if (movie != null) {
-                   int result = tryDeleteMovie(movie.id()); // tries to delete movie by id inside the row
-                   refreshTableAndNotify(result,movie.id());
+                    var resultNotify = AlertHelper.showOptionalAlertWindow("Are you sure you want delete movie with id: " + movie.id(), Alert.AlertType.CONFIRMATION);
+                    if (resultNotify.get().equals(ButtonType.OK)) {
+                        int result = tryDeleteMovie(movie.id()); // tries to delete movie by id inside the row
+                        refreshTableAndNotify(result,movie.id());
+                    }
                 }
             });
             return new SimpleObjectProperty<>(deleteButton);
         });
         // tries to call movie service and set all items
-        try {
-            moviesTable.getItems().setAll(movieModel.getAllMovies());
-        } catch (SQLException e) {
-            throw new RuntimeException(e); //TODO: Lets look at this later to fi it
-        }
+        trySetTableWithMovies();
     }
+
 
     private void showUpdateWindow(Parent view) {
         Stage stage = new Stage();
@@ -148,12 +146,17 @@ public class MovieController extends RootController implements Initializable{
         return controller;
     }
 
+    /**
+     * refreshed the table and notify user about the status of his actions
+     * @param result that will be judged up on
+     * @param id that will be displayed if action for that id was successful
+     */
     private void refreshTableAndNotify(int result,int id) {
         if(result > 0){
             refreshTable();
-            System.out.println("Successfully deleted movie with id: "+ id); // place for out notification
+            AlertHelper.showDefaultAlert("Successfully deleted movie with id: "+ id, Alert.AlertType.INFORMATION);
         }else {
-            System.out.println("Could not delete movie with id: " + id); // place for our notification
+            AlertHelper.showDefaultAlert("Could not delete movie with id: " + id, Alert.AlertType.ERROR);
         }
     }
 
@@ -170,6 +173,18 @@ public class MovieController extends RootController implements Initializable{
                     throw new RuntimeException(e);
                 }
             }
+        }
+    }
+
+    /**
+     * method that tries to set table with all movies
+     */
+
+    private void trySetTableWithMovies() {
+        try {
+            moviesTable.getItems().setAll(movieModel.getAllMovies());
+        } catch (SQLException e) {
+            throw new RuntimeException(e); //TODO: Lets look at this later to fix it
         }
     }
 

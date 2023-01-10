@@ -83,7 +83,7 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="63.0" prefWidth="257.0">
                <children>
-                  <Button fx:id="confirm_action" alignment="BOTTOM_LEFT" mnemonicParsing="false" prefHeight="26.0" prefWidth="84.0" text="Add Movie">
+                  <Button fx:id="confirm_action" onAction="#movieOnClickAction" alignment="BOTTOM_LEFT" mnemonicParsing="false" prefHeight="26.0" prefWidth="84.0" text="Add Movie">
                      <HBox.margin>
                         <Insets right="10.0" />
                      </HBox.margin>
