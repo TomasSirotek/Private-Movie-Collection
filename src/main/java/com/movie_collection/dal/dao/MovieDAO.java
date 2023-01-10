@@ -109,28 +109,60 @@ public class MovieDAO implements IMovieDAO {
     }
 
     public int createMovie(Movie movie) throws SQLException {
+        int rowsAffected = 0;
         try (Connection con = cm.getConnection()) {
-            String sql = "INSERT INTO Movie name, rating, path, lastview VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO Movie name, rating, path, lastview VALUES (?, ?, ?, ?); SELECT SCOPE_IDENTITY() as id ";
             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, movie.name().get());
             pstmt.setDouble(2, movie.rating());
             pstmt.setString(3, movie.absolutePath().get());
             pstmt.setDate(4, movie.lastview());
-            return pstmt.executeUpdate();
+            ResultSet rs = pstmt.executeQuery();
+            rs.next();
+            int id = rs.getInt("id");
+
+
+            for (Category c : movie.categories()) {
+                sql = "INSERT INTO CatMovie (categoryId, movieId) VALUES (?, ?)";
+                pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                pstmt.setInt(1, c.id());
+                pstmt.setInt(2, id);
+                rowsAffected += pstmt.executeUpdate();
+            }
         }
+        return rowsAffected + 1;
     }
 
     public int updateMovie(Movie movie) throws SQLException {
+        int rowsAffected = 1;
         try (Connection con = cm.getConnection()) {
-            String sql = "UPDATE Movie SET name = ?, rating = ?, path = ?, lastview = ? WHERE id = ?";
+            String sql = "UPDATE Movie SET name = ?, rating = ?, path = ?, lastview = ? WHERE name = (?) SELECT SCOPE_IDENTITY() as id;";
             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, movie.name().get());
             pstmt.setDouble(2, movie.rating());
             pstmt.setString(3, movie.absolutePath().get());
             pstmt.setDate(4, movie.lastview());
-            pstmt.setInt(5, movie.id());
-            return pstmt.executeUpdate();
+            pstmt.setString(5, movie.name().get());
+            ResultSet rs = pstmt.executeQuery();
+            rs.next();
+            int id = rs.getInt("id");
+
+            sql = "DELETE FROM CatMovie WHERE movieId = ?;";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+
+            for (Category c : movie.categories()) {
+                System.out.println(c.id());
+                sql = "INSERT INTO CatMovie (categoryId, movieId) VALUES (?, ?)";
+                pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                pstmt.setInt(1, c.id());
+                pstmt.setInt(2, id);
+                pstmt.executeQuery();
+                rowsAffected += 1;
+            }
         }
+        return rowsAffected;
     }
 
     public int deleteMovie(int id) throws SQLException {
