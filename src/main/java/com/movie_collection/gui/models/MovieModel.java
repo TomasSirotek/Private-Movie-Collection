@@ -2,7 +2,6 @@ package com.movie_collection.gui.models;
 
 import com.google.inject.Inject;
 import com.movie_collection.be.Movie;
-import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.bll.services.interfaces.IMovieService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

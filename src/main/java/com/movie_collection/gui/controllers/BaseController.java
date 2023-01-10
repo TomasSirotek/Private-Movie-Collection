@@ -261,11 +261,9 @@ public class BaseController extends RootController implements Initializable {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 movies.clear();
                 System.out.println("TEST");
-                try {
-                    movies.addAll(filter.filteringMovies(newValue));
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+                //TODO FIX TRIGGER ERROR FROM MOVIE Observable and communication with MovieController
+                //movies.addAll(filter.filteringMovies(newValue));
+
 
             }
         });
