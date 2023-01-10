@@ -38,4 +38,9 @@ public class MovieModel implements IMovieModel{
     public int deleteMovie(int id) throws SQLException {
         return movieService.deleteMovie(id);
     }
+
+    @Override
+    public int updateTimeStamp(int id, String date) throws SQLException {
+        return movieService.updateTimeStamp(id, date);
+    }
 }

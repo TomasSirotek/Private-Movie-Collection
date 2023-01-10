@@ -56,4 +56,14 @@ public interface IMovieDAO {
      * @throws SQLException if the connection to the database fails
      */
     int deleteMovie(int id) throws SQLException;
+
+    /**
+     * Update timeStamp when a movie is played based on the id of the movie and date of opening
+     *
+     * @param id id of movie to be played
+     * @param date String of date about the selection
+     * @return number of rows affected
+     * @throws SQLException if the connection to the database fails
+     */
+    int updateTimeStamp(int id, String date) throws SQLException;
 }

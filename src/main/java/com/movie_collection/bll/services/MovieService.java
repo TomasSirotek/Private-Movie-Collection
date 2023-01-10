@@ -43,6 +43,11 @@ public class MovieService implements IMovieService {
     }
 
     @Override
+    public int updateTimeStamp(int id, String date) throws SQLException {
+        return movieDAO.updateTimeStamp(id, date);
+    }
+
+    @Override
     public Movie getMovieById(int id) throws SQLException {
         return movieDAO.getMovieById(id);
     }

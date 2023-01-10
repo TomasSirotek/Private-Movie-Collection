@@ -4,18 +4,18 @@ import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.services.interfaces.IMovieService;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import com.movie_collection.gui.models.IMovieModel;
+import javafx.beans.property.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -35,12 +35,11 @@ public class MovieController extends BaseController implements Initializable{
     @FXML
     private TableColumn<Movie,String> colMovieRating;
 
-    @Inject
-    private IMovieService movieService;
+    private final IMovieModel movieModel;
 
     @Inject
-    public MovieController(IMovieService movieService) {
-        this.movieService = movieService;
+    public MovieController(IMovieModel movieModel) {
+        this.movieModel = movieModel;
 
     }
 
@@ -71,7 +70,13 @@ public class MovieController extends BaseController implements Initializable{
         colPlayMovie.setCellValueFactory(col -> {
             Button playButton = new Button("▶️");
             playButton.setOnAction(e -> {
-                //- > invoking to play movie in local player
+                try {
+                    playVideoDesktop(col.getValue().id());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
             });
             return new SimpleObjectProperty<>(playButton);
         });
@@ -99,15 +104,21 @@ public class MovieController extends BaseController implements Initializable{
             deleteButton.setOnAction(e -> {
                 Movie movie = col.getValue(); // get movie object from the current row
                 if (movie != null) {
-                   int result =  tryDeleteMovie(movie.id()); // tries to delete movie by id inside the row
+                    int result = 0; // tries to delete movie by id inside the row
+                    try {
+                        result = tryDeleteMovie(movie.id());
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     refreshTableAndNotify(result,movie.id());
                 }
             });
             return new SimpleObjectProperty<>(deleteButton);
         });
         // tries to call movie service and set all items
+
         try {
-            moviesTable.getItems().setAll(movieService.getAllMovies());
+            moviesTable.setItems(movieModel.getAllMovies());
         } catch (SQLException e) {
             throw new RuntimeException(e); //TODO: Lets look at this later to fi it
         }
@@ -122,18 +133,30 @@ public class MovieController extends BaseController implements Initializable{
         }
     }
 
+    private void playVideoDesktop(int id) throws IOException, InterruptedException {
+        Runtime runTime = Runtime.getRuntime();
+        String s[] = new String[]{"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe", "C:\\Users\\nicoe\\OneDrive\\Escritorio\\videos\\sheesh.mp4"};
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy.MM.dd");
+        Timestamp ts = Timestamp.from(Instant.now());
+        try {
+            movieModel.updateTimeStamp(id, sdf1.format(ts));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        runTime.exec(s);
+
+    }
+
     /**
      * method that clears table items if they are not null and sets it back to required values
      */
-    protected void refreshTable() {
-        if(moviesTable != null){
-            if(moviesTable.getItems() != null){
-                moviesTable.getItems().clear();
-                try {
-                    moviesTable.getItems().setAll(movieService.getAllMovies());
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+    void refreshTable() {
+        if(moviesTable.getItems() != null){
+            moviesTable.getItems().clear();
+            try {
+                moviesTable.getItems().setAll(movieModel.getAllMovies());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -143,12 +166,8 @@ public class MovieController extends BaseController implements Initializable{
      * result success if > 0 ... else err display/handel
      * @param id of movie that will be deleted
      */
-    private int tryDeleteMovie(int id) {
-        try {
-            return movieService.deleteMovie(id);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    private int tryDeleteMovie(int id) throws SQLException {
+        return movieModel.deleteMovie(id);
     }
 
 

@@ -180,4 +180,13 @@ public class MovieDAO implements IMovieDAO {
             return rs1 + rs2;
         }
     }
+
+    public int updateTimeStamp(int id, String date) throws SQLException{
+        try(Connection con = cm.getConnection()){
+            String sql = "UPDATE Movie SET lastview = '"+ date +"'" + "WHERE id='"+id+"'";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            int rs1 = preparedStatement.executeUpdate();
+            return rs1;
+        }
+    }
 }
