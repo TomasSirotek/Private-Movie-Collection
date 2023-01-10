@@ -123,7 +123,6 @@ public class MovieDAO implements IMovieDAO {
             rs.next();
             int id = rs.getInt("id");
 
-
             for (Category c : movie.categories()) {
                 sql = "INSERT INTO CatMovie (categoryId, movieId) VALUES (?, ?)";
                 pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -153,8 +152,8 @@ public class MovieDAO implements IMovieDAO {
             pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
-            for (Category c : movie.categories()) {
 
+            for (Category c : movie.categories()) {
                 sql = "INSERT INTO CatMovie (categoryId, movieId) VALUES (?, ?)";
                 pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 pstmt.setInt(1, c.id());
