@@ -23,9 +23,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -76,7 +74,7 @@ public class BaseController extends RootController implements Initializable {
     private void showMoviesToDelete() throws SQLException {
         List<Movie> allMovies = movieModel.getAllMovies();
         List<Movie> moviesToDelete = allMovies.stream()
-                .filter(m -> m.rating() < 6.0 || (m.lastview() != null && (Instant.now().toEpochMilli() - m.lastview().getTime() > Duration.of(2, ChronoUnit.YEARS).toMillis()))) // add movie if rating is < 6 or if lastview is not null and Current time - (lastview time is more than time of 2 years in miliseconds)
+                .filter(m -> m.rating() < 6.0 || (m.lastview() != null && (Instant.now().toEpochMilli() - m.lastview().getTime() > 63113852000L))) // add movie if rating is < 6 or if lastview is not null and Current time - (lastview time is more than time of 2 years in miliseconds)
                 .toList();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Do you want to delete these movies ?");
