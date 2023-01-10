@@ -3,17 +3,25 @@ package com.movie_collection.gui.controllers;
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
-import com.movie_collection.bll.services.interfaces.IMovieService;
+import com.movie_collection.bll.helpers.ViewType;
+import com.movie_collection.gui.controllers.abstractController.RootController;
+import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
+import com.movie_collection.gui.models.IMovieModel;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -22,7 +30,7 @@ import java.util.stream.Collectors;
 /**
  * Controller for Movies with the view
  */
-public class MovieController extends BaseController implements Initializable{
+public class MovieController extends RootController implements Initializable{
 
     @FXML
     private Label descrMovieTitle,descrIMDBRating;
@@ -35,13 +43,14 @@ public class MovieController extends BaseController implements Initializable{
     @FXML
     private TableColumn<Movie,String> colMovieRating;
 
-    @Inject
-    private IMovieService movieService;
+    private final IMovieModel movieModel;
+
+    private final IControllerFactory controllerFactory;
 
     @Inject
-    public MovieController(IMovieService movieService) {
-        this.movieService = movieService;
-
+    public MovieController(IMovieModel movieService, IControllerFactory controllerFactory) {
+        this.movieModel = movieService;
+        this.controllerFactory = controllerFactory;
     }
 
     @Override
@@ -88,8 +97,10 @@ public class MovieController extends BaseController implements Initializable{
         // sets value factory for edit column
         colEditMovies.setCellValueFactory(col -> {
             Button editButton = new Button("⚙️");
+            Movie updateMovie = col.getValue();
             editButton.setOnAction(e -> {
-                // _> edit functionality here
+                CreateMovieController controller = loadSetEditController(updateMovie);
+                showUpdateWindow(controller.getView());
             });
             return new SimpleObjectProperty<>(editButton);
         });
@@ -99,18 +110,42 @@ public class MovieController extends BaseController implements Initializable{
             deleteButton.setOnAction(e -> {
                 Movie movie = col.getValue(); // get movie object from the current row
                 if (movie != null) {
-                   int result =  tryDeleteMovie(movie.id()); // tries to delete movie by id inside the row
-                    refreshTableAndNotify(result,movie.id());
+                   int result = tryDeleteMovie(movie.id()); // tries to delete movie by id inside the row
+                   refreshTableAndNotify(result,movie.id());
                 }
             });
             return new SimpleObjectProperty<>(deleteButton);
         });
         // tries to call movie service and set all items
         try {
-            moviesTable.getItems().setAll(movieService.getAllMovies());
+            moviesTable.getItems().setAll(movieModel.getAllMovies());
         } catch (SQLException e) {
             throw new RuntimeException(e); //TODO: Lets look at this later to fi it
         }
+    }
+
+    private void showUpdateWindow(Parent view) {
+        Stage stage = new Stage();
+        Scene scene = new Scene(view);
+
+        stage.initOwner(getStage());
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.setTitle("Update Movie");
+
+        stage.setResizable(false);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private CreateMovieController loadSetEditController(Movie updateMovie) {
+        CreateMovieController controller;
+        try {
+            controller = (CreateMovieController) controllerFactory.loadFxmlFile(ViewType.CREATE_EDIT);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        controller.setEditableView(updateMovie);
+        return controller;
     }
 
     private void refreshTableAndNotify(int result,int id) {
@@ -130,7 +165,7 @@ public class MovieController extends BaseController implements Initializable{
             if(moviesTable.getItems() != null){
                 moviesTable.getItems().clear();
                 try {
-                    moviesTable.getItems().setAll(movieService.getAllMovies());
+                    moviesTable.getItems().setAll(movieModel.getAllMovies());
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -145,7 +180,7 @@ public class MovieController extends BaseController implements Initializable{
      */
     private int tryDeleteMovie(int id) {
         try {
-            return movieService.deleteMovie(id);
+            return movieModel.deleteMovie(id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

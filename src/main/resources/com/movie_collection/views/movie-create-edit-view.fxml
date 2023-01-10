@@ -18,7 +18,7 @@
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="277.0">
                <children>
-                  <Label fx:id="labelUserAction" text="Add Movie">
+                  <Label fx:id="labelMovieWindow" text="Add Movie">
                      <font>
                         <Font size="21.0" />
                      </font>
@@ -83,12 +83,7 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="63.0" prefWidth="257.0">
                <children>
-                  <Button fx:id="confirm_action" mnemonicParsing="false" prefWidth="44.0" text="Add">
-                     <HBox.margin>
-                        <Insets right="10.0" />
-                     </HBox.margin>
-                  </Button>
-                  <Button fx:id="deleteOnAction" disable="true" mnemonicParsing="false" text="Delete">
+                  <Button fx:id="confirm_action" alignment="BOTTOM_LEFT" mnemonicParsing="false" prefHeight="26.0" prefWidth="84.0" text="Add Movie">
                      <HBox.margin>
                         <Insets right="10.0" />
                      </HBox.margin>

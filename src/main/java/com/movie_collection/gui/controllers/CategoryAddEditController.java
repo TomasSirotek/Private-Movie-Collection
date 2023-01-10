@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-public class CategoryAddEditController extends BaseController implements Initializable {
+public class CategoryAddEditController extends RootController implements Initializable {
 
     @FXML
     private TextField category_name;
@@ -47,9 +47,7 @@ public class CategoryAddEditController extends BaseController implements Initial
     // method that for now is randomly setting ID and creates category, refreshed the pane and closes the stage
     private void createCategoryOnAction(String categoryName) throws SQLException {
         Objects.requireNonNull(categoryName,"Category name cannot be empty");
-        Random id = new Random();
-        // TODO: just for testing now since we dont have actual dao to get
-        Category newCategory = new Category(id.nextInt(),new SimpleStringProperty(categoryName));
+        Category newCategory = new Category(0,new SimpleStringProperty(categoryName));
         var result =  categoryModel.createCategory(newCategory);
         if(result > 0){
             baseController.refreshScrollPane();

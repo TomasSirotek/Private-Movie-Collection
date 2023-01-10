@@ -38,10 +38,8 @@ public class BaseController extends RootController implements Initializable {
     @FXML
     private StackPane app_content;
 
-    @Inject
     private IControllerFactory controllerFactory;
 
-    @Inject
     private ICategoryModel categoryModel;
 
     @Inject
