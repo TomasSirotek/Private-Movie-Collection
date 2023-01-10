@@ -71,7 +71,7 @@ public class MovieController extends BaseController implements Initializable{
             Button playButton = new Button("▶️");
             playButton.setOnAction(e -> {
                 try {
-                    playVideoDesktop(col.getValue().id());
+                    playVideoDesktop(col.getValue().id(), col.getValue().absolutePath().getValue());
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 } catch (InterruptedException ex) {
@@ -133,9 +133,9 @@ public class MovieController extends BaseController implements Initializable{
         }
     }
 
-    private void playVideoDesktop(int id) throws IOException, InterruptedException {
+    private void playVideoDesktop(int id, String path) throws IOException, InterruptedException {
         Runtime runTime = Runtime.getRuntime();
-        String s[] = new String[]{"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe", "C:\\Users\\nicoe\\OneDrive\\Escritorio\\videos\\sheesh.mp4"};
+        String s[] = new String[]{"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe", path};
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy.MM.dd");
         Timestamp ts = Timestamp.from(Instant.now());
         try {
@@ -144,7 +144,6 @@ public class MovieController extends BaseController implements Initializable{
             throw new RuntimeException(e);
         }
         runTime.exec(s);
-
     }
 
     /**
