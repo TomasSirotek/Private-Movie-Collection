@@ -138,12 +138,25 @@ public class MovieController extends BaseController implements Initializable{
         String s[] = new String[]{"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe", path};
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy.MM.dd");
         Timestamp ts = Timestamp.from(Instant.now());
+        getOperatingSystem();
         try {
             movieModel.updateTimeStamp(id, sdf1.format(ts));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         runTime.exec(s);
+    }
+    //TODO SYSTEM OP
+    public String getOperatingSystem() {
+        String os = System.getProperty("os.name");
+        System.out.println("Using System Property: " + os);
+        if(os.contains("Windows")){
+            System.out.println("true");
+        }
+        else {
+            System.out.println("False");
+        }
+        return os;
     }
 
     /**
