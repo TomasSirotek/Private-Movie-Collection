@@ -15,8 +15,6 @@ import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory
 import com.movie_collection.gui.controllers.controllerFactory.ControllerFactory;
 import com.movie_collection.gui.models.CategoryModel;
 import com.movie_collection.gui.models.ICategoryModel;
-import com.movie_collection.gui.models.IMovieModel;
-import com.movie_collection.gui.models.MovieModel;
 
 public class ConfigModule extends AbstractModule {
     @Override
@@ -50,10 +48,6 @@ public class ConfigModule extends AbstractModule {
         bind(ICategoryModel.class).to(CategoryModel.class).in(Singleton.class);
 
 
-        /*
-         * Injection of movie service
-         */
-        bind(IMovieModel.class).to(MovieModel.class).in(Singleton.class);
         /*
          * Injection of base controller
          */

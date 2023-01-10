@@ -96,8 +96,8 @@ public class MovieController extends BaseController implements Initializable{
             deleteButton.setOnAction(e -> {
                 Movie movie = col.getValue(); // get movie object from the current row
                 if (movie != null) {
-                    tryDeleteMovie(movie.id()); // tries to delete movie by id inside the row
-                    //TODO: refresh table or perform delete operation this is implemented in another commit I believe
+                   int result =  tryDeleteMovie(movie.id()); // tries to delete movie by id inside the row
+                    refreshTableAndNotify(result,movie.id());
                 }
             });
             return new SimpleObjectProperty<>(deleteButton);
@@ -110,24 +110,39 @@ public class MovieController extends BaseController implements Initializable{
         }
     }
 
+    private void refreshTableAndNotify(int result,int id) {
+        if(result > 0){
+           refreshTable();
+            System.out.println("Successfully deleted movie with id: "+ id); // place for out notification
+        }else {
+            System.out.println("Could not delete movie with id: " + id); // place for our notification
+        }
+    }
 
+    /**
+     * method that clears table items if they are not null and sets it back to required values
+     */
+    private void refreshTable() {
+        if(moviesTable.getItems() != null){
+            moviesTable.getItems().clear();
+            try {
+                moviesTable.getItems().setAll(movieService.getAllMovies());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
     /**
      * method that tries to delete movie by id
      * result success if > 0 ... else err display/handel
      * @param id of movie that will be deleted
      */
-    private void tryDeleteMovie(int id) {
-        int result = 0;
+    private int tryDeleteMovie(int id) {
         try {
-            result = movieService.deleteMovie(id);
+            return movieService.deleteMovie(id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
-        if(result > 0){
-            System.out.println("Successfully deleted movie with id: " + id); // place for our notification not sout !
-        }else {
-            System.out.println("Could not delete movie with id: " + id); // place for our notification
         }
     }
 

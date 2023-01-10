@@ -3,8 +3,6 @@ package com.movie_collection.bll.util;
 import com.google.inject.Inject;
 import com.movie_collection.be.Movie;
 import com.movie_collection.dal.dao.MovieDAO;
-import com.movie_collection.gui.models.IMovieModel;
-import com.movie_collection.gui.models.MovieModel;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 
@@ -15,10 +13,10 @@ public class Filter {
 
     private MovieDAO movieDAO = new MovieDAO();
 
-    @Inject
-    private IMovieModel MovieModel;
+    //@Inject
+   // private IMovieModel MovieModel;
 
-
+/*
 
     public List<Movie> filteringMovies(String query) throws SQLException {
 
@@ -34,4 +32,6 @@ public class Filter {
         });
         return filteredMovies;
     }
+
+ */
 }

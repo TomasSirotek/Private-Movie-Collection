@@ -7,8 +7,6 @@ import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
 import com.movie_collection.gui.models.ICategoryModel;
-import com.movie_collection.gui.models.IMovieModel;
-import com.movie_collection.gui.models.MovieModel;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -60,8 +58,8 @@ public class BaseController extends RootController implements Initializable {
     @Inject
     ICategoryModel categoryModel;
 
-    @Inject
-    IMovieModel movieModel;
+    //@Inject
+    //IMovieModel movieModel;
 
     @Inject
     public BaseController(IControllerFactory controllerFactory,ICategoryModel categoryModel) {
