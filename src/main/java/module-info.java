@@ -16,6 +16,8 @@ module com.movie_collection.private_movie_collection {
     exports com.movie_collection.bll.services.interfaces;
     exports com.movie_collection to javafx.graphics;
 
+    exports com.movie_collection.bll.util;
+    opens com.movie_collection.bll.util to com.google.guice,javafx.fxml;
     exports com.movie_collection.gui.controllers.abstractController;
     opens com.movie_collection.gui.controllers.abstractController to com.google.guice, javafx.fxml;
     exports com.movie_collection.gui.controllers.controllerFactory;
@@ -29,8 +31,6 @@ module com.movie_collection.private_movie_collection {
     exports com.movie_collection.dal.dao to com.google.guice;
     exports com.movie_collection.dal.interfaces;
 
-    // opens com.movie_collection.gui to com.google.guice, javafx.fxml;
 
-    // exports com.movie_collection.application to javafx.graphics;
-    // opens com.movie_collection.application to  javafx.fxml;
+
 }

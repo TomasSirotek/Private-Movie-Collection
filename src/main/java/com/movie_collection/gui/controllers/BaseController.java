@@ -7,6 +7,7 @@ import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
 import com.movie_collection.gui.models.ICategoryModel;
+import com.movie_collection.gui.models.IMovieModel;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -48,23 +49,20 @@ public class BaseController extends RootController implements Initializable {
     @FXML
     private TextField searchMovies;
 
-    private Filter filter = new Filter();
-
-    private ObservableList<Movie> movies = FXCollections.observableArrayList();
-
     @Inject
     IControllerFactory controllerFactory;
 
     @Inject
     ICategoryModel categoryModel;
 
-    //@Inject
-    //IMovieModel movieModel;
+    @Inject
+    IMovieModel movieModel;
 
     @Inject
-    public BaseController(IControllerFactory controllerFactory,ICategoryModel categoryModel) {
+    public BaseController(IControllerFactory controllerFactory,ICategoryModel categoryModel,IMovieModel movieModel) {
         this.controllerFactory = controllerFactory;
         this.categoryModel = categoryModel;
+        this.movieModel = movieModel;
     }
 
     //  TODO: an empty constructor that is always created
@@ -76,9 +74,9 @@ public class BaseController extends RootController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        filterBar();
         try {
             setCategoriesScrollPane(categoryModel.getAllCategories());
-            filterBar();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -251,33 +249,38 @@ public class BaseController extends RootController implements Initializable {
         show(parent,"Add new Category");
     }
 
-    private void filterBar() throws SQLException {
-        //System.out.println(movieModel.getAllMovies());
-        System.out.println("TEST");
-        searchMovies.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                movies.clear();
-                System.out.println("TEST");
-                //TODO FIX TRIGGER ERROR FROM MOVIE Observable and communication with MovieController
-                //movies.addAll(filter.filteringMovies(newValue));
-
+    private void filterBar() {
+        searchMovies.textProperty().addListener((obs, oldValue, newValue) -> {
+            var test = getStage().getScene().lookup("#moviesTable");
+            if(test != null){
+                try {
+                    movieModel.searchMovies(newValue);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }else {
+             System.out.println("smth went wong " + test);
 
             }
         });
+
+
+        //System.out.println(movieModel.getAllMovies());
+//        System.out.println("TEST");
+//        searchMovies.textProperty().addListener(new ChangeListener<String>() {
+//            @Override
+//            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+//                movies.clear();
+//                System.out.println("TEST");
+//                //TODO FIX TRIGGER ERROR FROM MOVIE Observable and communication with MovieController
+//                //movies.addAll(filter.filteringMovies(newValue));
+//
+//
+//            }
+//        });
     }
     //Force one of the tables and change the Content/Info
-//   txfSearchBar.textProperty().addListener((obs, oldValue, newValue) -> {
-//        try {
-//            if (lblCurrentLocation.getText().equals("Playlists")) {
-//                playlistModel.searchPlaylist(newValue);
-//            } else {
-//                songModel.searchSongs(newValue);
-//            }
-//        } catch (Exception e) {
-//            throw new RuntimeException();
-//        }
-//    });
+
 
 
 

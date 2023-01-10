@@ -56,4 +56,13 @@ public interface IMovieService {
      * @throws SQLException if the connection to the database fails
      */
     List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException;
+
+    /**
+     * docs
+     * @param listToSearch
+     * @param query
+     * @return
+     */
+
+    List<Movie> searchMovie(List<Movie> listToSearch, String query);
 }

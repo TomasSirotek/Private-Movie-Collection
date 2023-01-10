@@ -6,6 +6,8 @@ import com.movie_collection.bll.services.CategoryService;
 import com.movie_collection.bll.services.MovieService;
 import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.bll.services.interfaces.IMovieService;
+import com.movie_collection.bll.util.Filter;
+import com.movie_collection.bll.util.IFilter;
 import com.movie_collection.dal.dao.CategoryDAO;
 import com.movie_collection.dal.interfaces.ICategoryDAO;
 import com.movie_collection.gui.controllers.BaseController;
@@ -15,6 +17,8 @@ import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory
 import com.movie_collection.gui.controllers.controllerFactory.ControllerFactory;
 import com.movie_collection.gui.models.CategoryModel;
 import com.movie_collection.gui.models.ICategoryModel;
+import com.movie_collection.gui.models.IMovieModel;
+import com.movie_collection.gui.models.MovieModel;
 
 public class ConfigModule extends AbstractModule {
     @Override
@@ -35,12 +39,12 @@ public class ConfigModule extends AbstractModule {
         /*
          * Injection of movie service
          */
-        bind(IMovieService.class).to(MovieService.class).in(Singleton.class);
+        bind(IMovieService.class).to(MovieService.class);
 
         /*
          * Injection of Category service
          */
-        bind(ICategoryService.class).to(CategoryService.class).in(Singleton.class);
+        bind(ICategoryService.class).to(CategoryService.class);
         
         /*
          * Injection of Category service
@@ -51,7 +55,16 @@ public class ConfigModule extends AbstractModule {
         /*
          * Injection of base controller
          */
-        bind(BaseController.class).in(Singleton.class);
+        bind(BaseController.class);
+
+        /**
+         * docs
+         */
+        bind(IMovieModel.class).to(MovieModel.class);
+        /*
+         * Injection of Filter service
+         */
+        bind(IFilter.class).to(Filter.class);
 
     }
 }

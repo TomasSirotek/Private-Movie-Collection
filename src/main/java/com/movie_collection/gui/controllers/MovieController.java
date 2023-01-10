@@ -4,10 +4,8 @@ import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.services.interfaces.IMovieService;
-import com.movie_collection.gui.controllers.controllerFactory.ControllerFactory;
+import com.movie_collection.gui.models.IMovieModel;
 import javafx.beans.property.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -32,12 +30,11 @@ public class MovieController extends BaseController implements Initializable{
     @FXML
     private TableColumn<Movie,String> colMovieRating;
 
-    @Inject
-    IMovieService movieService;
+    private final IMovieModel movieModel;
 
     @Inject
-    public MovieController(IMovieService movieService) {
-        this.movieService = movieService;
+    public MovieController(IMovieModel movieModel) {
+        this.movieModel = movieModel;
 
     }
 
@@ -103,8 +100,9 @@ public class MovieController extends BaseController implements Initializable{
             return new SimpleObjectProperty<>(deleteButton);
         });
         // tries to call movie service and set all items
+
         try {
-            moviesTable.getItems().setAll(movieService.getAllMovies());
+            moviesTable.setItems(movieModel.getAllMovies());
         } catch (SQLException e) {
             throw new RuntimeException(e); //TODO: Lets look at this later to fi it
         }
@@ -126,7 +124,7 @@ public class MovieController extends BaseController implements Initializable{
         if(moviesTable.getItems() != null){
             moviesTable.getItems().clear();
             try {
-                moviesTable.getItems().setAll(movieService.getAllMovies());
+                moviesTable.getItems().setAll(movieModel.getAllMovies());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -139,11 +137,7 @@ public class MovieController extends BaseController implements Initializable{
      * @param id of movie that will be deleted
      */
     private int tryDeleteMovie(int id) {
-        try {
-            return movieService.deleteMovie(id);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+            return movieModel.deleteMovie(id);
     }
 
 
