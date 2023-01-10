@@ -5,6 +5,7 @@ module com.movie_collection.private_movie_collection {
     requires java.sql;
     requires com.microsoft.sqlserver.jdbc;
     requires java.naming;
+    requires javafx.media;
 
     exports com.movie_collection.gui.controllers;
 

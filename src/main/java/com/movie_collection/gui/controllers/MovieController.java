@@ -4,11 +4,16 @@ import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.services.interfaces.IMovieService;
-import com.movie_collection.gui.controllers.controllerFactory.ControllerFactory;
-import javafx.beans.property.*;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -31,7 +36,7 @@ public class MovieController extends BaseController implements Initializable{
     private TableColumn<Movie,String> colMovieRating;
 
     @Inject
-    IMovieService movieService;
+    private IMovieService movieService;
 
     @Inject
     public MovieController(IMovieService movieService) {
@@ -110,7 +115,7 @@ public class MovieController extends BaseController implements Initializable{
 
     private void refreshTableAndNotify(int result,int id) {
         if(result > 0){
-           refreshTable();
+            refreshTable();
             System.out.println("Successfully deleted movie with id: "+ id); // place for out notification
         }else {
             System.out.println("Could not delete movie with id: " + id); // place for our notification
@@ -121,12 +126,14 @@ public class MovieController extends BaseController implements Initializable{
      * method that clears table items if they are not null and sets it back to required values
      */
     protected void refreshTable() {
-        if(moviesTable.getItems() != null){
-            moviesTable.getItems().clear();
-            try {
-                moviesTable.getItems().setAll(movieService.getAllMovies());
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+        if(moviesTable != null){
+            if(moviesTable.getItems() != null){
+                moviesTable.getItems().clear();
+                try {
+                    moviesTable.getItems().setAll(movieService.getAllMovies());
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }

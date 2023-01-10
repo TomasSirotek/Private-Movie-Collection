@@ -74,7 +74,11 @@
                       <MenuItem mnemonicParsing="false" text="Action 1" />
                       <MenuItem mnemonicParsing="false" text="Action 2" />
                     </items>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
                   </MenuButton>
+                  <TextField fx:id="durationField" disable="true" editable="false" prefHeight="25.0" prefWidth="91.0" promptText="Duration" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="63.0" prefWidth="257.0">
