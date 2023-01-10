@@ -2,18 +2,18 @@ package com.movie_collection.gui.controllers;
 
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
+import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
 import com.movie_collection.gui.models.ICategoryModel;
+import com.movie_collection.gui.models.IMovieModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,11 +44,14 @@ public class BaseController extends RootController implements Initializable {
 
     @Inject
     private ICategoryModel categoryModel;
+    @Inject
+    private IMovieModel movieModel;
 
     @Inject
-    public BaseController(IControllerFactory controllerFactory,ICategoryModel categoryModel) {
+    public BaseController(IControllerFactory controllerFactory, ICategoryModel categoryModel, IMovieModel movieModel) {
         this.controllerFactory = controllerFactory;
         this.categoryModel = categoryModel;
+        this.movieModel = movieModel;
     }
 
     //  TODO: an empty constructor that is always created
@@ -61,8 +65,31 @@ public class BaseController extends RootController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         try {
             setCategoriesScrollPane(categoryModel.getAllCategories());
+            showMoviesToDelete();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void showMoviesToDelete() throws SQLException {
+        List<Movie> allMovies = movieModel.getAllMovies();
+        List<Movie> moviesToDelete = allMovies.stream()
+                .filter(m -> m.rating() < 6.0 || (m.lastview() != null && (Instant.now().toEpochMilli() - m.lastview().getTime() > 15778800000L))) // add movie if rating is < 6 or if lastview is not null and Current time - lastview time is more than time of 6 months in miliseconds
+                .toList();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Do you want to delete these movies ?");
+        String str = "";
+        for (Movie m:moviesToDelete) {
+            str += m.name().get() + "\n";
+        }
+        alert.setContentText(str);
+        alert.getButtonTypes().setAll(new ButtonType("Delete"), new ButtonType("Cancel"));
+        Optional<ButtonType> btn= alert.showAndWait();
+        String button = btn.isPresent() ? btn.get().getText() : "Cancel";
+        if (button.equals("Delete")){
+            for (Movie m: moviesToDelete) {
+                movieModel.deleteMovie(m.id());
+            }
         }
     }
 
