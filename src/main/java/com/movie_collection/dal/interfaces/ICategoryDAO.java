@@ -30,9 +30,5 @@ public interface ICategoryDAO {
      */
     int deleteCategory(int id) throws SQLException;
 
-    /**
-     * Retrieves all movies in a genre/category in specific
-     * @param categoryId the id of a category we're getting the movies from
-     * @return a list of all movies in a genre/category.
-     */
+    Category getCategoryByName(String name) throws SQLException;
 }

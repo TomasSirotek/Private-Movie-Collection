@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-public class CategoryAddEditController extends RootController implements Initializable {
+public class CategoryAddEditController extends BaseController implements Initializable {
 
     @FXML
     private TextField category_name;

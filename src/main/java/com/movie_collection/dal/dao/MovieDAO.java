@@ -109,18 +109,34 @@ public class MovieDAO implements IMovieDAO {
     }
 
     public int createMovie(Movie movie) throws SQLException {
+        int rowsAffected = 0;
         try (Connection con = cm.getConnection()) {
-            String sql = "INSERT INTO Movie name, rating, path, lastview VALUES (?, ?, ?, ?)";
-            PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            String sql;
+            PreparedStatement pstmt;
+            sql = "INSERT INTO Movie (name, rating, path, lastview) VALUES (?, ?, ?, ?); SELECT SCOPE_IDENTITY() as id";
+            pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, movie.name().get());
             pstmt.setDouble(2, movie.rating());
             pstmt.setString(3, movie.absolutePath().get());
             pstmt.setDate(4, movie.lastview());
-            return pstmt.executeUpdate();
+            ResultSet rs = pstmt.executeQuery();
+            rs.next();
+            int id = rs.getInt("id");
+
+
+            for (Category c : movie.categories()) {
+                sql = "INSERT INTO CatMovie (categoryId, movieId) VALUES (?, ?)";
+                pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                pstmt.setInt(1, c.id());
+                pstmt.setInt(2, id);
+                rowsAffected += pstmt.executeUpdate();
+            }
         }
+        return rowsAffected + 1;
     }
 
     public int updateMovie(Movie movie) throws SQLException {
+        int rowsAffected;
         try (Connection con = cm.getConnection()) {
             String sql = "UPDATE Movie SET name = ?, rating = ?, path = ?, lastview = ? WHERE id = ?";
             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -129,8 +145,10 @@ public class MovieDAO implements IMovieDAO {
             pstmt.setString(3, movie.absolutePath().get());
             pstmt.setDate(4, movie.lastview());
             pstmt.setInt(5, movie.id());
-            return pstmt.executeUpdate();
+            rowsAffected = pstmt.executeUpdate();
+
         }
+        return rowsAffected;
     }
 
     public int deleteMovie(int id) throws SQLException {
