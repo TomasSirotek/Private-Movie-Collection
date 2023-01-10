@@ -19,9 +19,6 @@ public abstract class RootController implements IRootController {
 
     @Override
     public void setView(Parent node){
-        if (this.root != null)
-            throw new IllegalStateException("view already set.");
-
        this.root = Objects.requireNonNull(node, "view must not be null.");
     }
 
