@@ -8,6 +8,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -181,7 +183,10 @@ public class MovieDAO implements IMovieDAO {
         }
     }
 
-    public int updateTimeStamp(int id, String date) throws SQLException{
+    public int updateTimeStamp(int id) throws SQLException{
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy.MM.dd");
+        Timestamp ts = Timestamp.from(Instant.now());
+        String date = sdf1.format(ts);
         try(Connection con = cm.getConnection()){
             String sql = "UPDATE Movie SET lastview = '"+ date +"'" + "WHERE id='"+id+"'";
             PreparedStatement preparedStatement = con.prepareStatement(sql);

@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -136,11 +137,10 @@ public class MovieController extends BaseController implements Initializable{
     private void playVideoDesktop(int id, String path) throws IOException, InterruptedException {
         Runtime runTime = Runtime.getRuntime();
         String s[] = new String[]{"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe", path};
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy.MM.dd");
-        Timestamp ts = Timestamp.from(Instant.now());
+
         getOperatingSystem();
         try {
-            movieModel.updateTimeStamp(id, sdf1.format(ts));
+            movieModel.updateTimeStamp(id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -158,6 +158,7 @@ public class MovieController extends BaseController implements Initializable{
         }
         return os;
     }
+
 
     /**
      * method that clears table items if they are not null and sets it back to required values

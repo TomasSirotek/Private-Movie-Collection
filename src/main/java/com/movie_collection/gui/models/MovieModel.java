@@ -40,7 +40,7 @@ public class MovieModel implements IMovieModel{
     }
 
     @Override
-    public int updateTimeStamp(int id, String date) throws SQLException {
-        return movieService.updateTimeStamp(id, date);
+    public int updateTimeStamp(int id) throws SQLException {
+        return movieService.updateTimeStamp(id);
     }
 }

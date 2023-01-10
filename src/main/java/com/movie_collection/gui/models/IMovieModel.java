@@ -13,5 +13,5 @@ public interface IMovieModel {
 
     int deleteMovie(int id) throws SQLException;
 
-    int updateTimeStamp(int id, String date) throws SQLException;
+    int updateTimeStamp(int id) throws SQLException;
 }
