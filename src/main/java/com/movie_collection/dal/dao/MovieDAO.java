@@ -111,8 +111,10 @@ public class MovieDAO implements IMovieDAO {
     public int createMovie(Movie movie) throws SQLException {
         int rowsAffected = 0;
         try (Connection con = cm.getConnection()) {
-            String sql = "INSERT INTO Movie name, rating, path, lastview VALUES (?, ?, ?, ?); SELECT SCOPE_IDENTITY() as id ";
-            PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            String sql;
+            PreparedStatement pstmt;
+            sql = "INSERT INTO Movie (name, rating, path, lastview) VALUES (?, ?, ?, ?); SELECT SCOPE_IDENTITY() as id";
+            pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, movie.name().get());
             pstmt.setDouble(2, movie.rating());
             pstmt.setString(3, movie.absolutePath().get());
@@ -136,7 +138,7 @@ public class MovieDAO implements IMovieDAO {
     public int updateMovie(Movie movie) throws SQLException {
         int rowsAffected = 1;
         try (Connection con = cm.getConnection()) {
-            String sql = "UPDATE Movie SET name = ?, rating = ?, path = ?, lastview = ? WHERE name = (?) SELECT SCOPE_IDENTITY() as id;";
+            String sql = "UPDATE Movie SET name = ?, rating = ?, path = ?, lastview = ? OUTPUT INSERTED.id WHERE name = (?) ";
             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, movie.name().get());
             pstmt.setDouble(2, movie.rating());
@@ -151,9 +153,8 @@ public class MovieDAO implements IMovieDAO {
             pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
-
             for (Category c : movie.categories()) {
-                System.out.println(c.id());
+
                 sql = "INSERT INTO CatMovie (categoryId, movieId) VALUES (?, ?)";
                 pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 pstmt.setInt(1, c.id());
