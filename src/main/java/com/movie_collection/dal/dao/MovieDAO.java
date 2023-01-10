@@ -184,14 +184,13 @@ public class MovieDAO implements IMovieDAO {
     }
 
     public int updateTimeStamp(int id) throws SQLException{
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy.MM.dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
         Timestamp ts = Timestamp.from(Instant.now());
-        String date = sdf1.format(ts);
+        String date = dateFormat.format(ts);
         try(Connection con = cm.getConnection()){
             String sql = "UPDATE Movie SET lastview = '"+ date +"'" + "WHERE id='"+id+"'";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
-            int rs1 = preparedStatement.executeUpdate();
-            return rs1;
+            return preparedStatement.executeUpdate();
         }
     }
 }

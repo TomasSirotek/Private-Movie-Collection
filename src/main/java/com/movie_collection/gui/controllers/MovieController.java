@@ -71,13 +71,8 @@ public class MovieController extends BaseController implements Initializable{
         colPlayMovie.setCellValueFactory(col -> {
             Button playButton = new Button("▶️");
             playButton.setOnAction(e -> {
-                try {
-                    playVideoDesktop(col.getValue().id(), col.getValue().absolutePath().getValue());
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
+                //TODO MAKE A METHOD WITH ALL PLAY ACTION
+                actionPlay(col);
             });
             return new SimpleObjectProperty<>(playButton);
         });
@@ -125,6 +120,14 @@ public class MovieController extends BaseController implements Initializable{
         }
     }
 
+    private void actionPlay(TableColumn.CellDataFeatures<Movie, Button> col) {
+        try {
+            playVideoDesktop(col.getValue().id(), col.getValue().absolutePath().getValue());
+        } catch (IOException | InterruptedException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     private void refreshTableAndNotify(int result,int id) {
         if(result > 0){
             refreshTable();
@@ -134,8 +137,10 @@ public class MovieController extends BaseController implements Initializable{
         }
     }
 
+
     private void playVideoDesktop(int id, String path) throws IOException, InterruptedException {
         Runtime runTime = Runtime.getRuntime();
+        //TODO MORE DINAMICALLY U ASSHOLE
         String s[] = new String[]{"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe", path};
 
         getOperatingSystem();
