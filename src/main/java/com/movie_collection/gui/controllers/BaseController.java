@@ -267,7 +267,17 @@ public class BaseController extends RootController implements Initializable {
         });
     }
     //Force one of the tables and change the Content/Info
-
+//   txfSearchBar.textProperty().addListener((obs, oldValue, newValue) -> {
+//        try {
+//            if (lblCurrentLocation.getText().equals("Playlists")) {
+//                playlistModel.searchPlaylist(newValue);
+//            } else {
+//                songModel.searchSongs(newValue);
+//            }
+//        } catch (Exception e) {
+//            throw new RuntimeException();
+//        }
+//    });
 
 
 
