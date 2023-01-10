@@ -123,13 +123,7 @@ public class MovieDAO implements IMovieDAO {
             rs.next();
             int id = rs.getInt("id");
 
-            for (Category c : movie.categories()) {
-                sql = "INSERT INTO CatMovie (categoryId, movieId) VALUES (?, ?)";
-                pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                pstmt.setInt(1, c.id());
-                pstmt.setInt(2, id);
-                rowsAffected += pstmt.executeUpdate();
-            }
+            rowsAffected = linkMovieCategories(movie, rowsAffected, con, id);
         }
         return rowsAffected + 1;
     }
@@ -153,15 +147,23 @@ public class MovieDAO implements IMovieDAO {
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
 
-            for (Category c : movie.categories()) {
-                sql = "INSERT INTO CatMovie (categoryId, movieId) VALUES (?, ?)";
-                pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                pstmt.setInt(1, c.id());
-                pstmt.setInt(2, id);
-                pstmt.executeQuery();
-                rowsAffected += 1;
-            }
+            rowsAffected = linkMovieCategories(movie, rowsAffected, con, id);
         }
+        return rowsAffected;
+    }
+
+    private int linkMovieCategories(Movie movie, int rowsAffected, Connection con, int id) throws SQLException {
+        String sql;
+        PreparedStatement pstmt;
+        sql = "INSERT INTO CatMovie (categoryId, movieId) VALUES (?, ?);";
+        pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        for (Category c : movie.categories()) {
+            pstmt.setInt(1, c.id());
+            pstmt.setInt(2, id);
+            pstmt.addBatch();
+            rowsAffected++;
+        }
+        pstmt.executeBatch();
         return rowsAffected;
     }
 
