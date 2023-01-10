@@ -20,7 +20,7 @@ public enum ViewType {
     CREATE_EDIT {
         @Override
         public String getFXMLView() {
-            return "views/create-edit-view.fxml";
+            return "views/movie-create-edit-view.fxml";
         }
     }, CATEGORY_ADD_EDIT {
         @Override

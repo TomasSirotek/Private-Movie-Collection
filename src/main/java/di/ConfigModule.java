@@ -11,10 +11,13 @@ import com.movie_collection.dal.interfaces.ICategoryDAO;
 import com.movie_collection.gui.controllers.BaseController;
 import com.movie_collection.dal.dao.MovieDAO;
 import com.movie_collection.dal.interfaces.IMovieDAO;
+import com.movie_collection.gui.controllers.MovieController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
 import com.movie_collection.gui.controllers.controllerFactory.ControllerFactory;
 import com.movie_collection.gui.models.CategoryModel;
 import com.movie_collection.gui.models.ICategoryModel;
+import com.movie_collection.gui.models.IMovieModel;
+import com.movie_collection.gui.models.MovieModel;
 
 public class ConfigModule extends AbstractModule {
     @Override
@@ -52,5 +55,14 @@ public class ConfigModule extends AbstractModule {
          */
         bind(BaseController.class).in(Singleton.class);
 
+        /*
+         * Injection of main controller
+         */
+        bind(MovieController.class).in(Singleton.class);
+
+        /**
+         * Injection of the model
+         */
+        bind(IMovieModel.class).to(MovieModel.class).in(Singleton.class);
     }
 }

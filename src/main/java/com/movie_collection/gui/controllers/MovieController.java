@@ -120,7 +120,7 @@ public class MovieController extends BaseController implements Initializable{
     /**
      * method that clears table items if they are not null and sets it back to required values
      */
-    private void refreshTable() {
+    protected void refreshTable() {
         if(moviesTable.getItems() != null){
             moviesTable.getItems().clear();
             try {

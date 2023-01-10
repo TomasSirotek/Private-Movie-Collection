@@ -26,4 +26,6 @@ public interface ICategoryService {
      * @return false if not able to delete otherwise return true if successful
      */
     int deleteCategory(int id) throws SQLException;
+
+    Category getCategoryByName(String name) throws SQLException;
 }
