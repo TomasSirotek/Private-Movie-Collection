@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="291.0" prefWidth="324.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.CreateMovieController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="291.0" prefWidth="324.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.MediaPlayerSelectionController">
    <children>
       <VBox fx:id="action_content" prefHeight="291.0" prefWidth="326.0">
          <children>
@@ -61,7 +61,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="cancelOnAction" mnemonicParsing="false" text="Cancel">
+                  <Button fx:id="cancelAction" mnemonicParsing="false" text="Cancel">
                      <HBox.margin>
                         <Insets right="10.0" />
                      </HBox.margin>
