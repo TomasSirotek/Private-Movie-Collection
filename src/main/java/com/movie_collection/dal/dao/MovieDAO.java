@@ -92,20 +92,21 @@ public class MovieDAO implements IMovieDAO {
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
-            rs.next();
+            if(rs.next()){
+                StringProperty name = new SimpleStringProperty(rs.getString("name"));
+                double rating = rs.getDouble("rating");
+                StringProperty path = new SimpleStringProperty(rs.getString("path"));
+                Date lastview = rs.getDate("lastview");
+                String catName = rs.getString("C_name");
 
-            StringProperty name = new SimpleStringProperty(rs.getString("name"));
-            double rating = rs.getDouble("rating");
-            StringProperty path = new SimpleStringProperty(rs.getString("path"));
-            Date lastview = rs.getDate("lastview");
-            String catName = rs.getString("C_name");
-
-            ArrayList<Category> allCategories = new ArrayList<>(catName != null ? List.of(new Category(rs.getInt("C_id"), new SimpleStringProperty(catName))) : new ArrayList<>());
-            while (rs.next()) {
-                allCategories.add(new Category(rs.getInt("C_id"), new SimpleStringProperty(rs.getString("C_name"))));
+                ArrayList<Category> allCategories = new ArrayList<>(catName != null ? List.of(new Category(rs.getInt("C_id"), new SimpleStringProperty(catName))) : new ArrayList<>());
+                while (rs.next()) {
+                    allCategories.add(new Category(rs.getInt("C_id"), new SimpleStringProperty(rs.getString("C_name"))));
+                }
+                return new Movie(id, name, rating, path, allCategories, lastview);
+            }else {
+                return null;
             }
-
-            return new Movie(id, name, rating, path, allCategories, lastview);
         }
     }
 
