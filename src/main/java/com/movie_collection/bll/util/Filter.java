@@ -10,21 +10,20 @@ public class Filter implements IFilter {
     public List<Movie> filteringMovies(List<Movie> listToSearch,String query) {
         List<Movie> filtered = new ArrayList<>();
         for (Movie m : listToSearch) {
-            if (m.name().getValue().toLowerCase().contains(query.toLowerCase())) {
+            if (m.name().getValue().toLowerCase().contains(query.toLowerCase()) || checkCategories(m, query)) {
                 filtered.add(m);
-            } else {
-                List<Category> categories = m.categories();
-                String categoryNames = "";
-                for (Category c: categories) {
-                    categoryNames += c.name().get();
-                }
-                if(categoryNames.contains(query)){
-                    filtered.add(m);
-                }
             }
         }
         return filtered;
 
+    }
+    private boolean checkCategories(Movie m, String query){
+        List<Category> categories = m.categories();
+        String categoryNames = "";
+        for (Category c: categories) {
+            categoryNames += c.name().getValue().toLowerCase();
+        }
+        return categoryNames.contains(query.toLowerCase());
     }
 
 //        ObservableList<Movie> Movies =  MovieModel.getAllMovies();
