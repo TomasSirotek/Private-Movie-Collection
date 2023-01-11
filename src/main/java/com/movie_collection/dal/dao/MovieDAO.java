@@ -10,6 +10,7 @@ import javafx.beans.property.StringProperty;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MovieDAO implements IMovieDAO {
     private static final ConnectionManager cm = new ConnectionManager();
@@ -29,6 +30,11 @@ public class MovieDAO implements IMovieDAO {
             // used for adding categories to movie
             while (rs.next()) {
                 int id = rs.getInt("id");
+                // check for empty table
+                // since we are sorting by movies if the first one is 0 the rest will also be zero
+                if (id == 0){
+                    return movies;
+                }
                 StringProperty name = new SimpleStringProperty(rs.getString("name"));
                 double rating = rs.getDouble("rating");
                 StringProperty path = new SimpleStringProperty(rs.getString("path"));
@@ -77,13 +83,18 @@ public class MovieDAO implements IMovieDAO {
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("id");
-                movies.add(getMovieById(id));
+                if (id == 0) {
+                    return movies;
+                } else {
+                    Optional<Movie> movie = getMovieById(id);
+                    movie.ifPresent(movies::add);
+                }
             }
         }
         return movies;
     }
 
-    public Movie getMovieById(int id) throws SQLException {
+    public Optional<Movie> getMovieById(int id) throws SQLException {
         try (Connection con = cm.getConnection()) {
             String sql = "SELECT M.id, M.name, M.rating, M.path, M.lastview, CM.categoryId, CM.movieId, C.id as C_id, C.name as C_name FROM Movie M  " +
                     "LEFT JOIN CatMovie CM on M.id = CM.movieId " +
@@ -92,8 +103,9 @@ public class MovieDAO implements IMovieDAO {
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
-            rs.next();
-
+            if (!rs.next()){
+                return Optional.empty();
+            }
             StringProperty name = new SimpleStringProperty(rs.getString("name"));
             double rating = rs.getDouble("rating");
             StringProperty path = new SimpleStringProperty(rs.getString("path"));
@@ -104,8 +116,7 @@ public class MovieDAO implements IMovieDAO {
             while (rs.next()) {
                 allCategories.add(new Category(rs.getInt("C_id"), new SimpleStringProperty(rs.getString("C_name"))));
             }
-
-            return new Movie(id, name, rating, path, allCategories, lastview);
+            return Optional.of(new Movie(id, name, rating, path, allCategories, lastview));
         }
     }
 
