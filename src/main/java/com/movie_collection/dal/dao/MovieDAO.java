@@ -132,25 +132,34 @@ public class MovieDAO implements IMovieDAO {
     public int updateMovie(Movie movie) throws SQLException {
         int rowsAffected = 1;
         try (Connection con = cm.getConnection()) {
-            String sql = "UPDATE Movie SET name = ?, rating = ?, path = ?, lastview = ? OUTPUT INSERTED.id WHERE name = (?) ";
+            System.out.println(movie);
+            String sql = "UPDATE Movie SET name = ?, rating = ?, path = ? WHERE id = (?) ;";
             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, movie.name().get());
             pstmt.setDouble(2, movie.rating());
             pstmt.setString(3, movie.absolutePath().get());
-            pstmt.setDate(4, movie.lastview());
-            pstmt.setString(5, movie.name().get());
+            pstmt.setInt(4, movie.id());
             ResultSet rs = pstmt.executeQuery();
             rs.next();
             int id = rs.getInt("id");
 
             sql = "DELETE FROM CatMovie WHERE movieId = ?;";
             pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, id);
+            pstmt.setInt(1, movie.id());
             pstmt.executeUpdate();
 
             rowsAffected = linkMovieCategories(movie, rowsAffected, con, id);
         }
         return rowsAffected;
+    }
+
+    public int deleteMovie(int id) throws SQLException {
+        try (Connection con = cm.getConnection()) {
+            String sql = "DELETE FROM Movie WHERE id = ?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            return pstmt.executeUpdate();
+        }
     }
 
     private int linkMovieCategories(Movie movie, int rowsAffected, Connection con, int id) throws SQLException {
@@ -166,19 +175,5 @@ public class MovieDAO implements IMovieDAO {
         }
         pstmt.executeBatch();
         return rowsAffected;
-    }
-
-    public int deleteMovie(int id) throws SQLException {
-        try (Connection con = cm.getConnection()) {
-            String sql = "DELETE FROM CatMovie WHERE Movieid = ?";
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, id);
-            int rs1 = pstmt.executeUpdate();
-            String sql2 = "DELETE FROM Movie WHERE id = ?";
-            PreparedStatement pstmt2 = con.prepareStatement(sql2);
-            pstmt2.setInt(1, id);
-            int rs2 = pstmt2.executeUpdate();
-            return rs1 + rs2;
-        }
     }
 }
