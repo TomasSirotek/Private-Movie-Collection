@@ -15,6 +15,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.sql.*;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,16 +24,42 @@ public class MovieDAO implements IMovieDAO {
    private static final ConnectionManager cm = new ConnectionManager();
 
     public static void main(String[] args) {
-        //var test = getAllMoviesTest();
-       //test.forEach(System.out::println);
+//       var test = getAllMoviesTest();
+//       //est.forEach(System.out::println);
+//        System.out.println(test.size());
+//       // var getAllMoviesInTheCategoryTest = getAllMoviesInTheCategoryTest(1210);
+//
+////        getAllMoviesInTheCategoryTest(5).ifPresent(allMoviesInCategory -> {
+////            for (Movie2 movie : allMoviesInCategory) {
+////                System.out.println(movie);
+////            }
+////        });
+//
+//        int toDelete = 1134;
+//        int resultDelete = deleteMovieTest(toDelete);
+//        if(resultDelete > 0){
+//            System.out.println("Deleted with id: " + toDelete);
+//        }else {
+//            System.out.println("Could not delete with id " + toDelete);
+//        }
 
-       // var getAllMoviesInTheCategoryTest = getAllMoviesInTheCategoryTest(1210);
+        var test2 = getAllMoviesTest();
+        System.out.println(test2.size());
 
-        getAllMoviesInTheCategoryTest(5).ifPresent(allMoviesInCategory -> {
-            for (Movie2 movie : allMoviesInCategory) {
-                System.out.println(movie);
-            }
-        });
+        Movie2 movieToCreate = new Movie2();
+
+        movieToCreate.setName("TestMovieBatis");
+        movieToCreate.setRating(4.9);
+        movieToCreate.setAbsolutePath("/C:Tomas/here");
+
+        int result = createMovieTest(movieToCreate);
+        if(result > 0){
+        System.out.println(result + "We did it Jesus");
+
+        }
+
+        var afterCreate = getAllMoviesTest();
+        System.out.println(afterCreate.size());
     }
 
 
@@ -52,8 +79,22 @@ public class MovieDAO implements IMovieDAO {
         }
     }
 
+    public static int createMovieTest(Movie2 movie){
+        try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+            MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
+            int affectedRows = mapper.createMovieTest(movie);
+            session.commit();
+            return affectedRows;
+        }
+    }
+
     public static int deleteMovieTest(int id){
-        return 0;
+        try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+            MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
+            int affectedRows = mapper.deleteMovieById(id);
+            session.commit(); // end a unit of work -> if u want to do more open new session -> ensure no leftovers
+            return affectedRows;
+        }
     }
 
     // -> only use when inserting write update delete ->  session.commit(); // end a unit of work -> if u want to do more open new session
@@ -161,35 +202,35 @@ public class MovieDAO implements IMovieDAO {
         return null;
     }
 
-    @Override
-    public List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException {
-        return null;
-    }
+//    @Override
+//    public List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException {
+//        return null;
+//    }
 
     @Override
     public Movie getMovieById(int id) throws SQLException {
         return null;
     }
 
-    public int createMovie(Movie movie) throws SQLException {
-        int rowsAffected = 0;
-        try (Connection con = cm.getConnection()) {
-            String sql;
-            PreparedStatement pstmt;
-            sql = "INSERT INTO Movie (name, rating, path, lastview) VALUES (?, ?, ?, ?); SELECT SCOPE_IDENTITY() as id";
-            pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, movie.name().get());
-            pstmt.setDouble(2, movie.rating());
-            pstmt.setString(3, movie.absolutePath().get());
-            pstmt.setDate(4, movie.lastview());
-            ResultSet rs = pstmt.executeQuery();
-            rs.next();
-            int id = rs.getInt("id");
-
-            rowsAffected = linkMovieCategories(movie, rowsAffected, con, id);
-        }
-        return rowsAffected + 1;
-    }
+//    public static int createMovie(Movie movie) throws SQLException {
+//        int rowsAffected = 0;
+//        try (Connection con = cm.getConnection()) {
+//            String sql;
+//            PreparedStatement pstmt;
+//            sql = "INSERT INTO Movie (name, rating, path, lastview) VALUES (?, ?, ?, ?); SELECT SCOPE_IDENTITY() as id";
+//            pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+//            pstmt.setString(1, movie.name().get());
+//            pstmt.setDouble(2, movie.rating());
+//            pstmt.setString(3, movie.absolutePath().get());
+//            pstmt.setDate(4, movie.lastview());
+//            ResultSet rs = pstmt.executeQuery();
+//            rs.next();
+//            int id = rs.getInt("id");
+//
+//            rowsAffected = linkMovieCategories(movie, rowsAffected, con, id);
+//        }
+//        return rowsAffected + 1;
+//    }
 
     public int updateMovie(Movie movie) throws SQLException {
         int rowsAffected = 1;

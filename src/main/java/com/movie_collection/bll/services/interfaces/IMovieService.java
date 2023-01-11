@@ -13,14 +13,14 @@ public interface IMovieService {
      */
     List<Movie> getAllMovies() throws SQLException;
 
-    /**
-     * method to create a movie
-     *
-     * @param movie to be created
-     * @return number of rows affected
-     * @throws SQLException if the connection to the database fails
-     */
-    int createMovie(Movie movie) throws SQLException;
+//    /**
+//     * method to create a movie
+//     *
+//     * @param movie to be created
+//     * @return number of rows affected
+//     * @throws SQLException if the connection to the database fails
+//     */
+//    int createMovie(Movie movie) throws SQLException;
 
     /**
      * method to update a movie

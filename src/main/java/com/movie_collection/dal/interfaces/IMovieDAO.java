@@ -14,14 +14,14 @@ public interface IMovieDAO {
      */
     List<Movie> getAllMovies() throws SQLException;
 
-    /**
-     * Class responsible for getting all movies in a given category
-     *
-     * @param categoryId id of the category
-     * @return List of movies that are in the category
-     * @throws SQLException if the connection to the database fails
-     */
-    List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException;
+//    /**
+//     * Class responsible for getting all movies in a given category
+//     *
+//     * @param categoryId id of the category
+//     * @return List of movies that are in the category
+//     * @throws SQLException if the connection to the database fails
+//     */
+//    List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException;
 
     /**
      * @param id integer of the movie id
@@ -30,14 +30,14 @@ public interface IMovieDAO {
      */
     Movie getMovieById(int id) throws SQLException;
 
-    /**
-     * Creates a new movie in the database with given properties
-     *
-     * @param movie an object of type Movie with necessary properties
-     * @return number of rows affected
-     * @throws SQLException if the connection to the database fails
-     */
-    int createMovie(Movie movie) throws SQLException;
+//    /**
+//     * Creates a new movie in the database with given properties
+//     *
+//     * @param movie an object of type Movie with necessary properties
+//     * @return number of rows affected
+//     * @throws SQLException if the connection to the database fails
+//     */
+//    int createMovie(Movie movie) throws SQLException;
 
     /**
      * Updates a movie in the database depending on the id of the movie

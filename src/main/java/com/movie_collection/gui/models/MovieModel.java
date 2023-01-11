@@ -39,7 +39,8 @@ public class MovieModel implements IMovieModel{
 
     @Override
     public int createMovie(Movie movie) throws SQLException {
-        return movieService.createMovie(movie);
+        return 0;
+        //return // movieService.createMovie(movie);
     }
     @Override
     public int updateMovie(Movie movie) throws SQLException {

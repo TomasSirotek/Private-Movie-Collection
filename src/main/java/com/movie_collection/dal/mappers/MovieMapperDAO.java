@@ -2,6 +2,7 @@ package com.movie_collection.dal.mappers;
 
 
 import com.movie_collection.be.Movie2;
+import org.apache.ibatis.annotations.Param;
 
 
 import java.util.List;
@@ -12,8 +13,10 @@ public interface MovieMapperDAO {
 
     List<Movie2> getAllMovies();
 
-    List<Movie2> getAllMoviesByCategoryId(int categoryId);
+    List<Movie2> getAllMoviesByCategoryId(@Param("value") int categoryId);
 
+    int createMovieTest(Movie2 movie2);
+    int deleteMovieById(@Param("value") int id);
 
 
     //    @Select(" SELECT movie.id ,movie.name, movie.rating, movie.path, movie.lastview,category.id as c_category_id, category.name as c_name\n" +

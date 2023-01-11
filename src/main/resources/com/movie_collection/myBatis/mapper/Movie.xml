@@ -17,7 +17,8 @@
         </collection>
     </resultMap>
 
-    <select id="getAllMovies" resultType="Movie"
+    <select id="getAllMovies"
+            resultType="Movie"
             resultMap="movieResult">
         SELECT M.id     as movieId,-->
                M.name   as movieName,-->
@@ -32,7 +33,8 @@
     </select>
 
 
-    <select id="getAllMoviesByCategoryId" resultType="Movie"
+    <select id="getAllMoviesByCategoryId"
+            resultType="Movie"
             resultMap="movieResult">
         SELECT M.id     as movieId,-->
                M.name   as movieName,-->
@@ -44,8 +46,37 @@
         FROM Movie AS M -->
                  left outer join CatMovie PT on M.id = PT.movieId
                  left outer join Category C on PT.categoryId = C.id
-        where C.id = #{catagoryId}
+        WHERE C.id = #{value}  -- this could be more safer -->
     </select>
+
+
+    <insert
+            id="createMovieTest"
+            parameterType="Movie"
+            flushCache="true"
+            statementType="PREPARED"
+            keyProperty=""
+            keyColumn=""
+            useGeneratedKeys="true"
+            timeout="20">
+
+        INSERT INTO Movie (name, rating, path) VALUES (#{name},#{rating},#{absolutePath})
+    </insert>
+
+
+<!--  cache should be cleared before the statement is executed  ->  ensure that stale data is not used-->
+<!--     timeout 20 to prevent any issues with a query taking too long to execute -->
+    <delete id="deleteMovieById"
+            parameterType="Movie"
+            flushCache="true"
+            statementType="PREPARED"
+            timeout="20">
+
+--         executes delete query
+        DELETE FROM MOVIE WHERE id = #{value}
+    </delete>
+
+
 
 
 

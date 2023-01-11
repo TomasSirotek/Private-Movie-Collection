@@ -17,6 +17,7 @@ public class Movie2{
     private List<Category2> categories;
 
 
+
     public int getId() {
         return id;
     }

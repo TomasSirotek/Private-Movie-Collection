@@ -27,10 +27,10 @@ public class MovieService implements IMovieService {
         return movieDAO.getAllMovies();
     }
 
-    @Override
-    public int createMovie(Movie movie) throws SQLException {
-        return movieDAO.createMovie(linkingCategoriesToId(movie));
-    }
+//    @Override
+//    public int createMovie(Movie movie) throws SQLException {
+//        return movieDAO.createMovie(linkingCategoriesToId(movie));
+//    }
 
     @Override
     public int updateMovie(Movie movie) throws SQLException {
@@ -49,7 +49,8 @@ public class MovieService implements IMovieService {
 
     @Override
     public List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException {
-        return movieDAO.getAllMoviesInTheCategory(categoryId);
+//        return movieDAO.getAllMoviesInTheCategory(categoryId);
+        return null;
     }
 
     private Movie linkingCategoriesToId(Movie movie) throws SQLException {
