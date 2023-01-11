@@ -142,7 +142,7 @@ public class MovieController extends BaseController implements Initializable{
         Runtime runTime = Runtime.getRuntime();
         //TODO MORE DINAMICALLY U ASSHOLE
         String s[] = new String[]{"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe", path};
-
+        //Store var with a abs path selected by user.
         getOperatingSystem();
         try {
             movieModel.updateTimeStamp(id);
@@ -152,7 +152,7 @@ public class MovieController extends BaseController implements Initializable{
         runTime.exec(s);
     }
     //TODO SYSTEM OP
-    public String getOperatingSystem() {
+    private String getOperatingSystem() {
         String os = System.getProperty("os.name");
         System.out.println("Using System Property: " + os);
         if(os.contains("Windows")){
