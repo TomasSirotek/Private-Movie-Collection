@@ -16,5 +16,5 @@ public interface IMovieModel {
 
     int updateMovie(Movie movie) throws SQLException;
 
-    void searchMovies(String query) throws SQLException;
+    void searchMovies(String query);
 }
