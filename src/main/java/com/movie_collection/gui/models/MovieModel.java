@@ -1,12 +1,16 @@
 package com.movie_collection.gui.models;
 
 import com.google.inject.Inject;
+import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
+import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.bll.services.interfaces.IMovieService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MovieModel implements  IMovieModel{
@@ -31,11 +35,27 @@ public class MovieModel implements  IMovieModel{
         List<Movie> temp = movieService.getAllMovies();
         movies = FXCollections.observableArrayList(temp);
         return movies;
-//        return movies = FXCollections.observableArrayList(
-//                movieService.getAllMovies()
-//        );
     }
 
+    @Override
+    public ObservableList<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException{
+        return FXCollections.observableArrayList(
+                movieService.getAllMoviesInTheCategory(categoryId)
+        );
+    }
+
+    @Override
+    public int createMovie(Movie movie) throws SQLException {
+        return movieService.createMovie(movie);
+    }
+    @Override
+    public int updateMovie(Movie movie) throws SQLException {
+        return movieService.updateMovie(movie);
+    }
+    @Override
+    public int deleteMovie(int id) throws SQLException {
+        return movieService.deleteMovie(id);
+    }
     @Override
     public void searchMovies(String query) throws SQLException {
         List<Movie> temp = movieService.getAllMovies();
@@ -50,11 +70,4 @@ public class MovieModel implements  IMovieModel{
         }
 
     }
-
-    @Override
-    public int deleteMovie(int id) {
-        return 0;
-    }
-
-
 }

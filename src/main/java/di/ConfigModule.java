@@ -13,6 +13,7 @@ import com.movie_collection.dal.interfaces.ICategoryDAO;
 import com.movie_collection.gui.controllers.BaseController;
 import com.movie_collection.dal.dao.MovieDAO;
 import com.movie_collection.dal.interfaces.IMovieDAO;
+import com.movie_collection.gui.controllers.MovieController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
 import com.movie_collection.gui.controllers.controllerFactory.ControllerFactory;
 import com.movie_collection.gui.models.CategoryModel;
@@ -66,5 +67,14 @@ public class ConfigModule extends AbstractModule {
          */
         bind(IFilter.class).to(Filter.class);
 
+        /*
+         * Injection of main controller
+         */
+        bind(MovieController.class).in(Singleton.class);
+
+        /**
+         * Injection of the model
+         */
+        bind(IMovieModel.class).to(MovieModel.class).in(Singleton.class);
     }
 }

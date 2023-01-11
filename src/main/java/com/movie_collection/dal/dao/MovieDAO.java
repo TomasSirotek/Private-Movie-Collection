@@ -10,6 +10,7 @@ import javafx.beans.property.StringProperty;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MovieDAO implements IMovieDAO {
     private static final ConnectionManager cm = new ConnectionManager();
@@ -29,6 +30,11 @@ public class MovieDAO implements IMovieDAO {
             // used for adding categories to movie
             while (rs.next()) {
                 int id = rs.getInt("id");
+                // check for empty table
+                // since we are sorting by movies if the first one is 0 the rest will also be zero
+                if (id == 0){
+                    return movies;
+                }
                 StringProperty name = new SimpleStringProperty(rs.getString("name"));
                 double rating = rs.getDouble("rating");
                 StringProperty path = new SimpleStringProperty(rs.getString("path"));
@@ -57,6 +63,7 @@ public class MovieDAO implements IMovieDAO {
                         categories = catName != null ? List.of(new Category(rs.getInt("C_id"), new SimpleStringProperty(catName))) : new ArrayList<>();
                     }
                     movies.add(new Movie(id, name, rating, path, new ArrayList<>(categories), lastview));
+
                 }
             }
         }
@@ -76,13 +83,18 @@ public class MovieDAO implements IMovieDAO {
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("id");
-                movies.add(getMovieById(id));
+                if (id == 0) {
+                    return movies;
+                } else {
+                    Optional<Movie> movie = getMovieById(id);
+                    movie.ifPresent(movies::add);
+                }
             }
         }
         return movies;
     }
 
-    public Movie getMovieById(int id) throws SQLException {
+    public Optional<Movie> getMovieById(int id) throws SQLException {
         try (Connection con = cm.getConnection()) {
             String sql = "SELECT M.id, M.name, M.rating, M.path, M.lastview, CM.categoryId, CM.movieId, C.id as C_id, C.name as C_name FROM Movie M  " +
                     "LEFT JOIN CatMovie CM on M.id = CM.movieId " +
@@ -91,8 +103,9 @@ public class MovieDAO implements IMovieDAO {
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
-            rs.next();
-
+            if (!rs.next()){
+                return Optional.empty();
+            }
             StringProperty name = new SimpleStringProperty(rs.getString("name"));
             double rating = rs.getDouble("rating");
             StringProperty path = new SimpleStringProperty(rs.getString("path"));
@@ -103,47 +116,76 @@ public class MovieDAO implements IMovieDAO {
             while (rs.next()) {
                 allCategories.add(new Category(rs.getInt("C_id"), new SimpleStringProperty(rs.getString("C_name"))));
             }
-
-            return new Movie(id, name, rating, path, allCategories, lastview);
+            return Optional.of(new Movie(id, name, rating, path, allCategories, lastview));
         }
     }
 
     public int createMovie(Movie movie) throws SQLException {
+        int rowsAffected = 0;
         try (Connection con = cm.getConnection()) {
-            String sql = "INSERT INTO Movie name, rating, path, lastview VALUES (?, ?, ?, ?)";
-            PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            String sql;
+            PreparedStatement pstmt;
+            sql = "INSERT INTO Movie (name, rating, path, lastview) VALUES (?, ?, ?, ?); SELECT SCOPE_IDENTITY() as id";
+            pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, movie.name().get());
             pstmt.setDouble(2, movie.rating());
             pstmt.setString(3, movie.absolutePath().get());
             pstmt.setDate(4, movie.lastview());
-            return pstmt.executeUpdate();
+            ResultSet rs = pstmt.executeQuery();
+            rs.next();
+            int id = rs.getInt("id");
+
+            rowsAffected = linkMovieCategories(movie, rowsAffected, con, id);
         }
+        return rowsAffected + 1;
     }
 
     public int updateMovie(Movie movie) throws SQLException {
+        int rowsAffected = 1;
         try (Connection con = cm.getConnection()) {
-            String sql = "UPDATE Movie SET name = ?, rating = ?, path = ?, lastview = ? WHERE id = ?";
+            System.out.println(movie);
+            String sql = "UPDATE Movie SET name = ?, rating = ?, path = ? WHERE id = (?) ;";
             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, movie.name().get());
             pstmt.setDouble(2, movie.rating());
             pstmt.setString(3, movie.absolutePath().get());
-            pstmt.setDate(4, movie.lastview());
-            pstmt.setInt(5, movie.id());
-            return pstmt.executeUpdate();
+            pstmt.setInt(4, movie.id());
+            ResultSet rs = pstmt.executeQuery();
+            rs.next();
+            int id = rs.getInt("id");
+
+            rowsAffected = linkMovieCategories(movie, rowsAffected, con, id);
         }
+        return rowsAffected;
     }
 
     public int deleteMovie(int id) throws SQLException {
         try (Connection con = cm.getConnection()) {
-            String sql = "DELETE FROM CatMovie WHERE Movieid = ?";
+            String sql = "DELETE FROM Movie WHERE id = ?";
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, id);
-            int rs1 = pstmt.executeUpdate();
-            String sql2 = "DELETE FROM Movie WHERE id = ?";
-            PreparedStatement pstmt2 = con.prepareStatement(sql2);
-            pstmt2.setInt(1, id);
-            int rs2 = pstmt2.executeUpdate();
-            return rs1 + rs2;
+            return pstmt.executeUpdate();
         }
+    }
+
+    private int linkMovieCategories(Movie movie, int rowsAffected, Connection con, int id) throws SQLException {
+        String sql;
+        PreparedStatement pstmt;
+
+        sql = "DELETE FROM CatMovie WHERE movieId = ?;";
+        pstmt = con.prepareStatement(sql);
+        pstmt.setInt(1, movie.id());
+        pstmt.executeUpdate();
+
+        sql = "INSERT INTO CatMovie (categoryId, movieId) VALUES (?, ?);";
+        pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        for (Category c : movie.categories()) {
+            pstmt.setInt(1, c.id());
+            pstmt.setInt(2, id);
+            pstmt.addBatch();
+            rowsAffected++;
+        }
+        pstmt.executeBatch();
+        return rowsAffected;
     }
 }

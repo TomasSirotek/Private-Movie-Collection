@@ -47,4 +47,15 @@ public class CategoryDAO implements ICategoryDAO {
             return preparedStatement.executeUpdate();
         }
     }
+    @Override
+    public Category getCategoryByName(String name) throws SQLException {
+        try(Connection connection = cm.getConnection()){
+            String sql = "SELECT Category.id, Category.name FROM Category WHERE UPPER(Category.name) = UPPER(?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            ResultSet rs = preparedStatement.executeQuery();
+            rs.next();
+            return new Category(rs.getInt("id"), new SimpleStringProperty(rs.getString("name")));
+        }
+    }
 }

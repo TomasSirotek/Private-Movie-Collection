@@ -2,12 +2,14 @@ package com.movie_collection.gui.controllers;
 
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
+import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.models.CategoryModel;
 import com.movie_collection.gui.models.ICategoryModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
@@ -35,27 +37,48 @@ public class CategoryAddEditController extends RootController implements Initial
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        add_category.setOnAction(e -> {
-            try {
-                createCategoryOnAction(category_name.getText());
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
+        add_category.setOnAction(e -> createCategoryOnAction(category_name.getText()));
     }
 
-    // method that for now is randomly setting ID and creates category, refreshed the pane and closes the stage
-    private void createCategoryOnAction(String categoryName) throws SQLException {
+    /**
+     * method that is set on action on the button to manage logic and validation of newly create category
+     * @param categoryName that is going to be eventualy created
+     */
+    private void createCategoryOnAction(String categoryName) {
         Objects.requireNonNull(categoryName,"Category name cannot be empty");
-        Random id = new Random();
-        // TODO: just for testing now since we dont have actual dao to get
-        Category newCategory = new Category(id.nextInt(),new SimpleStringProperty(categoryName));
-        var result =  categoryModel.createCategory(newCategory);
+        Category newCategory = new Category(0,new SimpleStringProperty(categoryName));
+        var result = tryToCreateCategory(newCategory);
+
         if(result > 0){
-            baseController.refreshScrollPane();
+            AlertHelper.showOptionalAlertWindow("Successfully created category with name :" + categoryName, Alert.AlertType.INFORMATION);
+            refreshMovieTable();
             getStage().close();
         } else {
-            // needs to have proper notification call
+            AlertHelper.showOptionalAlertWindow("Could not create category with name :" + categoryName, Alert.AlertType.ERROR);
+        }
+    }
+
+    /**
+     * tries to refresh category pane inside baseController
+     */
+    private void refreshMovieTable() {
+        try {
+            baseController.refreshScrollPane();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * tries to create category with the new name
+     * @param newCategory that will be created
+
+     */
+    private int tryToCreateCategory(Category newCategory) {
+        try {
+            return categoryModel.createCategory(newCategory);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

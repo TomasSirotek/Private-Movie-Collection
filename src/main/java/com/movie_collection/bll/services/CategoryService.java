@@ -31,4 +31,9 @@ public class CategoryService implements ICategoryService {
     public int deleteCategory(int id) throws SQLException {
         return categoryDAO.deleteCategory(id);
     }
+
+    @Override
+    public Category getCategoryByName(String name) throws SQLException {
+        return categoryDAO.getCategoryByName(name);
+    }
 }

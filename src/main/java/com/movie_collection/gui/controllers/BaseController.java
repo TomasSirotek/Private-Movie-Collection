@@ -12,11 +12,13 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import com.movie_collection.gui.models.IMovieModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -31,6 +33,7 @@ import com.movie_collection.bll.util.Filter;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,11 +49,14 @@ public class BaseController extends RootController implements Initializable {
     @FXML
     private StackPane app_content;
 
+    private IControllerFactory controllerFactory;
+
+    private ICategoryModel categoryModel;
     @FXML
     private TextField searchMovies;
 
     @Inject
-    IControllerFactory controllerFactory;
+    private IMovieModel movieModel;
 
     @Inject
     ICategoryModel categoryModel;
@@ -65,20 +71,38 @@ public class BaseController extends RootController implements Initializable {
         this.movieModel = movieModel;
     }
 
-    //  TODO: an empty constructor that is always created
-    // whenever we specify but in this case it wa
-    // s doing some not good stuff with injection
-    // but lets look into the di AND MODULE-INFO LATER
-    public BaseController() {
-    }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         filterBar();
         try {
             setCategoriesScrollPane(categoryModel.getAllCategories());
+            showMoviesToDelete();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void showMoviesToDelete() throws SQLException {
+        List<Movie> allMovies = movieModel.getAllMovies();
+        List<Movie> moviesToDelete = allMovies.stream()
+                .filter(m -> m.rating() < 6.0 || (m.lastview() != null && (Instant.now().toEpochMilli() - m.lastview().getTime() > 63113852000L))) // add movie if rating is < 6 or if lastview is not null and Current time - (lastview time is more than time of 2 years in miliseconds)
+                .toList();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Do you want to delete these movies ?");
+        String str = "";
+        for (Movie m:moviesToDelete) {
+            str += m.name().get() + "\n";
+        }
+        alert.setContentText(str);
+        alert.getButtonTypes().setAll(new ButtonType("Delete"), new ButtonType("Cancel"));
+        Optional<ButtonType> btn= alert.showAndWait();
+        String button = btn.isPresent() ? btn.get().getText() : "Cancel";
+        if (button.equals("Delete")){
+            for (Movie m: moviesToDelete) {
+                movieModel.deleteMovie(m.id());
+            }
         }
     }
 
@@ -86,7 +110,7 @@ public class BaseController extends RootController implements Initializable {
      * void method that invokes scroll pane to clean content first
      * and then set it back to all categories
      */
-    public void refreshScrollPane() throws SQLException {
+    protected void refreshScrollPane() throws SQLException {
         if(scroll_pane.getContent() != null){
             scroll_pane.setContent(null);
             setCategoriesScrollPane(categoryModel.getAllCategories());
@@ -111,8 +135,9 @@ public class BaseController extends RootController implements Initializable {
 
                     // Setting on the action for switching views
                     categoryBtn.setOnAction(event -> {
-                        Parent parent = tryToLoadView();
-                        switchToView(parent); // switches into chosen view
+                        MovieController parent = (MovieController) tryToLoadView();
+                        parent.setIsCategoryView(category.id());
+                        switchToView(parent.getView()); // switches into chosen view
                     });
                     categoryBtn.setPrefWidth(140);
 
@@ -171,7 +196,7 @@ public class BaseController extends RootController implements Initializable {
      * method that tries to load the view
      * @return parent that will be loaded
      */
-    private Parent tryToLoadView() {
+    private RootController tryToLoadView() {
         try {
             return loadNodesView(ViewType.MOVIES);
         } catch (IOException e) {
@@ -185,8 +210,9 @@ public class BaseController extends RootController implements Initializable {
      */
     @FXML
     private void onActionAddMovie(ActionEvent actionEvent) throws IOException {
-        Parent parent = loadNodesView(ViewType.CREATE_EDIT);
-        show(parent,"Add new Movie");
+        RootController parent = loadNodesView(ViewType.CREATE_EDIT);
+        show(parent.getView(),"Add new Movie");
+        actionEvent.consume();
     }
 
     /**
@@ -214,8 +240,8 @@ public class BaseController extends RootController implements Initializable {
      */
     @FXML
     private void clickMovies(ActionEvent e) throws IOException {
-        Parent parent = loadNodesView(ViewType.MOVIES);
-        switchToView(parent);
+        RootController parent = loadNodesView(ViewType.MOVIES);
+        switchToView(parent.getView());
         e.consume();
     }
 
@@ -225,8 +251,8 @@ public class BaseController extends RootController implements Initializable {
      * @return parent loaded from factory
      */
 
-    private Parent loadNodesView(ViewType viewType) throws IOException {
-        return controllerFactory.loadFxmlFile(viewType).getView();
+    private RootController loadNodesView(ViewType viewType) throws IOException {
+        return controllerFactory.loadFxmlFile(viewType);
     }
 
     /**
@@ -245,8 +271,9 @@ public class BaseController extends RootController implements Initializable {
      */
     @FXML
     private void onActionAddCategory(ActionEvent actionEvent) throws IOException {
-        Parent parent = loadNodesView(ViewType.CATEGORY_ADD_EDIT);
-        show(parent,"Add new Category");
+        RootController parent = loadNodesView(ViewType.CATEGORY_ADD_EDIT);
+        show(parent.getView(),"Add new Category");
+        actionEvent.consume();
     }
 
     private void filterBar() {
@@ -293,8 +320,8 @@ public class BaseController extends RootController implements Initializable {
      */
     @FXML
     private void onActionGoHome(ActionEvent actionEvent) throws IOException {
-        Parent parent = loadNodesView(ViewType.MOVIES);
-        switchToView(parent);
+        RootController parent = loadNodesView(ViewType.MOVIES);
+        switchToView(parent.getView());
         actionEvent.consume();
     }
 }
