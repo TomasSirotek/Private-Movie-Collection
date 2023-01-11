@@ -16,23 +16,19 @@ public class MovieModel implements  IMovieModel{
     private final ObservableList<Movie> filteredMovies;
 
     @Inject
-    public MovieModel(IMovieService movieService) {
+    public MovieModel(IMovieService movieService) throws SQLException {
         this.movieService = movieService;
         this.filteredMovies = FXCollections.observableArrayList();
         this.allMovies = FXCollections.observableArrayList();
-        try {
-            getAllMovies();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        getAllMovies();
         filteredMovies.addAll(allMovies);
 
     }
 
     @Override
     public ObservableList<Movie> getAllMovies() throws SQLException {
-        allMovies.clear();
-        allMovies.addAll(FXCollections.observableArrayList(movieService.getAllMovies()));
+        allMovies.setAll(FXCollections.observableArrayList(movieService.getAllMovies()));
+        filteredMovies.setAll(allMovies);
         return allMovies;
     }
 
@@ -42,35 +38,29 @@ public class MovieModel implements  IMovieModel{
     }
 
     @Override
-    public ObservableList<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException{
-        return FXCollections.observableArrayList(
-                movieService.getAllMoviesInTheCategory(categoryId)
-        );
+    public void getAllMoviesInTheCategory(int categoryId) throws SQLException{
+        allMovies.setAll(FXCollections.observableArrayList(movieService.getAllMoviesInTheCategory(categoryId)));
+        filteredMovies.setAll(allMovies);
     }
 
     @Override
     public int createMovie(Movie movie) throws SQLException {
-        getAllMovies();
         return movieService.createMovie(movie);
     }
     @Override
     public int updateMovie(Movie movie) throws SQLException {
-        getAllMovies();
         return movieService.updateMovie(movie);
     }
     @Override
     public int deleteMovie(int id) throws SQLException {
-        getAllMovies();
         return movieService.deleteMovie(id);
     }
     @Override
     public void searchMovies(String query) {
         if (query.length() > 0){
-            filteredMovies.clear();
-            filteredMovies.addAll(movieService.searchMovie(allMovies, query));
+            filteredMovies.setAll(movieService.searchMovie(allMovies, query));
         } else {
-            filteredMovies.clear();
-            filteredMovies.addAll(allMovies);
+            filteredMovies.setAll(allMovies);
         }
 //        System.out.println("----");
 //        filteredMovies.forEach(movie -> System.out.println(movie.name().get()));

@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public interface IMovieModel {
 
     ObservableList<Movie> getAllMovies() throws SQLException;
-    ObservableList<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException;
+    void getAllMoviesInTheCategory(int categoryId) throws SQLException;
     ObservableList<Movie> getFilteredMovies();
 
     int createMovie(Movie movie) throws SQLException;

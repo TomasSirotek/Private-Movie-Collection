@@ -22,7 +22,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -125,7 +124,7 @@ public class MovieController extends RootController implements Initializable{
         // tries to call movie service and set all items
 
 
-        moviesTable.setItems(movieModel.getFilteredMovies());
+        trySetTableWithMovies();
 
     }
     protected void setIsCategoryView(int categoryId){
@@ -183,9 +182,8 @@ public class MovieController extends RootController implements Initializable{
     protected void refreshTable() {
         if(moviesTable != null){
             if(moviesTable.getItems() != null){
-                moviesTable.getItems().clear();
                 try {
-                    moviesTable.setItems(movieModel.getAllMovies()  );
+                    movieModel.getAllMovies();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -195,18 +193,10 @@ public class MovieController extends RootController implements Initializable{
 
 
     private void trySetTableByCategory(int categoryId){
-        javafx.collections.ObservableList<Movie> test;
         try {
-            test = movieModel.getAllMoviesInTheCategory(categoryId);
-
+            movieModel.getAllMoviesInTheCategory(categoryId);
         } catch (SQLException e) {
             throw new RuntimeException(e); //TODO: Lets look at this later to fix it                no result rows
-        }
-        if(test.size() > 0){
-           moviesTable.getItems().setAll(test);
-        } else {
-            List<Movie> moviesEmpty =  List.of();
-            moviesTable.getItems().setAll(moviesEmpty);
         }
     }
 
@@ -215,11 +205,7 @@ public class MovieController extends RootController implements Initializable{
      */
 
     private void trySetTableWithMovies() {
-        try {
-            moviesTable.getItems().setAll(movieModel.getAllMovies());
-        } catch (SQLException e) {
-            throw new RuntimeException(e); //TODO: Lets look at this later to fix it
-        }
+        moviesTable.setItems(movieModel.getFilteredMovies());
     }
 
     /**
