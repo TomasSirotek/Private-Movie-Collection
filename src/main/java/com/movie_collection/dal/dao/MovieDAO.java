@@ -169,15 +169,10 @@ public class MovieDAO implements IMovieDAO {
 
     public int deleteMovie(int id) throws SQLException {
         try (Connection con = cm.getConnection()) {
-            String sql = "DELETE FROM CatMovie WHERE Movieid = ?";
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, id);
-            int rs1 = pstmt.executeUpdate();
             String sql2 = "DELETE FROM Movie WHERE id = ?";
             PreparedStatement pstmt2 = con.prepareStatement(sql2);
             pstmt2.setInt(1, id);
-            int rs2 = pstmt2.executeUpdate();
-            return rs1 + rs2;
+            return pstmt2.executeUpdate();
         }
     }
 }
