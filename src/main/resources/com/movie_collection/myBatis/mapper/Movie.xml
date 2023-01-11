@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.movie_collection.dal.mappers.MovieMapperDAO">
+
+    <resultMap id="movieResult" type="com.movie_collection.be.Movie2">
+        <id property="id" column="movieId"/>
+        <result property="name" column="movieName"/>
+        <result property="rating" column="movieRating"/>
+        <result property="absolutePath" column="moviePath"/>
+        <result property="lastview" column="lastview"/>
+        <collection property="categories" javaType="ArrayList" column="movieId" ofType="com.movie_collection.be.Category2" >
+            <id property="id" column="idCat"/>
+            <result property="name" column="nameCat"/>
+        </collection>
+    </resultMap>
+
+<!--    <select id="getCategoriesByMovieId" resultType="com.movie_collection.be.Category2" resultMap="movieResult">-->
+<!--        SELECT * FROM category-->
+<!--        WHERE id in (SELECT categoryId FROM CatMovie WHERE movieId = #{id})-->
+<!--    </select>-->
+
+<!--    column="idMovie" WAS INSIDE COLLECTION -->
+<!--    <resultMap id="categoryResult" type="Category">-->
+<!--        <collection property="categories" javaType="ArrayList" column="id" ofType="Category" select="selectPostsForBlog"/>-->
+<!--    </resultMap>-->
+
+<!--    <select id="selectBlog" resultMap="blogResult">-->
+<!--        SELECT * FROM Movie WHERE ID = #{id}-->
+<!--    </select>-->
+
+
+    <!-- MAP CATEGORY -->
+    <!--    <resultMap id="categoryResult" type="com.movie_collection.be.Category2">-->
+    <!--        <result property="id" column="c_category_id"/>-->
+    <!--        <result property="name" column="c_name"/>-->
+    <!--    </resultMap>-->
+
+
+    <select id="getAllMovies" resultType="com.movie_collection.be.Movie2"
+            resultMap="movieResult">
+
+
+                 SELECT M.id     as movieId,-->
+                        M.name   as movieName,-->
+                        M.rating as movieRating,-->
+                        M.path   as moviePath,-->
+                        M.lastview as lastview,-->
+                        C.id     as idCat,-->
+                        C.name   as nameCat-->
+                 FROM Movie AS M-->
+                          left outer join CatMovie PT on M.id = PT.movieId
+                          left outer join Category C on PT.categoryId = C.id
+
+
+-- select  M.id     as idMovie,
+--                 M.name   as name,
+--                 M.rating as rating,
+--                 M.path   as path,
+--                 M.lastview as moviePath,
+--                 C.id,C.name
+--
+-- from movie m
+--          inner join
+--      CatMovie cm
+--      on
+--          m.id = cm.movieId
+--          inner join
+--      category c
+--      on
+--          cm.categoryId = c.id
+
+    </select>
+
+
+<!--    &#45;&#45;         SELECT M.id     as idMovie,-->
+<!--    &#45;&#45;                M.name   as name,-->
+<!--    &#45;&#45;                M.rating as rating,-->
+<!--    &#45;&#45;                M.path   as path,-->
+<!--    &#45;&#45;                M.lastview as moviePath,-->
+<!--    &#45;&#45;                C.id     as idCat,-->
+<!--    &#45;&#45;                C.name   as nameCat-->
+<!--    &#45;&#45;         FROM Movie AS M-->
+<!--    &#45;&#45;                  left outer join CatMovie PT on M.id = PT.movieId-->
+<!--    &#45;&#45;                  left outer join Category C on PT.categoryId = C.id-->
+
+
+    <!--    <select id="selectAllMovies" resultMap="movieResult" resultType="com.movie_collection.be.Movie2">-->
+    <!--        SELECT movie.id, movie.name, movie.rating, movie.path, movie.lastview, category.name as category_name-->
+    <!--        FROM movie-->
+    <!--        JOIN CatMovie CM ON Movie.id = CM.movieId-->
+    <!--        JOIN category ON CM.categoryId = category.id-->
+    <!--    </select>-->
+
+    <!--    <select id="selectCategories" resultType="com.movie_collection.be.Category2">-->
+    <!--        SELECT id,name from category where category.name in-->
+    <!--        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">-->
+    <!--            #{item}-->
+    <!--        </foreach>-->
+    <!--    </select>-->
+
+    <!--    <select id="selectCategories" resultType="com.movie_collection.be.Category2">-->
+    <!--        SELECT name from category where category.id = #{id}-->
+    <!--    </select>-->
+
+    <!--    <select id="selectAll" resultMap="result" resultType="com.movie_collection.be.Movie2">-->
+    <!--        SELECT id,name,rating,path,lastview FROM Movie;-->
+    <!--    </select>-->
+    <!--    <select id="selectById" parameterType="int" resultMap="result">-->
+    <!--        SELECT * FROM user WHERE id = #{id}-->
+    <!--    </select>-->
+
+    <!--    <insert id="insert" parameterType="User" useGeneratedKeys="true" keyProperty="id">-->
+    <!--        INSERT INTO user (userName) VALUES (#{userName});-->
+    <!--    </insert>-->
+
+    <!--    <update id="update" parameterType="User">-->
+    <!--        UPDATE user-->
+    <!--        SET userName = #{userName}-->
+    <!--        WHERE id = #{id}-->
+    <!--    </update>-->
+
+    <!--    <delete id="delete" parameterType="int">-->
+    <!--        DELETE from user WHERE id = #{id}-->
+    <!--    </delete>
+-->
+</mapper>

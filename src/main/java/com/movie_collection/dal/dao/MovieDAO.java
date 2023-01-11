@@ -1,112 +1,155 @@
 package com.movie_collection.dal.dao;
 
+import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
+import com.movie_collection.be.Movie2;
 import com.movie_collection.dal.ConnectionManager;
 import com.movie_collection.dal.interfaces.IMovieDAO;
+import com.movie_collection.dal.mappers.MovieMapperDAO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.fxml.FXML;
+import myBatis.MyBatisConnectionFactory;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MovieDAO implements IMovieDAO {
-    private static final ConnectionManager cm = new ConnectionManager();
+   private static final ConnectionManager cm = new ConnectionManager();
 
+    public static void main(String[] args) {
+        var test = getAllMoviesTest();
+        test.forEach(System.out::println);
+    }
+
+
+    public static List<Movie2> getAllMoviesTest(){
+
+        try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+            MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
+            mapper.getAllMovies().forEach(System.out::println);
+            return mapper.getAllMovies();
+           //list.forEach(System.out::println);
+//            MovieMapperDAO userMapper = session.getMapper(MovieMapperDAO.class);
+//            return userMapper.getAllMovies();
+        }
+    }
+
+
+
+
+//    public List<Movie> getAllMovies() throws SQLException {
+//        List<Movie> movies = new ArrayList<>();
+//        long starttime;
+//        try (Connection con = cm.getConnection()){
+//            starttime = System.currentTimeMillis();
+//            String sql = "SELECT M.id, M.name, M.rating, M.path, M.lastview, CM.categoryId, CM.movieId, C.id as C_id, C.name as C_name FROM Movie M " +
+//                    "LEFT JOIN CatMovie CM on M.id = CM.movieId " +
+//                    "LEFT JOIN Category C on C.id = CM.categoryId " +
+//                    "ORDER BY M.id ASC;";
+//            PreparedStatement pstmt = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+//            ResultSet rs = pstmt.executeQuery();
+//
+//            // used for adding categories to movie
+//            while (rs.next()) {
+//                int id = rs.getInt("id");
+//                StringProperty name = new SimpleStringProperty(rs.getString("name"));
+//                double rating = rs.getDouble("rating");
+//                StringProperty path = new SimpleStringProperty(rs.getString("path"));
+//                Date lastview = rs.getDate("lastview");
+//
+//                Movie lastMovie;
+//                List<Category> categories;
+//                // check for empty list
+//                if (movies.isEmpty()) {
+//                    // add first element
+//                    String catName = rs.getString("C_name");
+//                    categories = catName != null ? List.of(new Category(rs.getInt("C_id"), new SimpleStringProperty(catName))) : new ArrayList<>();
+//                    movies.add(new Movie(id, name, rating, path, categories, lastview));
+//                } else {
+//                    // the last added movie
+//                    lastMovie = movies.get(movies.size() - 1);
+//                    // if it is the same as movie in this row
+//                    if (lastMovie.id() == id) {
+//                        // add the extra category
+//                        categories = new ArrayList<>(lastMovie.categories());
+//                        categories.add(new Category(rs.getInt("C_id"), new SimpleStringProperty(rs.getString("C_name"))));
+//                        // remove the old movie
+//                        movies.remove(lastMovie);
+//                    } else {
+//                        String catName = rs.getString("C_name");
+//                        categories = catName != null ? List.of(new Category(rs.getInt("C_id"), new SimpleStringProperty(catName))) : new ArrayList<>();
+//                    }
+//                    movies.add(new Movie(id, name, rating, path, new ArrayList<>(categories), lastview));
+//
+//                }
+//            }
+//        }
+//        System.out.println("Time to get all the movies: " + (System.currentTimeMillis() - starttime));
+//        return (movies);
+//    }
+//
+//    public List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException {
+//        ArrayList<Movie> movies = new ArrayList<>();
+//        try (Connection con= cm.getConnection()) {
+//            String sql = "SELECT M.id, CM.categoryId, CM.movieId, C.id as C_id, C.name as C_name FROM Category C  " +
+//                    "LEFT JOIN CatMovie CM on C.id = CM.categoryId " +
+//                    "LEFT JOIN Movie M on M.id = CM.movieId WHERE C.id = ? " +
+//                    "ORDER BY M.id ASC;";
+//            PreparedStatement preparedStatement = con.prepareStatement(sql);
+//            preparedStatement.setInt(1, categoryId);
+//            ResultSet rs = preparedStatement.executeQuery();
+//            while (rs.next()) {
+//                int id = rs.getInt("id");
+//                movies.add(getMovieById(id));
+//            }
+//        }
+//        return movies;
+//    }
+//
+//    public Movie getMovieById(int id) throws SQLException {
+//        try (Connection con = cm.getConnection()) {
+//            String sql = "SELECT M.id, M.name, M.rating, M.path, M.lastview, CM.categoryId, CM.movieId, C.id as C_id, C.name as C_name FROM Movie M  " +
+//                    "LEFT JOIN CatMovie CM on M.id = CM.movieId " +
+//                    "LEFT JOIN Category C on C.id = CM.categoryId WHERE M.id = ? " +
+//                    "ORDER BY M.id ASC, C.id ASC;";
+//            PreparedStatement pstmt = con.prepareStatement(sql);
+//            pstmt.setInt(1, id);
+//            ResultSet rs = pstmt.executeQuery();
+//            rs.next();
+//
+//            StringProperty name = new SimpleStringProperty(rs.getString("name"));
+//            double rating = rs.getDouble("rating");
+//            StringProperty path = new SimpleStringProperty(rs.getString("path"));
+//            Date lastview = rs.getDate("lastview");
+//            String catName = rs.getString("C_name");
+//
+//            ArrayList<Category> allCategories = new ArrayList<>(catName != null ? List.of(new Category(rs.getInt("C_id"), new SimpleStringProperty(catName))) : new ArrayList<>());
+//            while (rs.next()) {
+//                allCategories.add(new Category(rs.getInt("C_id"), new SimpleStringProperty(rs.getString("C_name"))));
+//            }
+//
+//            return new Movie(id, name, rating, path, allCategories, lastview);
+//        }
+//    }
+
+    @Override
     public List<Movie> getAllMovies() throws SQLException {
-        List<Movie> movies = new ArrayList<>();
-        long starttime;
-        try (Connection con = cm.getConnection()){
-            starttime = System.currentTimeMillis();
-            String sql = "SELECT M.id, M.name, M.rating, M.path, M.lastview, CM.categoryId, CM.movieId, C.id as C_id, C.name as C_name FROM Movie M " +
-                    "LEFT JOIN CatMovie CM on M.id = CM.movieId " +
-                    "LEFT JOIN Category C on C.id = CM.categoryId " +
-                    "ORDER BY M.id ASC;";
-            PreparedStatement pstmt = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            ResultSet rs = pstmt.executeQuery();
-
-            // used for adding categories to movie
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                StringProperty name = new SimpleStringProperty(rs.getString("name"));
-                double rating = rs.getDouble("rating");
-                StringProperty path = new SimpleStringProperty(rs.getString("path"));
-                Date lastview = rs.getDate("lastview");
-
-                Movie lastMovie;
-                List<Category> categories;
-                // check for empty list
-                if (movies.isEmpty()) {
-                    // add first element
-                    String catName = rs.getString("C_name");
-                    categories = catName != null ? List.of(new Category(rs.getInt("C_id"), new SimpleStringProperty(catName))) : new ArrayList<>();
-                    movies.add(new Movie(id, name, rating, path, categories, lastview));
-                } else {
-                    // the last added movie
-                    lastMovie = movies.get(movies.size() - 1);
-                    // if it is the same as movie in this row
-                    if (lastMovie.id() == id) {
-                        // add the extra category
-                        categories = new ArrayList<>(lastMovie.categories());
-                        categories.add(new Category(rs.getInt("C_id"), new SimpleStringProperty(rs.getString("C_name"))));
-                        // remove the old movie
-                        movies.remove(lastMovie);
-                    } else {
-                        String catName = rs.getString("C_name");
-                        categories = catName != null ? List.of(new Category(rs.getInt("C_id"), new SimpleStringProperty(catName))) : new ArrayList<>();
-                    }
-                    movies.add(new Movie(id, name, rating, path, new ArrayList<>(categories), lastview));
-
-                }
-            }
-        }
-        System.out.println("Time to get all the movies: " + (System.currentTimeMillis() - starttime));
-        return (movies);
+        return null;
     }
 
+    @Override
     public List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException {
-        ArrayList<Movie> movies = new ArrayList<>();
-        try (Connection con= cm.getConnection()) {
-            String sql = "SELECT M.id, CM.categoryId, CM.movieId, C.id as C_id, C.name as C_name FROM Category C  " +
-                    "LEFT JOIN CatMovie CM on C.id = CM.categoryId " +
-                    "LEFT JOIN Movie M on M.id = CM.movieId WHERE C.id = ? " +
-                    "ORDER BY M.id ASC;";
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setInt(1, categoryId);
-            ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                movies.add(getMovieById(id));
-            }
-        }
-        return movies;
+        return null;
     }
 
+    @Override
     public Movie getMovieById(int id) throws SQLException {
-        try (Connection con = cm.getConnection()) {
-            String sql = "SELECT M.id, M.name, M.rating, M.path, M.lastview, CM.categoryId, CM.movieId, C.id as C_id, C.name as C_name FROM Movie M  " +
-                    "LEFT JOIN CatMovie CM on M.id = CM.movieId " +
-                    "LEFT JOIN Category C on C.id = CM.categoryId WHERE M.id = ? " +
-                    "ORDER BY M.id ASC, C.id ASC;";
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-            rs.next();
-
-            StringProperty name = new SimpleStringProperty(rs.getString("name"));
-            double rating = rs.getDouble("rating");
-            StringProperty path = new SimpleStringProperty(rs.getString("path"));
-            Date lastview = rs.getDate("lastview");
-            String catName = rs.getString("C_name");
-
-            ArrayList<Category> allCategories = new ArrayList<>(catName != null ? List.of(new Category(rs.getInt("C_id"), new SimpleStringProperty(catName))) : new ArrayList<>());
-            while (rs.next()) {
-                allCategories.add(new Category(rs.getInt("C_id"), new SimpleStringProperty(rs.getString("C_name"))));
-            }
-
-            return new Movie(id, name, rating, path, allCategories, lastview);
-        }
+        return null;
     }
 
     public int createMovie(Movie movie) throws SQLException {
