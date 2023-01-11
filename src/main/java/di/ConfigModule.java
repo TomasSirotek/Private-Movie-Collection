@@ -22,40 +22,40 @@ import com.movie_collection.gui.models.MovieModel;
 public class ConfigModule extends AbstractModule {
     @Override
     public void configure(){
-        /*
+        /**
         * Bind the MovieDAO interface to the implementation
          */
         bind(IMovieDAO.class).to(MovieDAO.class);
-        /*
+        /**
          * Bind the CategoryDAO interface to the implementation
          */
         bind(ICategoryDAO.class).to(CategoryDAO.class);
-        /*
+        /**
          * Injection of binding
          */
         bind(IControllerFactory.class).to(ControllerFactory.class);
 
-        /*
+        /**
          * Injection of movie service
          */
         bind(IMovieService.class).to(MovieService.class).in(Singleton.class);
 
-        /*
+        /**
          * Injection of movie service
          */
         bind(ICategoryService.class).to(CategoryService.class).in(Singleton.class);
         
-        /*
+        /**
          * Injection of movie service
          */
         bind(ICategoryModel.class).to(CategoryModel.class).in(Singleton.class);
 
-        /*
+        /**
          * Injection of base controller
          */
         bind(BaseController.class).in(Singleton.class);
 
-        /*
+        /**
          * Injection of main controller
          */
         bind(MovieController.class).in(Singleton.class);

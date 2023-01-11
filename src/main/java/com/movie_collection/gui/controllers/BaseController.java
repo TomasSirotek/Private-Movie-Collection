@@ -262,6 +262,17 @@ public class BaseController extends RootController implements Initializable {
         actionEvent.consume();
     }
 
+    /**
+     * method to invoke action to Choose Media Player Path
+     * @param actionEvent event
+     */
+    @FXML
+    private void onActionSelectMedia(ActionEvent actionEvent) throws IOException {
+        Parent parent = loadNodesView(ViewType.MEDIA_PLAYER_SELECTION);
+        show(parent,"Select Media Player Path");
+        actionEvent.consume();
+    }
+
 
     /** TODO:
      * This method does nothing for now it is just prepared for later extension
