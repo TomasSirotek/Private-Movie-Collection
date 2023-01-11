@@ -12,24 +12,33 @@ public class MovieModel implements  IMovieModel{
 
     private final IMovieService movieService;
 
-    private ObservableList<Movie> allMovies;
-    private ObservableList<Movie> filteredMovies;
+    private final ObservableList<Movie> allMovies;
+    private final ObservableList<Movie> filteredMovies;
 
     @Inject
     public MovieModel(IMovieService movieService) {
         this.movieService = movieService;
+        this.filteredMovies = FXCollections.observableArrayList();
+        this.allMovies = FXCollections.observableArrayList();
         try {
             getAllMovies();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        filteredMovies.addAll(allMovies);
 
     }
 
     @Override
     public ObservableList<Movie> getAllMovies() throws SQLException {
-        allMovies = FXCollections.observableArrayList(movieService.getAllMovies());
+        allMovies.clear();
+        allMovies.addAll(FXCollections.observableArrayList(movieService.getAllMovies()));
         return allMovies;
+    }
+
+    @Override
+    public ObservableList<Movie> getFilteredMovies() {
+        return filteredMovies;
     }
 
     @Override
@@ -57,11 +66,13 @@ public class MovieModel implements  IMovieModel{
     @Override
     public void searchMovies(String query) {
         if (query.length() > 0){
-            filteredMovies = FXCollections.observableArrayList(movieService.searchMovie(allMovies, query));
+            filteredMovies.clear();
+            filteredMovies.addAll(movieService.searchMovie(allMovies, query));
         } else {
-            filteredMovies = allMovies;
+            filteredMovies.clear();
+            filteredMovies.addAll(allMovies);
         }
-        System.out.println("----");
-        filteredMovies.forEach(movie -> System.out.println(movie.name().get()));
+//        System.out.println("----");
+//        filteredMovies.forEach(movie -> System.out.println(movie.name().get()));
     }
 }

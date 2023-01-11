@@ -3,9 +3,6 @@ package com.movie_collection.gui.controllers;
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
-import com.movie_collection.bll.services.interfaces.IMovieService;
-import com.movie_collection.gui.models.IMovieModel;
-import javafx.beans.property.*;
 import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
@@ -127,11 +124,9 @@ public class MovieController extends RootController implements Initializable{
         });
         // tries to call movie service and set all items
 
-        try {
-            moviesTable.setItems(movieModel.getAllMovies());
-        } catch (SQLException e) {
-            throw new RuntimeException(e); //TODO: Lets look at this later to fi it
-        }
+
+        moviesTable.setItems(movieModel.getFilteredMovies());
+
     }
     protected void setIsCategoryView(int categoryId){
         this.isCategoryView = true;
@@ -190,7 +185,7 @@ public class MovieController extends RootController implements Initializable{
             if(moviesTable.getItems() != null){
                 moviesTable.getItems().clear();
                 try {
-                    moviesTable.getItems().setAll(movieModel.getAllMovies());
+                    moviesTable.setItems(movieModel.getAllMovies()  );
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }

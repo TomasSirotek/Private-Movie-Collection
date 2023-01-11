@@ -264,15 +264,12 @@ public class BaseController extends RootController implements Initializable {
 
     private void filterBar() {
         searchMovies.textProperty().addListener((obs, oldValue, newValue) -> {
-            var test = getStage().getScene().lookup("#moviesTable");
-            if(test != null){
-                try {
-                    movieModel.searchMovies(newValue);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }else {
-             System.out.println("smth went wong " + test);
+            TableView tableView = (TableView) getStage().getScene().lookup("#moviesTable");
+            if(tableView != null){
+                movieModel.searchMovies(newValue);
+                tableView.refresh();
+            } else {
+                System.out.println("The table view could not be found");
 
             }
         });
