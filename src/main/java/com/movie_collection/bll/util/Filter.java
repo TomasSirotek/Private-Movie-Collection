@@ -1,24 +1,26 @@
 package com.movie_collection.bll.util;
 
-import com.google.inject.Inject;
+import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
-import com.movie_collection.dal.dao.MovieDAO;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Filter implements IFilter {
     public List<Movie> filteringMovies(List<Movie> listToSearch,String query) {
         List<Movie> filtered = new ArrayList<>();
-        for (Movie m :
-                listToSearch) {
-            if (m.name().getValue().toLowerCase().contains(query.toLowerCase()) ||
-                    m.categories().contains(query.toLowerCase()
-                   )) {
+        for (Movie m : listToSearch) {
+            if (m.name().getValue().toLowerCase().contains(query.toLowerCase())) {
                 filtered.add(m);
+            } else {
+                List<Category> categories = m.categories();
+                String categoryNames = "";
+                for (Category c: categories) {
+                    categoryNames += c.name().get();
+                }
+                if(categoryNames.contains(query)){
+                    filtered.add(m);
+                }
             }
         }
         return filtered;
