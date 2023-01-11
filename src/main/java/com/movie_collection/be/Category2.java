@@ -1,8 +1,5 @@
 package com.movie_collection.be;
 
-//public record Category2(int id,String name) {
-//}
-
 public class Category2 {
     private int id;
 

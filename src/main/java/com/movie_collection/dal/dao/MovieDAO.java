@@ -17,27 +17,46 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MovieDAO implements IMovieDAO {
    private static final ConnectionManager cm = new ConnectionManager();
 
     public static void main(String[] args) {
-        var test = getAllMoviesTest();
-        test.forEach(System.out::println);
+        //var test = getAllMoviesTest();
+       //test.forEach(System.out::println);
+
+       // var getAllMoviesInTheCategoryTest = getAllMoviesInTheCategoryTest(1210);
+
+        getAllMoviesInTheCategoryTest(5).ifPresent(allMoviesInCategory -> {
+            for (Movie2 movie : allMoviesInCategory) {
+                System.out.println(movie);
+            }
+        });
     }
 
 
     public static List<Movie2> getAllMoviesTest(){
-
+        List<Movie2> allMovies;
         try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
-            mapper.getAllMovies().forEach(System.out::println);
-            return mapper.getAllMovies();
-           //list.forEach(System.out::println);
-//            MovieMapperDAO userMapper = session.getMapper(MovieMapperDAO.class);
-//            return userMapper.getAllMovies();
+            allMovies = mapper.getAllMovies();
+        }
+        return allMovies;
+    }
+
+    public static Optional<List<Movie2>> getAllMoviesInTheCategoryTest(int categoryId)  {
+        try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+            MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
+            return Optional.ofNullable(mapper.getAllMoviesByCategoryId(categoryId));
         }
     }
+
+    public static int deleteMovieTest(int id){
+        return 0;
+    }
+
+    // -> only use when inserting write update delete ->  session.commit(); // end a unit of work -> if u want to do more open new session
 
 
 

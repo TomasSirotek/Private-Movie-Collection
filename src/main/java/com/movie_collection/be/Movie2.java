@@ -4,13 +4,6 @@ import java.sql.Date;
 import java.util.List;
 
 
-//public record Movie2(int id, String name, double rating, String absolutePath, Date lastview,List<Category2> categories) {
-//
-//
-//}
-
-
-
 public class Movie2{
 
     private int id;

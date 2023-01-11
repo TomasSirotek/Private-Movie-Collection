@@ -1,13 +1,20 @@
 package com.movie_collection.dal.mappers;
 
-import com.movie_collection.be.Category2;
+
 import com.movie_collection.be.Movie2;
-import org.apache.ibatis.annotations.*;
+
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface MovieMapperDAO {
+
+    List<Movie2> getAllMovies();
+
+    List<Movie2> getAllMoviesByCategoryId(int categoryId);
+
+
 
     //    @Select(" SELECT movie.id ,movie.name, movie.rating, movie.path, movie.lastview,category.id as c_category_id, category.name as c_name\n" +
 //            "        FROM movie\n" +
@@ -36,7 +43,7 @@ public interface MovieMapperDAO {
 //           @Result(property = "categories", column = "idMovie", javaType = List.class, many = @Many(select = "selectCategories"))
 //   })
 
-    List<Movie2> getAllMovies();
+
 
     /**
      * Returns the list of all Post instances from the database of a Blog

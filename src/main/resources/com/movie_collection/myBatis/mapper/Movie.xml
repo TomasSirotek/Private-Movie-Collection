@@ -5,17 +5,49 @@
 
 <mapper namespace="com.movie_collection.dal.mappers.MovieMapperDAO">
 
-    <resultMap id="movieResult" type="com.movie_collection.be.Movie2">
+    <resultMap id="movieResult" type="Movie">
         <id property="id" column="movieId"/>
         <result property="name" column="movieName"/>
         <result property="rating" column="movieRating"/>
         <result property="absolutePath" column="moviePath"/>
         <result property="lastview" column="lastview"/>
-        <collection property="categories" javaType="ArrayList" column="movieId" ofType="com.movie_collection.be.Category2" >
+        <collection property="categories" javaType="ArrayList" column="movieId" ofType="Category" >
             <id property="id" column="idCat"/>
             <result property="name" column="nameCat"/>
         </collection>
     </resultMap>
+
+    <select id="getAllMovies" resultType="Movie"
+            resultMap="movieResult">
+        SELECT M.id     as movieId,-->
+               M.name   as movieName,-->
+               M.rating as movieRating,-->
+               M.path   as moviePath,-->
+               M.lastview as lastview,-->
+               C.id     as idCat,-->
+               C.name   as nameCat-->
+        FROM Movie AS M -->
+                 left outer join CatMovie PT on M.id = PT.movieId
+                 left outer join Category C on PT.categoryId = C.id
+    </select>
+
+
+    <select id="getAllMoviesByCategoryId" resultType="Movie"
+            resultMap="movieResult">
+        SELECT M.id     as movieId,-->
+               M.name   as movieName,-->
+               M.rating as movieRating,-->
+               M.path   as moviePath,-->
+               M.lastview as lastview,-->
+               C.id     as idCat,-->
+               C.name   as nameCat-->
+        FROM Movie AS M -->
+                 left outer join CatMovie PT on M.id = PT.movieId
+                 left outer join Category C on PT.categoryId = C.id
+        where C.id = #{catagoryId}
+    </select>
+
+
 
 <!--    <select id="getCategoriesByMovieId" resultType="com.movie_collection.be.Category2" resultMap="movieResult">-->
 <!--        SELECT * FROM category-->
@@ -39,40 +71,33 @@
     <!--    </resultMap>-->
 
 
-    <select id="getAllMovies" resultType="com.movie_collection.be.Movie2"
-            resultMap="movieResult">
 
 
-                 SELECT M.id     as movieId,-->
-                        M.name   as movieName,-->
-                        M.rating as movieRating,-->
-                        M.path   as moviePath,-->
-                        M.lastview as lastview,-->
-                        C.id     as idCat,-->
-                        C.name   as nameCat-->
-                 FROM Movie AS M-->
-                          left outer join CatMovie PT on M.id = PT.movieId
-                          left outer join Category C on PT.categoryId = C.id
+
+</mapper>
 
 
--- select  M.id     as idMovie,
---                 M.name   as name,
---                 M.rating as rating,
---                 M.path   as path,
---                 M.lastview as moviePath,
---                 C.id,C.name
---
--- from movie m
---          inner join
---      CatMovie cm
---      on
---          m.id = cm.movieId
---          inner join
---      category c
---      on
---          cm.categoryId = c.id
 
-    </select>
+
+
+<!--&#45;&#45; select  M.id     as idMovie,-->
+<!--&#45;&#45;                 M.name   as name,-->
+<!--&#45;&#45;                 M.rating as rating,-->
+<!--&#45;&#45;                 M.path   as path,-->
+<!--&#45;&#45;                 M.lastview as moviePath,-->
+<!--&#45;&#45;                 C.id,C.name-->
+<!--&#45;&#45;-->
+<!--&#45;&#45; from movie m-->
+<!--&#45;&#45;          inner join-->
+<!--&#45;&#45;      CatMovie cm-->
+<!--&#45;&#45;      on-->
+<!--&#45;&#45;          m.id = cm.movieId-->
+<!--&#45;&#45;          inner join-->
+<!--&#45;&#45;      category c-->
+<!--&#45;&#45;      on-->
+<!--&#45;&#45;          cm.categoryId = c.id-->
+
+
 
 
 <!--    &#45;&#45;         SELECT M.id     as idMovie,-->
@@ -126,4 +151,3 @@
     <!--        DELETE from user WHERE id = #{id}-->
     <!--    </delete>
 -->
-</mapper>
