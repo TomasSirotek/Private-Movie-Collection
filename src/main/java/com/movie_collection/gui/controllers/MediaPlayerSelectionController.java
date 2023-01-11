@@ -5,11 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.media.Media;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -40,5 +37,4 @@ public class MediaPlayerSelectionController extends BaseController implements In
         }
         return isValidated;
     }
-
 }
