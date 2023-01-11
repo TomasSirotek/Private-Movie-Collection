@@ -58,10 +58,10 @@ public class ConfigModule extends AbstractModule {
          */
         bind(BaseController.class);
 
-        /**
+        /*
          * docs
          */
-        bind(IMovieModel.class).to(MovieModel.class);
+        bind(IMovieModel.class).to(MovieModel.class).in(Singleton.class);
         /*
          * Injection of Filter service
          */
@@ -72,9 +72,5 @@ public class ConfigModule extends AbstractModule {
          */
         bind(MovieController.class).in(Singleton.class);
 
-        /**
-         * Injection of the model
-         */
-        bind(IMovieModel.class).to(MovieModel.class).in(Singleton.class);
     }
 }

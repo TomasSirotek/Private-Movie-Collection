@@ -8,27 +8,17 @@ import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
 import com.movie_collection.gui.models.ICategoryModel;
 import com.movie_collection.gui.models.IMovieModel;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import com.movie_collection.gui.models.IMovieModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import com.movie_collection.bll.util.Filter;
 
 import java.io.IOException;
 import java.net.URL;
@@ -49,9 +39,8 @@ public class BaseController extends RootController implements Initializable {
     @FXML
     private StackPane app_content;
 
+    @Inject
     private IControllerFactory controllerFactory;
-
-    private ICategoryModel categoryModel;
     @FXML
     private TextField searchMovies;
 
@@ -59,10 +48,7 @@ public class BaseController extends RootController implements Initializable {
     private IMovieModel movieModel;
 
     @Inject
-    ICategoryModel categoryModel;
-
-    @Inject
-    IMovieModel movieModel;
+    private ICategoryModel categoryModel;
 
     @Inject
     public BaseController(IControllerFactory controllerFactory,ICategoryModel categoryModel,IMovieModel movieModel) {
