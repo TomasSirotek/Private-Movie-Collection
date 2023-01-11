@@ -143,11 +143,6 @@ public class MovieDAO implements IMovieDAO {
             rs.next();
             int id = rs.getInt("id");
 
-            sql = "DELETE FROM CatMovie WHERE movieId = ?;";
-            pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, movie.id());
-            pstmt.executeUpdate();
-
             rowsAffected = linkMovieCategories(movie, rowsAffected, con, id);
         }
         return rowsAffected;
@@ -165,6 +160,12 @@ public class MovieDAO implements IMovieDAO {
     private int linkMovieCategories(Movie movie, int rowsAffected, Connection con, int id) throws SQLException {
         String sql;
         PreparedStatement pstmt;
+
+        sql = "DELETE FROM CatMovie WHERE movieId = ?;";
+        pstmt = con.prepareStatement(sql);
+        pstmt.setInt(1, movie.id());
+        pstmt.executeUpdate();
+
         sql = "INSERT INTO CatMovie (categoryId, movieId) VALUES (?, ?);";
         pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         for (Category c : movie.categories()) {
