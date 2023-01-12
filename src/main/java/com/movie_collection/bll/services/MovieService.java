@@ -63,7 +63,7 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public List<Movie> searchMovie(List<Movie> listToSearch, String query){
-        return filterUtil.filteringMovies(listToSearch,query);
+    public List<Movie> searchMovie(List<Movie> listToSearch, String query, String buttonText, double spinnerValue){
+        return filterUtil.filteringMovies(listToSearch, query, buttonText, spinnerValue);
     }
 }

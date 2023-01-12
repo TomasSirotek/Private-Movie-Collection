@@ -56,11 +56,7 @@ public class MovieModel implements  IMovieModel{
         return movieService.deleteMovie(id);
     }
     @Override
-    public void searchMovies(String query) {
-        if (query.length() > 0){
-            filteredMovies.setAll(movieService.searchMovie(allMovies, query));
-        } else {
-            filteredMovies.setAll(allMovies);
-        }
+    public void searchMovies(String query, String buttonText, double spinnerValue) {
+        filteredMovies.setAll(movieService.searchMovie(allMovies, query, buttonText, spinnerValue));
     }
 }

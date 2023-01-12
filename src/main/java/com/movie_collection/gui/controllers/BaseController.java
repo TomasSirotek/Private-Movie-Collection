@@ -35,6 +35,10 @@ import java.util.stream.Collectors;
 public class BaseController extends RootController implements Initializable {
 
     @FXML
+    private Spinner ratingFilterSpinner;
+    @FXML
+    private Button ratingFilterButton;
+    @FXML
     private ScrollPane scroll_pane;
     @FXML
     private StackPane app_content;
@@ -62,6 +66,7 @@ public class BaseController extends RootController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         filterBar();
+        setupSpinner();
         try {
             setCategoriesScrollPane(categoryModel.getAllCategories());
             showMoviesToDelete();
@@ -268,16 +273,7 @@ public class BaseController extends RootController implements Initializable {
     }
 
     private void filterBar() {
-        searchMovies.textProperty().addListener((obs, oldValue, newValue) -> {
-            TableView tableView = (TableView) getStage().getScene().lookup("#moviesTable");
-            if (tableView != null) {
-                movieModel.searchMovies(newValue);
-                tableView.refresh();
-            } else {
-                System.out.println("The table view could not be found");
-
-            }
-        });
+        searchMovies.textProperty().addListener((obs, oldValue, newValue) -> searchMovies());
     }
 
     /** TODO:
@@ -296,5 +292,32 @@ public class BaseController extends RootController implements Initializable {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    @FXML
+    private void ratingFilterButtonAction(ActionEvent actionEvent) {
+        List<String> buttonValues = new ArrayList<>(List.of(">=", "<=", "="));
+        int index = buttonValues.indexOf(ratingFilterButton.getText());
+        index = index+1 >= buttonValues.size() ? 0 : index + 1;
+        ratingFilterButton.setText(buttonValues.get(index));
+
+        searchMovies();
+    }
+
+    private void searchMovies() {
+        TableView tableView = (TableView) getStage().getScene().lookup("#moviesTable");
+        if (tableView != null) {
+            movieModel.searchMovies(searchMovies.getText(), ratingFilterButton.getText(), (Double) ratingFilterSpinner.getValue());
+            tableView.refresh();
+        } else {
+            System.out.println("The table view could not be found");
+        }
+    }
+
+    private void setupSpinner(){
+        SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(1.0, 10.0,1.0, 0.5);
+        ratingFilterSpinner.setValueFactory(valueFactory);
+
+        valueFactory.valueProperty().addListener((observable, oldValue, newValue) -> searchMovies());
     }
 }

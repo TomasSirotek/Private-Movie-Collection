@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Filter implements IFilter {
-    public List<Movie> filteringMovies(List<Movie> listToSearch, String query) {
+    public List<Movie> filteringMovies(List<Movie> listToSearch, String query, String buttonText, double spinnerValue) {
         List<Movie> filtered = new ArrayList<>();
         for (Movie m : listToSearch) {
-            if (m.name().getValue().toLowerCase().contains(query.toLowerCase()) || checkCategories(m, query)) {
+            if ((m.name().getValue().toLowerCase().contains(query.toLowerCase()) || checkCategories(m, query)) && checkRating(m, buttonText, spinnerValue) ) {
                 filtered.add(m);
             }
         }
@@ -25,6 +25,16 @@ public class Filter implements IFilter {
             categoryNames += c.name().getValue().toLowerCase();
         }
         return categoryNames.contains(query.toLowerCase());
+    }
+
+    private boolean checkRating(Movie m, String buttonText, double spinnerValue){
+        if (buttonText.equals("<=")){
+            return m.rating() <= spinnerValue;
+        } else if (buttonText.equals(">=")) {
+            return m.rating() >= spinnerValue;
+        } else {
+            return m.rating() == spinnerValue;
+        }
     }
 }
 

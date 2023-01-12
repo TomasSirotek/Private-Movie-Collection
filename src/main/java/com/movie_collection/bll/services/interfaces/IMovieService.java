@@ -50,10 +50,13 @@ public interface IMovieService {
 
     /**
      * docs
+     *
      * @param listToSearch
      * @param query
+     * @param buttonText
+     * @param spinnerValue
      * @return
      */
 
-    List<Movie> searchMovie(List<Movie> listToSearch, String query);
+    List<Movie> searchMovie(List<Movie> listToSearch, String query, String buttonText, double spinnerValue);
 }
