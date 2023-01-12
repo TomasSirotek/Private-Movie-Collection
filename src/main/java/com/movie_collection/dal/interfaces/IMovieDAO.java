@@ -22,7 +22,7 @@ public interface IMovieDAO {
      * @param categoryId that could have all movies
      * @return Optional list of Movies - not all movies can be found in that category
      */
-    Optional<List<Movie2>> getAllMoviesInTheCategoryTest(int categoryId);
+    Optional<List<Movie2>> getAllMoviesInTheCategoryById(int categoryId);
 
     /**
      * Retrieves optional Movie by its id
@@ -65,7 +65,7 @@ public interface IMovieDAO {
      * @param id    by its will be deleted -> this could be done better but works for now
      * @return @Identity id of updated movie
      */
-    int updateMovie(Movie2 movie, int id);
+    int updateMovieById(Movie2 movie, int id);
 
     /**
      * Removes a movie from the database based on the id
@@ -73,7 +73,7 @@ public interface IMovieDAO {
      * @param id id of movie to be deleted
      * @return number of rows affected
      */
-    int deleteMovie(int id);
+    int deleteMovieById(int id);
 
     /**
      * Removes a category from the database based on the id

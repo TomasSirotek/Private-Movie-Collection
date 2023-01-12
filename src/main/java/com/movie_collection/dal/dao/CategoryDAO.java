@@ -42,7 +42,7 @@ public class CategoryDAO implements ICategoryDAO {
     }
 
     @Override
-    public int addCategory(Category2 category) {
+    public int createCategory(Category2 category) {
         int finalAffectedRows = 0;
         try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             CategoryMapperDAO mapper = session.getMapper(CategoryMapperDAO.class);

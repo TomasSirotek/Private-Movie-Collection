@@ -8,6 +8,7 @@ import myBatis.MyBatisConnectionFactory;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,78 +18,79 @@ public class MovieDAO implements IMovieDAO {
     Logger logger = LoggerFactory.getLogger(MovieDAO.class);
 
     @Override
-    public List<Movie2> getAllMovies(){
+    public List<Movie2> getAllMovies() {
         List<Movie2> allMovies = new ArrayList<>();
-        try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+        try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
             allMovies = mapper.getAllMovies();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             logger.error("An error occurred mapping tables", ex);
         }
         return allMovies;
     }
 
     @Override
-    public Optional<Movie2> getMovieById(int id)  {
+    public Optional<Movie2> getMovieById(int id) {
         Movie2 movie2 = new Movie2();
-        try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+        try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
             movie2 = mapper.getMovieById(id);
-        } catch(Exception ex){
-            logger.error("An error occurred mapping tables",ex);
+        } catch (Exception ex) {
+            logger.error("An error occurred mapping tables", ex);
         }
         return Optional.ofNullable(movie2);
     }
 
     @Override
-    public Optional<List<Movie2>> getAllMoviesInTheCategoryTest(int categoryId)  {
+    public Optional<List<Movie2>> getAllMoviesInTheCategoryById(int categoryId) {
         List<Movie2> fetchedMovieInRole = new ArrayList<>();
-        try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+        try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
             fetchedMovieInRole = mapper.getAllMoviesByCategoryId(categoryId);
-        } catch(Exception ex){
-            logger.error("An error occurred mapping tables",ex);
+        } catch (Exception ex) {
+            logger.error("An error occurred mapping tables", ex);
         }
-        return  Optional.ofNullable(fetchedMovieInRole);
+        return Optional.ofNullable(fetchedMovieInRole);
     }
 
     @Override
-    public int createMovieTest(Movie2 movie){
+    public int createMovieTest(Movie2 movie) {
         int returnedId = 0;
-        try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+        try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
             int affectedRows = mapper.createMovieTest(movie);
             session.commit();//  after commit if rows > 0 returns the generated key
             returnedId = affectedRows > 0 ? movie.getId() : 0;
-        } catch(Exception ex){
-            logger.error("An error occurred mapping tables",ex);
+        } catch (Exception ex) {
+            logger.error("An error occurred mapping tables", ex);
         }
         return returnedId;
     }
 
     @Override
-    public int updateMovie(Movie2 movie,int id) {
+    public int updateMovieById(Movie2 movie, int id) {
         int resultId = 0;
-        try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+        try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
-            int affectedRows = mapper.updateMovie(movie.getName(),movie.getRating(),movie.getAbsolutePath(),movie.getId());
+            int affectedRows = mapper.updateMovie(movie.getName(), movie.getRating(), movie.getAbsolutePath(), movie.getId());
             session.commit();//  after commit if rows > 0 returns the key
             resultId = affectedRows == -1 ? movie.getId() : 0;
-        } catch(Exception ex){
-            logger.error("An error occurred mapping tables",ex);
+        } catch (Exception ex) {
+            logger.error("An error occurred mapping tables", ex);
         }
         return resultId;
     }
+
     @Override
-    public int addCategoryToMovie(Category2 category2,Movie2 movie2){
+    public int addCategoryToMovie(Category2 category2, Movie2 movie2) {
         int finalAffectedRows = 0;
-        try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+        try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
-            int affectedRows = mapper.addCategoryToMovie(category2.getId(),movie2.getId());
+            int affectedRows = mapper.addCategoryToMovie(category2.getId(), movie2.getId());
             session.commit();
             return affectedRows;
-        } catch(Exception ex){
-            logger.error("An error occurred mapping tables",ex);
+        } catch (Exception ex) {
+            logger.error("An error occurred mapping tables", ex);
         }
         return finalAffectedRows;
     }
@@ -96,27 +98,27 @@ public class MovieDAO implements IMovieDAO {
     @Override
     public int removeCategoryFromMovie(int id) {
         int finalAffectedRows = 0;
-        try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+        try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
             int affectedRows = mapper.removeCategoryMovie(id);
             session.commit();
             return affectedRows;
-        } catch(Exception ex){
-            logger.error("An error occurred mapping tables",ex);
+        } catch (Exception ex) {
+            logger.error("An error occurred mapping tables", ex);
         }
         return finalAffectedRows;
     }
 
     @Override
-    public int deleteMovie(int id){
+    public int deleteMovieById(int id) {
         int finalAffectedRows = 0;
-        try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+        try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
             int affectedRows = mapper.deleteMovieById(id);
             session.commit(); // end a unit of work -> if u want to do more open new session -> ensure no leftovers
             return affectedRows;
-        } catch(Exception ex){
-            logger.error("An error occurred mapping tables",ex);
+        } catch (Exception ex) {
+            logger.error("An error occurred mapping tables", ex);
         }
         return finalAffectedRows;
     }

@@ -1,12 +1,10 @@
 package com.movie_collection.bll.services;
 
 import com.google.inject.Inject;
-import com.movie_collection.be.Category;
 import com.movie_collection.be.Category2;
 import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.dal.interfaces.ICategoryDAO;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class CategoryService implements ICategoryService {
@@ -25,7 +23,7 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public int createCategory(Category2 category){
-        return categoryDAO.addCategory(category);
+        return categoryDAO.createCategory(category);
     }
 
     @Override

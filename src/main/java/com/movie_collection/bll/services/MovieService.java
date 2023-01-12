@@ -35,7 +35,7 @@ public class MovieService implements IMovieService {
 
     @Override
     public Optional<List<Movie2>> getAllMoviesInTheCategory(int categoryId){
-        return Optional.of(movieDAO.getAllMoviesInTheCategoryTest(categoryId).get()); // have better check
+        return Optional.of(movieDAO.getAllMoviesInTheCategoryById(categoryId).get()); // have better check
     }
 
     @Override
@@ -58,7 +58,7 @@ public class MovieService implements IMovieService {
         int finalResult = 0;
         Objects.requireNonNull(movie,"Movie cannot be null");
 
-        int resultId = movieDAO.updateMovie(movie,movie.getId());
+        int resultId = movieDAO.updateMovieById(movie,movie.getId());
 
         // tries to get movie by id
         if(resultId > 0){
@@ -86,7 +86,7 @@ public class MovieService implements IMovieService {
 
     @Override
     public int deleteMovie(int id) {
-        return movieDAO.deleteMovie(id);
+        return movieDAO.deleteMovieById(id);
     }
 
 }
