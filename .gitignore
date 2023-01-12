@@ -142,6 +142,6 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 #txt file Media Player
-.mediaPlayerPath.txt
+/mediaPlayerPath.txt
 
 /config.cfg
