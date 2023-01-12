@@ -62,7 +62,6 @@ public class MediaPlayerSelectionController extends RootController implements In
             File txt = new File("mediaPlayerPath.txt");
             Path fileName = Path.of(txt.getAbsolutePath());
             movieController.setPath(fileName, mediaPlayerPath);
-
         }
     }
 }

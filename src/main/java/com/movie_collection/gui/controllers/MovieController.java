@@ -19,6 +19,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -155,9 +157,20 @@ public class MovieController extends BaseController implements Initializable{
             runTime.exec(s);
         }
         else{
-            System.out.println("FK U");
+            try {
+                showMoviesToDelete();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
 
+    }
+
+    private void showMoviesToDelete() throws SQLException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Select your Media Player");
+        alert.getButtonTypes().setAll(new ButtonType("OK"));
+        Optional<ButtonType> btn= alert.showAndWait();
     }
 
 
