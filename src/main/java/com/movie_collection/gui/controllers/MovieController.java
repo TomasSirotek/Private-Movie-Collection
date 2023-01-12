@@ -46,7 +46,7 @@ public class MovieController extends RootController implements Initializable {
 
     private final IMovieModel movieModel;
 
-    private static String txt_content = "";
+    private static String txtContent = "";
 
     private final IControllerFactory controllerFactory;
 
@@ -138,8 +138,8 @@ public class MovieController extends RootController implements Initializable {
 
     private void playVideoDesktop(int id, String path) throws IOException, InterruptedException {
         Runtime runTime = Runtime.getRuntime();
-        if (!txt_content.isEmpty()) {
-            String s[] = new String[]{txt_content, path};
+        if (!txtContent.isEmpty()) {
+            String s[] = new String[]{txtContent, path};
             try {
                 movieModel.updateTimeStamp(id);
             } catch (SQLException e) {
@@ -289,7 +289,7 @@ public class MovieController extends RootController implements Initializable {
     protected void setPath(Path fileName, String mediaPlayerPath) {
         try {
             Files.writeString(fileName,mediaPlayerPath);
-            txt_content = Files.readString(fileName);
+            txtContent = Files.readString(fileName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
