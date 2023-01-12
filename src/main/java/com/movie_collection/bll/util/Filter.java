@@ -2,15 +2,16 @@ package com.movie_collection.bll.util;
 
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
+import com.movie_collection.bll.helpers.CompareSigns;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Filter implements IFilter {
-    public List<Movie> filteringMovies(List<Movie> listToSearch, String query, String buttonText, double spinnerValue) {
+    public List<Movie> filteringMovies(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue) {
         List<Movie> filtered = new ArrayList<>();
         for (Movie m : listToSearch) {
-            if ((m.name().getValue().toLowerCase().contains(query.toLowerCase()) || checkCategories(m, query)) && checkRating(m, buttonText, spinnerValue) ) {
+            if ((m.name().getValue().toLowerCase().contains(query.toLowerCase()) || checkCategories(m, query)) && checkRating(m, buttonValue, spinnerValue) ) {
                 filtered.add(m);
             }
         }
@@ -27,10 +28,10 @@ public class Filter implements IFilter {
         return categoryNames.contains(query.toLowerCase());
     }
 
-    private boolean checkRating(Movie m, String buttonText, double spinnerValue){
-        if (buttonText.equals("<=")){
+    private boolean checkRating(Movie m, CompareSigns buttonValue, double spinnerValue){
+        if (buttonValue == CompareSigns.LESS_THAN_OR_EQUAL){
             return m.rating() <= spinnerValue;
-        } else if (buttonText.equals(">=")) {
+        } else if (buttonValue == CompareSigns.MORE_THAN_OR_EQUAL) {
             return m.rating() >= spinnerValue;
         } else {
             return m.rating() == spinnerValue;

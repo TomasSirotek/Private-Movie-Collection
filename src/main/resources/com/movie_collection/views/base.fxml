@@ -60,7 +60,7 @@
                                     <Insets left="10.0" />
                                  </HBox.margin>
                               </Text>
-                              <Button fx:id="ratingFilterButton" mnemonicParsing="false" onAction="#ratingFilterButtonAction" prefHeight="26.0" prefWidth="34.0" text="&gt;=" />
+                              <Button fx:id="ratingFilterButton" mnemonicParsing="false" onAction="#ratingFilterButtonAction" prefHeight="26.0" prefWidth="25.0" text="≥" />
                               <Spinner fx:id="ratingFilterSpinner" prefHeight="26.0" prefWidth="81.0" />
                            </children>
                         </HBox>

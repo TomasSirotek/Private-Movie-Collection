@@ -3,6 +3,7 @@ package com.movie_collection.gui.controllers;
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
+import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
  */
 public class BaseController extends RootController implements Initializable {
 
+    private CompareSigns currentCompare = CompareSigns.MORE_THAN_OR_EQUAL;
     @FXML
     private Spinner<Double> ratingFilterSpinner;
     @FXML
@@ -308,10 +310,11 @@ public class BaseController extends RootController implements Initializable {
 
     @FXML
     private void ratingFilterButtonAction(ActionEvent actionEvent) {
-        List<String> buttonValues = new ArrayList<>(List.of(">=", "<=", "="));
-        int index = buttonValues.indexOf(ratingFilterButton.getText());
+        List<CompareSigns> buttonValues = new ArrayList<>(List.of(CompareSigns.MORE_THAN_OR_EQUAL, CompareSigns.LESS_THAN_OR_EQUAL, CompareSigns.EQUAL));
+        int index = buttonValues.indexOf(currentCompare);
         index = index+1 >= buttonValues.size() ? 0 : index + 1;
-        ratingFilterButton.setText(buttonValues.get(index));
+        currentCompare = buttonValues.get(index);
+        ratingFilterButton.setText(currentCompare.getSign());
 
         searchMovies();
     }
@@ -326,7 +329,7 @@ public class BaseController extends RootController implements Initializable {
     private void searchMovies() {
         TableView tableView = (TableView) getStage().getScene().lookup("#moviesTable");
         if (tableView != null) {
-            movieModel.searchMovies(searchMovies.getText(), ratingFilterButton.getText(), ratingFilterSpinner.getValue());
+            movieModel.searchMovies(searchMovies.getText(), currentCompare, ratingFilterSpinner.getValue());
             tableView.refresh();
         } else {
             System.out.println("The table view could not be found");

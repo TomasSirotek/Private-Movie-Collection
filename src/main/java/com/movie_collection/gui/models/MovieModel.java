@@ -2,6 +2,7 @@ package com.movie_collection.gui.models;
 
 import com.google.inject.Inject;
 import com.movie_collection.be.Movie;
+import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.bll.services.interfaces.IMovieService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -61,7 +62,7 @@ public class MovieModel implements  IMovieModel{
         return movieService.updateTimeStamp(id);
     }
     @Override
-    public void searchMovies(String query, String buttonText, double spinnerValue) {
-        filteredMovies.setAll(movieService.searchMovie(allMovies, query, buttonText, spinnerValue));
+    public void searchMovies(String query, CompareSigns buttonValue, double spinnerValue) {
+        filteredMovies.setAll(movieService.searchMovie(allMovies, query, buttonValue, spinnerValue));
     }
 }
