@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 public class BaseController extends RootController implements Initializable {
 
     @FXML
-    private Spinner ratingFilterSpinner;
+    private Spinner<Double> ratingFilterSpinner;
     @FXML
     private Button ratingFilterButton;
     @FXML
@@ -304,20 +304,20 @@ public class BaseController extends RootController implements Initializable {
         searchMovies();
     }
 
-    private void searchMovies() {
-        TableView tableView = (TableView) getStage().getScene().lookup("#moviesTable");
-        if (tableView != null) {
-            movieModel.searchMovies(searchMovies.getText(), ratingFilterButton.getText(), (Double) ratingFilterSpinner.getValue());
-            tableView.refresh();
-        } else {
-            System.out.println("The table view could not be found");
-        }
-    }
-
     private void setupSpinner(){
         SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(1.0, 10.0,1.0, 0.5);
         ratingFilterSpinner.setValueFactory(valueFactory);
 
         valueFactory.valueProperty().addListener((observable, oldValue, newValue) -> searchMovies());
+    }
+
+    private void searchMovies() {
+        TableView tableView = (TableView) getStage().getScene().lookup("#moviesTable");
+        if (tableView != null) {
+            movieModel.searchMovies(searchMovies.getText(), ratingFilterButton.getText(), ratingFilterSpinner.getValue());
+            tableView.refresh();
+        } else {
+            System.out.println("The table view could not be found");
+        }
     }
 }
