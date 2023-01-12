@@ -2,8 +2,8 @@
 <!DOCTYPE configuration>
 <configuration>
 
-<!--trying to set root path-->
-    <root class="com.movie_collection" >
+    <!--trying to set root path-->
+    <root class="com.movie_collection">
         <appender-ref ref="stdout"/>
     </root>
 
@@ -13,8 +13,8 @@
         </encoder>
     </appender>
 
-<!-- adding to the group of mappers -->
-<!-- NOTE: set to trace internal lowest level inside mappers-->
+    <!-- adding to the group of mappers -->
+    <!-- NOTE: set to trace internal lowest level inside mappers-->
     <logger name="com.movie_collection.dal.mappers">
         <level value="trace"/>
     </logger>

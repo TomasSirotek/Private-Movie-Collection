@@ -13,10 +13,8 @@
     <select id="getAllCategories"
             resultType="Category"
             resultMap="categoryResult">
-
-        SELECT
-            C.id as idCat,
-            C.name as nameCat -->
+        SELECT C.id   as idCat,
+               C.name as nameCat -->
         FROM Category C;
 
     </select>
@@ -24,13 +22,10 @@
     <select id="getCategoryByName"
             resultType="Category"
             resultMap="categoryResult">
-
-        SELECT
-               C.id as idCat,
+        SELECT C.id   as idCat,
                C.name as nameCat-->
         FROM Category C
         WHERE C.name = #{value}
-
     </select>
 
 
@@ -43,10 +38,8 @@
             keyColumn="id"
             useGeneratedKeys="true"
             timeout="20">
-
         -- insert new category into table with params still need to make them safer
         INSERT INTO Category (name) VALUES (#{name})
-
         -- selects the generated key
         <selectKey keyProperty="id" resultType="int" order="AFTER">
             SELECT @@IDENTITY
@@ -59,9 +52,10 @@
             flushCache="true"
             statementType="PREPARED"
             timeout="20">
-
-        --         executes delete query
-        DELETE FROM Category WHERE id = #{catId}
+        -- executes delete query
+        DELETE
+        FROM Category
+        WHERE id = #{catId}
     </delete>
 
 </mapper>

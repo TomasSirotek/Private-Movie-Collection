@@ -1,32 +1,30 @@
 package com.movie_collection.bll.services.interfaces;
 
-import com.movie_collection.be.Category;
 import com.movie_collection.be.Category2;
-
-import java.sql.SQLException;
 import java.util.List;
 
 public interface ICategoryService {
     /**
-     * abstract method to retrieve all the categories stored in DAL
-     * @return List<Category>
+     * Retrieves all Categories from the database and store into a list
+     *
+     * @return a list of all the Categories from database
      */
-
-    List<Category2> getAllCategories() ;
+    List<Category2> getAllCategories();
 
     /**
-     * abstract method to retrieve all the categories stored in DAL
-     * @param category
+     * Saves the new information about a new Category into the database
+     *
+     * @param category the Category to be added
      */
-
     int createCategory(Category2 category);
 
     /**
-     * abstract method to delete category by its id
-     * @param id of the category that will be deleted
-     * @return false if not able to delete otherwise return true if successful
+     * Deletes the desired Category from the Category database
+     *
+     * @param id which by the category will be deleted from database
+     * @return 0 if no rows affected otherwise return 1 as success
      */
-    int deleteCategory(int id) ;
+    int deleteCategory(int id);
 
 
 }

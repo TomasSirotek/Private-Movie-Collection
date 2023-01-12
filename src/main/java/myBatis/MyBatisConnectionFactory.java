@@ -20,7 +20,7 @@ public class MyBatisConnectionFactory {
             }
         } catch (IOException fileNotFoundException ) {
             Logger logger = LoggerFactory.getLogger(MyBatisConnectionFactory.class);
-            logger.atInfo().log("Could not load config file ! Check if file exist and path is correct (best guess)" , fileNotFoundException);
+            logger.error("Could not load config file ! Check if file exist and path is correct (best guess)" , fileNotFoundException);
         }
     }
 

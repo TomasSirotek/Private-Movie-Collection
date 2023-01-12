@@ -34,8 +34,6 @@
             </dataSource>
         </environment>
     </environments>
-
-
     <!-- mappers used to map required tables-->
     <mappers>
         <mapper resource="com/movie_collection/mybatis/mapper/Movie.xml"/>

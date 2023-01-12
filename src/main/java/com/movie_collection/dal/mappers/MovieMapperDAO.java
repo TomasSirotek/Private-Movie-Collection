@@ -28,7 +28,7 @@ public interface MovieMapperDAO {
      * @return Optional list of Movies - not all movies can be found in that category
      */
 
-    List<Movie2> getAllMoviesByCategoryId(@Param("valueeeee") int categoryId);
+    List<Movie2> getAllMoviesByCategoryId(@Param("value") int categoryId);
 
     /**
      * Creates a new movie in the database with given properties

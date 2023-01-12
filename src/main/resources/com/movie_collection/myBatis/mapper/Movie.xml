@@ -11,22 +11,23 @@
         <result property="rating" column="movieRating"/>
         <result property="absolutePath" column="moviePath"/>
         <result property="lastview" column="lastview"/>
-        <collection property="categories" javaType="ArrayList" column="movieId" ofType="Category" >
+        <collection property="categories" javaType="ArrayList" column="movieId" ofType="Category">
             <id property="id" column="idCat"/>
             <result property="name" column="nameCat"/>
         </collection>
     </resultMap>
 
+
     <select id="getAllMovies"
             resultType="Movie"
             resultMap="movieResult">
-        SELECT M.id     as movieId,-->
-               M.name   as movieName,-->
-               M.rating as movieRating,-->
-               M.path   as moviePath,-->
+        SELECT M.id       as movieId,-->
+               M.name     as movieName,-->
+               M.rating   as movieRating,-->
+               M.path     as moviePath,-->
                M.lastview as lastview,-->
-               C.id     as idCat,-->
-               C.name   as nameCat-->
+               C.id       as idCat,-->
+               C.name     as nameCat-->
         FROM Movie AS M -->
                  left outer join CatMovie PT on M.id = PT.movieId
                  left outer join Category C on PT.categoryId = C.id
@@ -36,13 +37,13 @@
     <select id="getAllMoviesByCategoryId"
             resultType="Movie"
             resultMap="movieResult">
-        SELECT M.id     as movieId,-->
-               M.name   as movieName,-->
-               M.rating as movieRating,-->
-               M.path   as moviePath,-->
+        SELECT M.id       as movieId,-->
+               M.name     as movieName,-->
+               M.rating   as movieRating,-->
+               M.path     as moviePath,-->
                M.lastview as lastview,-->
-               C.id     as idCat,-->
-               C.name   as nameCat-->
+               C.id       as idCat,-->
+               C.name     as nameCat-->
         FROM Movie AS M -->
                  left outer join CatMovie PT on M.id = PT.movieId
                  left outer join Category C on PT.categoryId = C.id
@@ -52,13 +53,13 @@
     <select id="getMovieById"
             resultType="Movie"
             resultMap="movieResult">
-        SELECT M.id     as movieId,-->
-               M.name   as movieName,-->
-               M.rating as movieRating,-->
-               M.path   as moviePath,-->
+        SELECT M.id       as movieId,-->
+               M.name     as movieName,-->
+               M.rating   as movieRating,-->
+               M.path     as moviePath,-->
                M.lastview as lastview,-->
-               C.id     as idCat,-->
-               C.name   as nameCat-->
+               C.id       as idCat,-->
+               C.name     as nameCat-->
         FROM Movie AS M -->
                  left outer join CatMovie PT on M.id = PT.movieId
                  left outer join Category C on PT.categoryId = C.id
@@ -75,13 +76,11 @@
             keyColumn="id"
             useGeneratedKeys="true"
             timeout="20">
-
---      insert new movie into table with params still need to make them safer
+        -- insert new movie into table with params still need to make them safer
         INSERT INTO Movie (name, rating, path) VALUES (#{name},#{rating},#{absolutePath})
-
---      selects the generated key
+        -- selects the generated key
         <selectKey keyProperty="id" resultType="int" order="AFTER">
-        SELECT @@IDENTITY
+            SELECT @@IDENTITY
         </selectKey>
 
     </insert>
@@ -95,9 +94,9 @@
             keyColumn=""
             useGeneratedKeys="true"
             timeout="20">
-
---       insert categoryId and movieId to joining table
-        INSERT INTO CatMovie (categoryId, movieId) VALUES (#{catValue},#{movieValue})
+        --  insert categoryId and movieId to joining table
+        INSERT INTO CatMovie (categoryId, movieId)
+        VALUES (#{catValue}, #{movieValue})
 
     </insert>
 
@@ -110,32 +109,29 @@
             keyColumn="id"
             statementType="PREPARED">
 
---         updates movie by the id
+        -- updates movie by the id
         UPDATE Movie SET
-                     name = #{name},
-                     rating = #{rating},
-                     path = #{path}
+        name = #{name},
+        rating = #{rating},
+        path = #{path}
         OUTPUT INSERTED.id WHERE id = #{id}
-
         -- retrieves back the identity key
         <selectKey keyProperty="id" resultType="int" order="AFTER">
             SELECT @@IDENTITY
         </selectKey>
     </update>
-
-
-<!--  cache should be cleared before the statement is executed  ->  ensure that stale data is not used-->
-<!--     timeout 20 to prevent any issues with a query taking too long to execute -->
+    <!--  cache should be cleared before the statement is executed  ->  ensure that stale data is not used-->
+    <!--     timeout 20 to prevent any issues with a query taking too long to execute -->
     <delete id="deleteMovieById"
             parameterType="Movie"
             flushCache="true"
             statementType="PREPARED"
             timeout="20">
-
---         executes delete query
-        DELETE FROM MOVIE WHERE id = #{value}
+        --  executes delete query
+        DELETE
+        FROM MOVIE
+        WHERE id = #{value}
     </delete>
-
     <!--  cache should be cleared before the statement is executed  ->  ensure that stale data is not used-->
     <!--     timeout 20 to prevent any issues with a query taking too long to execute -->
     <delete id="removeCategoryMovie"
@@ -143,9 +139,10 @@
             flushCache="true"
             statementType="PREPARED"
             timeout="20">
-
-        --         executes delete query
-        DELETE FROM CatMovie WHERE movieId = #{movieId}
+        --  executes delete query
+        DELETE
+        FROM CatMovie
+        WHERE movieId = #{movieId}
     </delete>
 
 </mapper>
