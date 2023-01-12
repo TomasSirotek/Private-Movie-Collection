@@ -5,6 +5,7 @@ import com.movie_collection.be.Movie2;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public interface IMovieService {
     /**
@@ -12,8 +13,26 @@ public interface IMovieService {
      *
      * @return List<Movie> to be created
      */
-    List<Movie2> getAllMovies() throws SQLException;
+    List<Movie2> getAllMovies();
 
+    /**
+     * method to get all movies in a category
+     *
+     * @param categoryId of the category
+     * @return List of movies in the category
+     */
+
+
+    Optional<List<Movie2>> getAllMoviesInTheCategory(int categoryId);
+    /**
+     * method to get a movie by id
+     *
+     * @param id of the movie
+     * @return movie object
+     */
+    Optional<Movie2> getMovieById(int id);
+
+    int updateMovie(Movie2 movie);
     /**
      * method to create a movie
      *
@@ -24,14 +43,6 @@ public interface IMovieService {
     int createMovie(Movie2 movie);
 
     /**
-     * method to update a movie
-     * @param movie to be updated with new parameters
-     * @return number of rows affected
-     * @throws SQLException if the connection to the database fails
-     */
-    int updateMovie(Movie movie) throws SQLException;
-
-    /**
      * method to delete a movie
      *
      * @param id of the movie to be deleted
@@ -40,21 +51,4 @@ public interface IMovieService {
      */
     int deleteMovie(int id) throws SQLException;
 
-    /**
-     * method to get a movie by id
-     *
-     * @param id of the movie
-     * @return movie object
-     * @throws SQLException if the connection to the database fails
-     */
-    Movie getMovieById(int id) throws SQLException;
-
-    /**
-     * method to get all movies in a category
-     *
-     * @param categoryId of the category
-     * @return List of movies in the category
-     * @throws SQLException if the connection to the database fails
-     */
-    List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException;
 }

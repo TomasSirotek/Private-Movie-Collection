@@ -5,16 +5,17 @@ import com.movie_collection.be.Movie2;
 import javafx.collections.ObservableList;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
 
 public interface IMovieModel {
     
-    ObservableList<Movie2> getAllMovies() throws SQLException;
-    ObservableList<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException;
+    ObservableList<Movie2> getAllMovies();
+    ObservableList<Optional<List<Movie2>>> getAllMoviesInTheCategory(int categoryId);
 
     int createMovie(Movie2 movie) ;
 
+    int updateMovie(Movie2 movie);
+
     int deleteMovie(int id) throws SQLException;
-
-    int updateMovie(Movie movie) throws SQLException;
-
 }

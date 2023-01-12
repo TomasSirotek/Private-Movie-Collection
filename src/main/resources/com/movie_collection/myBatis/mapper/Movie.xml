@@ -46,7 +46,23 @@
         FROM Movie AS M -->
                  left outer join CatMovie PT on M.id = PT.movieId
                  left outer join Category C on PT.categoryId = C.id
-        WHERE C.id = #{value}  -- this could be more safer -->
+        WHERE C.id = #{value}
+    </select>
+
+    <select id="getMovieById"
+            resultType="Movie"
+            resultMap="movieResult">
+        SELECT M.id     as movieId,-->
+               M.name   as movieName,-->
+               M.rating as movieRating,-->
+               M.path   as moviePath,-->
+               M.lastview as lastview,-->
+               C.id     as idCat,-->
+               C.name   as nameCat-->
+        FROM Movie AS M -->
+                 left outer join CatMovie PT on M.id = PT.movieId
+                 left outer join Category C on PT.categoryId = C.id
+        WHERE M.id = #{userValue}
     </select>
 
 
@@ -77,12 +93,36 @@
             statementType="PREPARED"
             keyProperty=""
             keyColumn=""
-            useGeneratedKeys="true">
+            useGeneratedKeys="true"
+            timeout="20">
 
 --       insert categoryId and movieId to joining table
         INSERT INTO CatMovie (categoryId, movieId) VALUES (#{catValue},#{movieValue})
 
     </insert>
+
+
+    <update
+            id="updateMovie"
+            parameterType="Movie"
+            flushCache="true"
+            keyProperty="id"
+            keyColumn="id"
+            statementType="PREPARED">
+
+--         updates movie by the id
+        UPDATE Movie SET
+                     name = #{name},
+                     rating = #{rating},
+                     path = #{path}
+        OUTPUT INSERTED.id WHERE id = #{id}
+
+        -- retrieves back the identity key
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            SELECT @@IDENTITY
+        </selectKey>
+    </update>
+
 
 <!--  cache should be cleared before the statement is executed  ->  ensure that stale data is not used-->
 <!--     timeout 20 to prevent any issues with a query taking too long to execute -->
@@ -96,34 +136,17 @@
         DELETE FROM MOVIE WHERE id = #{value}
     </delete>
 
+    <!--  cache should be cleared before the statement is executed  ->  ensure that stale data is not used-->
+    <!--     timeout 20 to prevent any issues with a query taking too long to execute -->
+    <delete id="removeCategoryMovie"
+            parameterType="Movie"
+            flushCache="true"
+            statementType="PREPARED"
+            timeout="20">
 
-
-
-
-<!--    <select id="getCategoriesByMovieId" resultType="com.movie_collection.be.Category2" resultMap="movieResult">-->
-<!--        SELECT * FROM category-->
-<!--        WHERE id in (SELECT categoryId FROM CatMovie WHERE movieId = #{id})-->
-<!--    </select>-->
-
-<!--    column="idMovie" WAS INSIDE COLLECTION -->
-<!--    <resultMap id="categoryResult" type="Category">-->
-<!--        <collection property="categories" javaType="ArrayList" column="id" ofType="Category" select="selectPostsForBlog"/>-->
-<!--    </resultMap>-->
-
-<!--    <select id="selectBlog" resultMap="blogResult">-->
-<!--        SELECT * FROM Movie WHERE ID = #{id}-->
-<!--    </select>-->
-
-
-    <!-- MAP CATEGORY -->
-    <!--    <resultMap id="categoryResult" type="com.movie_collection.be.Category2">-->
-    <!--        <result property="id" column="c_category_id"/>-->
-    <!--        <result property="name" column="c_name"/>-->
-    <!--    </resultMap>-->
-
-
-
-
+        --         executes delete query
+        DELETE FROM CatMovie WHERE movieId = #{movieId}
+    </delete>
 
 </mapper>
 

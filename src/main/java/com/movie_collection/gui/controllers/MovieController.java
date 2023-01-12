@@ -3,6 +3,7 @@ package com.movie_collection.gui.controllers;
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
+import com.movie_collection.be.Movie2;
 import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
@@ -11,11 +12,14 @@ import com.movie_collection.gui.models.IMovieModel;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.shape.MoveTo;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -23,6 +27,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -187,7 +192,16 @@ public class MovieController extends RootController implements Initializable{
             if(moviesTable.getItems() != null){
                 moviesTable.getItems().clear();
 //                try {
-//                   // moviesTable.getItems().setAll(movieModel.getAllMovies());
+                ObservableList<Movie2> movie = movieModel.getAllMovies();
+                var test = movie.stream()
+                        .map(m -> {
+                            List<Category> movieCategoriesList = m.getCategories().stream()
+                                    .map(c -> new Category(c.getId(), new SimpleStringProperty(c.getName())))
+                                    .collect(Collectors.toList());
+                            return new Movie(m.getId(), new SimpleStringProperty(m.getName()), m.getRating(), new SimpleStringProperty(m.getAbsolutePath()), m.getLastview(), movieCategoriesList);
+                        }).toList();
+
+                moviesTable.getItems().setAll(test);
 //                } catch (SQLException e) {
 //                    throw new RuntimeException(e);
 //                }
@@ -197,18 +211,27 @@ public class MovieController extends RootController implements Initializable{
 
 
     private void trySetTableByCategory(int categoryId){
-        javafx.collections.ObservableList<Movie> test;
-        try {
-            test = movieModel.getAllMoviesInTheCategory(categoryId);
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e); //TODO: Lets look at this later to fix it                no result rows
-        }
-        if(test.size() > 0){
-           moviesTable.getItems().setAll(test);
-        } else {
-            List<Movie> moviesEmpty =  List.of();
-            moviesTable.getItems().setAll(moviesEmpty);
+        // ObservableList<Optional<List<Movie2>>> movie = movieModel.getAllMoviesInTheCategory(categoryId);
+      //  ObservableList<Optional<List<Movie2>>> movie = movieModel.getAllMoviesInTheCategory(categoryId);
+
+        ObservableList<Optional<List<Movie2>>> movie = movieModel.getAllMoviesInTheCategory(categoryId);
+
+        if(!movie.isEmpty()){
+            List<Movie> test = movie.stream()
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .flatMap(List::stream)
+                    .map(m -> {
+                        List<Category> movieCategoriesList = m.getCategories().stream()
+                                .map(c -> new Category(c.getId(), new SimpleStringProperty(c.getName())))
+                                .collect(Collectors.toList());
+                        return new Movie(m.getId(), new SimpleStringProperty(m.getName()), m.getRating(), new SimpleStringProperty(m.getAbsolutePath()), m.getLastview(), movieCategoriesList);
+                    }).toList();
+            moviesTable.getItems().setAll(test);
+
+        }else {
+            moviesTable.getItems().setAll(List.of());
         }
     }
 
@@ -217,11 +240,16 @@ public class MovieController extends RootController implements Initializable{
      */
 
     private void trySetTableWithMovies() {
-//        try {
-//            moviesTable.getItems().setAll(movieModel.getAllMovies());
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e); //TODO: Lets look at this later to fix it
-//        }
+        ObservableList<Movie2> movie = movieModel.getAllMovies();
+         var test = movie.stream()
+                .map(m -> {
+                    List<Category> movieCategoriesList = m.getCategories().stream()
+                            .map(c -> new Category(c.getId(), new SimpleStringProperty(c.getName())))
+                            .collect(Collectors.toList());
+                    return new Movie(m.getId(), new SimpleStringProperty(m.getName()), m.getRating(), new SimpleStringProperty(m.getAbsolutePath()), m.getLastview(), movieCategoriesList);
+                }).toList();
+
+            moviesTable.getItems().setAll(test);
     }
 
     /**

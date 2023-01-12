@@ -6,15 +6,9 @@ import com.movie_collection.be.Movie2;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public interface IMovieDAO {
-    /**
-    * Class responsible for getting all movies from the database
-    *
-     * @return List of all movies
-    * @throws SQLException if the connection to the database fails
-     */
-    List<Movie> getAllMovies() throws SQLException;
 
 
     List<Movie2> getAllMoviesTest();
@@ -26,14 +20,14 @@ public interface IMovieDAO {
 //     * @return List of movies that are in the category
 //     * @throws SQLException if the connection to the database fails
 //     */
-//    List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException;
+    Optional<List<Movie2>> getAllMoviesInTheCategoryTest(int categoryId);
 
     /**
      * @param id integer of the movie id
      * @return returns a movie object with the id
      * @throws SQLException if the connection to the database fails
      */
-    Movie getMovieById(int id) throws SQLException;
+    Optional<Movie2> getMovieById(int id);
 
     /**
      * Creates a new movie in the database with given properties
@@ -53,14 +47,15 @@ public interface IMovieDAO {
      * @return number of rows affected
      * @throws SQLException if the connection to the database fails
      */
-    int updateMovie(Movie movie) throws SQLException;
+    int updateMovie(Movie2 movie,int id) ;
 
     /**
      * Removes a movie from the database based on the id
      *
      * @param id id of movie to be deleted
      * @return number of rows affected
-     * @throws SQLException if the connection to the database fails
      */
-    int deleteMovie(int id) throws SQLException;
+    int deleteMovie(int id);
+
+    int removeCategoryFromMovie(int id);
 }

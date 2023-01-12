@@ -14,88 +14,86 @@ import javafx.beans.property.SimpleStringProperty;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class MovieService implements IMovieService {
 
     private final IMovieDAO movieDAO;
 
     private final ICategoryDAO categoryDAO;
-    private final ICategoryService categoryService;
 
     @Inject
-    public MovieService(IMovieDAO movieDAO,ICategoryDAO categoryDAO, ICategoryService categoryService) {
+    public MovieService(IMovieDAO movieDAO,ICategoryDAO categoryDAO) {
         this.movieDAO = movieDAO;
         this.categoryDAO = categoryDAO;
-        this.categoryService = categoryService;
     }
 
     @Override
-    public List<Movie2> getAllMovies() throws SQLException {
+    public List<Movie2> getAllMovies()  {
         return movieDAO.getAllMoviesTest();
     }
 
+    @Override
+    public Optional<Movie2> getMovieById(int id)  {
+        return Optional.of(movieDAO.getMovieById(id).get()); // still sketchy
+    }
+
+    @Override
+    public Optional<List<Movie2>> getAllMoviesInTheCategory(int categoryId){
+        return Optional.of(movieDAO.getAllMoviesInTheCategoryTest(categoryId).get()); // have better check
+    }
 
     @Override
     public int createMovie(Movie2 movie) {
-        // -> block to prepare categoriesList
-//        List<Category2> category2List = new ArrayList<>();
-//
-//        for (var category : movie.getCategories()
-//             ) {
-//            Category2 category2 = new Category2();
-//            category2.setName(category.getName());
-//            category2List.add(category2);
-//        }
-//        movie.setCategories(category2List);
-
-
-        // -> create movie and for each movie add to category
-
         int result = movieDAO.createMovieTest(movie);
-        if(result > 0){
+        if(result != 0){ // -> this is sktchy atm
             movie.setId(result);
             for (Category2 category : movie.getCategories()
                  ) {
                 Optional<Category2> category2 = categoryDAO.getCategoryByName(category.getName());// -> inject categoryDAO
-                if(category2.isPresent()){
-                    movieDAO.addCategoryToMovie(category2.get(),movie);
-                }
+                category2.ifPresent(value -> movieDAO.addCategoryToMovie(value, movie)); // -> check if category present and tries to add it
             }
         }
-
         return result;
     }
 
     @Override
-    public int updateMovie(Movie movie) throws SQLException {
-        return movieDAO.updateMovie(linkingCategoriesToId(movie));
+    public int updateMovie(Movie2 movie){
+        // try to update movie
+        int finalResult = 0;
+        Objects.requireNonNull(movie,"Movie cannot be null");
+
+        int resultId = movieDAO.updateMovie(movie,movie.getId());
+
+        // tries to get movie by id
+        if(resultId > 0){
+            finalResult = 1;
+            Optional<Movie2> fetchedMovie = movieDAO.getMovieById(resultId);
+            // if found tries to delete categories for it so that they can be assigned
+            if(fetchedMovie.isPresent()){
+                int resultRemove = movieDAO.removeCategoryFromMovie(fetchedMovie.get().getId());
+                if(resultRemove < 0) {
+                    finalResult = 0;
+                    System.out.println("Could not remove role for movie with id :" + fetchedMovie.get().getId());
+                }
+            }
+        }
+        // if ok tries to assign the new categories again
+        if(finalResult > 0){
+            for (Category2 category : movie.getCategories()
+            ) {
+                Optional<Category2> category2 = categoryDAO.getCategoryByName(category.getName());// -> inject categoryDAO
+                category2.ifPresent(value -> movieDAO.addCategoryToMovie(value, movie)); // -> check if category present and tries to add it
+            }
+        }
+        return finalResult;
     }
 
     @Override
-    public int deleteMovie(int id) throws SQLException {
+    public int deleteMovie(int id) {
         return movieDAO.deleteMovie(id);
     }
 
-    @Override
-    public Movie getMovieById(int id) throws SQLException {
-        return movieDAO.getMovieById(id);
-    }
-
-    @Override
-    public List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException {
-//        return movieDAO.getAllMoviesInTheCategory(categoryId);
-        return null;
-    }
-
-    private Movie linkingCategoriesToId(Movie movie) throws SQLException {
-        ArrayList<Category> allCategories = new ArrayList<>(categoryService.getAllCategories());
-        List<Category> categories = new ArrayList<>(movie.categories());
-        for (int i = 0; i < categories.size(); i++) {
-            String catName = categories.get(i).name().get();
-            Category category = allCategories.stream().filter(c -> c.name().get().equals(catName)).findFirst().orElse(new Category(0, new SimpleStringProperty("Does not exist")));
-            categories.set(i, category);
-        }
-        return new Movie(movie.id(), movie.name(), movie.rating(), movie.absolutePath(), categories, movie.lastview());
-    }
 }

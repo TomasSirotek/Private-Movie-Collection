@@ -133,6 +133,19 @@ public class CreateMovieController extends RootController implements Initializab
             }
         }else {
             if(isValidatedInput()){
+                var collectedCategory = mapSelectedCategories();
+
+                Movie2 movie2 = new Movie2();
+                movie2.setId(editableMovie.id());
+                movie2.setName(movieName.getText().trim());
+                movie2.setRating(personalRatingSpin.getValue());
+                movie2.setAbsolutePath(path.getText().trim());
+                movie2.setCategories(collectedCategory);
+
+                int result = tryUpdateMovie(movie2);
+                closeAndUpdate(result,movie2.getId());
+
+                e.consume();
 //                var collectedCategory = mapSelectedCategories();
 //                Movie movie = new Movie(
 //                        editableMovie.id(),
@@ -264,12 +277,8 @@ public class CreateMovieController extends RootController implements Initializab
      * @return 0 or 1 where 0 is fail and 1 is success
      */
 
-    private int tryUpdateMovie(Movie movie) {
-        try {
+    private int tryUpdateMovie(Movie2 movie) {
             return movieModel.updateMovie(movie);
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
     }
 
     /**
