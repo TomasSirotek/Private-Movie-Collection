@@ -13,11 +13,14 @@ import javafx.scene.control.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +40,8 @@ public class MovieController extends BaseController implements Initializable{
     private TableColumn<Movie,String> colMovieRating;
 
     private final IMovieModel movieModel;
+
+    private static String TXT_CONTENT = "";
 
     @Inject
     public MovieController(IMovieModel movieModel) {
@@ -140,28 +145,19 @@ public class MovieController extends BaseController implements Initializable{
 
     private void playVideoDesktop(int id, String path) throws IOException, InterruptedException {
         Runtime runTime = Runtime.getRuntime();
-        //TODO MORE DINAMICALLY U ASSHOLE
-        String s[] = new String[]{"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe", path};
-        //Store var with a abs path selected by user.
-        getOperatingSystem();
-        try {
-            movieModel.updateTimeStamp(id);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if(!TXT_CONTENT.isEmpty()){
+            String s[] = new String[]{TXT_CONTENT, path};
+            try {
+                movieModel.updateTimeStamp(id);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            runTime.exec(s);
         }
-        runTime.exec(s);
-    }
-    //TODO SYSTEM OP
-    private String getOperatingSystem() {
-        String os = System.getProperty("os.name");
-        System.out.println("Using System Property: " + os);
-        if(os.contains("Windows")){
-            System.out.println("true");
+        else{
+            System.out.println("FK U");
         }
-        else {
-            System.out.println("False");
-        }
-        return os;
+
     }
 
 
@@ -189,4 +185,12 @@ public class MovieController extends BaseController implements Initializable{
     }
 
 
+    protected void setPath(Path fileName, String mediaPlayerPath) {
+        try {
+            Files.writeString(fileName,mediaPlayerPath);
+            TXT_CONTENT = Files.readString(fileName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

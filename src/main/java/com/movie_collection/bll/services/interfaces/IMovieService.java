@@ -2,6 +2,8 @@ package com.movie_collection.bll.services.interfaces;
 
 import com.movie_collection.be.Movie;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 

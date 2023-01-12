@@ -6,7 +6,6 @@ import com.movie_collection.dal.ConnectionManager;
 import com.movie_collection.dal.interfaces.IMovieDAO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -182,6 +181,7 @@ public class MovieDAO implements IMovieDAO {
             return rs1 + rs2;
         }
     }
+
 
     public int updateTimeStamp(int id) throws SQLException{
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");

@@ -2,6 +2,8 @@ package com.movie_collection.dal.interfaces;
 
 import com.movie_collection.be.Movie;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -65,4 +67,5 @@ public interface IMovieDAO {
      * @throws SQLException if the connection to the database fails
      */
     int updateTimeStamp(int id) throws SQLException;
+
 }
