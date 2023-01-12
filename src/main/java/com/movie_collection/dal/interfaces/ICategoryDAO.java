@@ -14,6 +14,12 @@ public interface ICategoryDAO {
      * @return a list of all the Categories from database
      */
     List<Category2> getAllCategories();
+
+    /**
+     *  Retrieves Category by name from the database
+     *  @param categoryName that will be get Category by name
+     *  @return Optional Category that might not be found
+     */
     Optional<Category2> getCategoryByName(String categoryName);
 
     /**
@@ -21,14 +27,11 @@ public interface ICategoryDAO {
      * @param category the Category to be added
      */
     int addCategory(Category2 category);
+
     /**
      * Deletes the desired Category from the Category database
-     * @param Category the Category to be deleted
-     */
-    /**
-     * NEED TO DISCUSS WITH TEAM
-     *
-     * @return
+     * @param id which by the category will be deleted from database
+     * @return 0 if no rows affected otherwise return 1 as success
      */
     int deleteCategory(int id);
 

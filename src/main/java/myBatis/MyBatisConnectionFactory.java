@@ -1,11 +1,12 @@
 package myBatis;
 
 import java.io.FileReader;
-import java.io.Reader;
 import java.io.IOException;
-import org.apache.ibatis.io.Resources;
+
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MyBatisConnectionFactory {
     private static SqlSessionFactory sqlSessionFactory;
@@ -17,8 +18,9 @@ public class MyBatisConnectionFactory {
             if (sqlSessionFactory == null) {
                 sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
             }
-        } catch (IOException fileNotFoundException) {
-            fileNotFoundException.printStackTrace();
+        } catch (IOException fileNotFoundException ) {
+            Logger logger = LoggerFactory.getLogger(MyBatisConnectionFactory.class);
+            logger.atInfo().log("Could not load config file ! Check if file exist and path is correct (best guess)" , fileNotFoundException);
         }
     }
 

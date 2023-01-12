@@ -19,4 +19,8 @@
         <level value="trace"/>
     </logger>
 
+    <logger name="com.movie_collection.dal.dao.MovieDAO">
+        <level value="trace"/>
+    </logger>
+
 </configuration>

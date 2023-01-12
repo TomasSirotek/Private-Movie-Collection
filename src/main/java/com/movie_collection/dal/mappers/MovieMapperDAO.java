@@ -16,7 +16,7 @@ public interface MovieMapperDAO {
 
     Movie2 getMovieById(@Param("userValue") int id);
 
-    List<Movie2> getAllMoviesByCategoryId(@Param("value") int categoryId);
+    List<Movie2> getAllMoviesByCategoryId(@Param("valueeeee") int categoryId);
 
     int createMovieTest(Movie2 movie2);
     int updateMovie(@Param("name") String name,@Param("rating") double rating,@Param("path") String path,@Param("id") int id);

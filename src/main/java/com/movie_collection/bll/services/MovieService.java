@@ -1,22 +1,15 @@
 package com.movie_collection.bll.services;
 
 import com.google.inject.Inject;
-import com.movie_collection.be.Category;
 import com.movie_collection.be.Category2;
-import com.movie_collection.be.Movie;
 import com.movie_collection.be.Movie2;
-import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.bll.services.interfaces.IMovieService;
 import com.movie_collection.dal.interfaces.ICategoryDAO;
 import com.movie_collection.dal.interfaces.IMovieDAO;
-import javafx.beans.property.SimpleStringProperty;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 public class MovieService implements IMovieService {
 
@@ -32,7 +25,7 @@ public class MovieService implements IMovieService {
 
     @Override
     public List<Movie2> getAllMovies()  {
-        return movieDAO.getAllMoviesTest();
+        return movieDAO.getAllMovies();
     }
 
     @Override
