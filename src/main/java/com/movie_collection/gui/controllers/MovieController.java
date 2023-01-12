@@ -148,7 +148,7 @@ public class MovieController extends RootController implements Initializable {
             runTime.exec(s);
         } else {
             try {
-                showMoviesToDelete();
+                showMediaPlayerUnselected();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -236,8 +236,8 @@ public class MovieController extends RootController implements Initializable {
     }
 
 
-    private void showMoviesToDelete() throws SQLException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    private void showMediaPlayerUnselected() throws SQLException {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Select your Media Player");
         alert.getButtonTypes().setAll(new ButtonType("OK"));
         Optional<ButtonType> btn= alert.showAndWait();
