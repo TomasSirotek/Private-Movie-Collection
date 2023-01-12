@@ -21,7 +21,7 @@ public class MovieModel implements  IMovieModel{
         this.filteredMovies = FXCollections.observableArrayList();
         this.allMovies = FXCollections.observableArrayList();
         getAllMovies();
-        filteredMovies.addAll(allMovies);
+        filteredMovies.setAll(allMovies);
 
     }
 
