@@ -3,13 +3,13 @@ package com.movie_collection.bll.services;
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
+import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.bll.services.interfaces.IMovieService;
+import com.movie_collection.bll.util.IFilter;
 import com.movie_collection.dal.interfaces.IMovieDAO;
 import javafx.beans.property.SimpleStringProperty;
 
-import java.io.File;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +18,13 @@ public class MovieService implements IMovieService {
     private final IMovieDAO movieDAO;
     private final ICategoryService categoryService;
 
+    private final IFilter filterUtil;
+
     @Inject
-    public MovieService(IMovieDAO movieDAO, ICategoryService categoryService) {
+    public MovieService(IMovieDAO movieDAO, ICategoryService categoryService, IFilter filter) {
         this.movieDAO = movieDAO;
         this.categoryService = categoryService;
+        this.filterUtil = filter;
     }
 
     @Override
@@ -65,5 +68,10 @@ public class MovieService implements IMovieService {
             categories.set(i, category);
         }
         return new Movie(movie.id(), movie.name(), movie.rating(), movie.absolutePath(), categories, movie.lastview());
+    }
+
+    @Override
+    public List<Movie> searchMovie(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue){
+        return filterUtil.filteringMovies(listToSearch, query, buttonValue, spinnerValue);
     }
 }

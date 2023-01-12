@@ -3,6 +3,7 @@ package com.movie_collection.gui.controllers;
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
+import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
@@ -34,19 +35,29 @@ import java.util.stream.Collectors;
  */
 public class BaseController extends RootController implements Initializable {
 
+    private CompareSigns currentCompare = CompareSigns.MORE_THAN_OR_EQUAL;
+    @FXML
+    private Spinner<Double> ratingFilterSpinner;
+    @FXML
+    private Button ratingFilterButton;
     @FXML
     private ScrollPane scroll_pane;
     @FXML
     private StackPane app_content;
 
+    @Inject
     private IControllerFactory controllerFactory;
+    @FXML
+    private TextField searchMovies;
 
-    private ICategoryModel categoryModel;
     @Inject
     private IMovieModel movieModel;
 
     @Inject
-    public BaseController(IControllerFactory controllerFactory, ICategoryModel categoryModel, IMovieModel movieModel) {
+    private ICategoryModel categoryModel;
+
+    @Inject
+    public BaseController(IControllerFactory controllerFactory,ICategoryModel categoryModel,IMovieModel movieModel) {
         this.controllerFactory = controllerFactory;
         this.categoryModel = categoryModel;
         this.movieModel = movieModel;
@@ -56,6 +67,8 @@ public class BaseController extends RootController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        filterBar();
+        setupSpinner();
         try {
             setCategoriesScrollPane(categoryModel.getAllCategories());
             showMoviesToDelete();
@@ -234,6 +247,11 @@ public class BaseController extends RootController implements Initializable {
         RootController parent = loadNodesView(ViewType.MOVIES);
         switchToView(parent.getView());
         e.consume();
+        try {
+            movieModel.getAllMovies();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     /**
@@ -267,6 +285,9 @@ public class BaseController extends RootController implements Initializable {
         actionEvent.consume();
     }
 
+    private void filterBar() {
+        searchMovies.textProperty().addListener((obs, oldValue, newValue) -> searchMovies());
+    }
 
 
     /** TODO:
@@ -280,5 +301,38 @@ public class BaseController extends RootController implements Initializable {
         RootController parent = loadNodesView(ViewType.MOVIES);
         switchToView(parent.getView());
         actionEvent.consume();
+        try {
+            movieModel.getAllMovies();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @FXML
+    private void ratingFilterButtonAction(ActionEvent actionEvent) {
+        List<CompareSigns> buttonValues = new ArrayList<>(List.of(CompareSigns.MORE_THAN_OR_EQUAL, CompareSigns.LESS_THAN_OR_EQUAL, CompareSigns.EQUAL));
+        int index = buttonValues.indexOf(currentCompare);
+        index = index+1 >= buttonValues.size() ? 0 : index + 1;
+        currentCompare = buttonValues.get(index);
+        ratingFilterButton.setText(currentCompare.getSign());
+
+        searchMovies();
+    }
+
+    private void setupSpinner(){
+        SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(1.0, 10.0,1.0, 0.5);
+        ratingFilterSpinner.setValueFactory(valueFactory);
+
+        valueFactory.valueProperty().addListener((observable, oldValue, newValue) -> searchMovies());
+    }
+
+    private void searchMovies() {
+        TableView tableView = (TableView) getStage().getScene().lookup("#moviesTable");
+        if (tableView != null) {
+            movieModel.searchMovies(searchMovies.getText(), currentCompare, ratingFilterSpinner.getValue());
+            tableView.refresh();
+        } else {
+            System.out.println("The table view could not be found");
+        }
     }
 }

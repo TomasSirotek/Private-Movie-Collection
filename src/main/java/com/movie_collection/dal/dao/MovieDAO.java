@@ -153,9 +153,8 @@ public class MovieDAO implements IMovieDAO {
             pstmt.setInt(4, movie.id());
             ResultSet rs = pstmt.executeQuery();
             rs.next();
-            int id = rs.getInt("id");
 
-            rowsAffected = linkMovieCategories(movie, rowsAffected, con, id);
+            rowsAffected = linkMovieCategories(movie, rowsAffected, con, movie.id());
         }
         return rowsAffected;
     }

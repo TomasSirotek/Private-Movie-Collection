@@ -1,9 +1,8 @@
 package com.movie_collection.bll.services.interfaces;
 
 import com.movie_collection.be.Movie;
+import com.movie_collection.bll.helpers.CompareSigns;
 
-import java.io.File;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -58,4 +57,16 @@ public interface IMovieService {
      * @throws SQLException if the connection to the database fails
      */
     List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException;
+
+    /**
+     * docs
+     *
+     * @param listToSearch
+     * @param query
+     * @param buttonValue
+     * @param spinnerValue
+     * @return
+     */
+
+    List<Movie> searchMovie(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue);
 }

@@ -3,27 +3,27 @@ package com.movie_collection.gui.controllers;
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
-import com.movie_collection.gui.models.IMovieModel;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.*;
 import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
+import com.movie_collection.gui.models.IMovieModel;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -129,11 +129,7 @@ public class MovieController extends RootController implements Initializable {
 
         // tries to call movie service and set all items
 
-        try {
-            moviesTable.setItems(movieModel.getAllMovies());
-        } catch (SQLException e) {
-            throw new RuntimeException(e); //TODO: Lets look at this later to fi it
-        }
+        trySetTableWithMovies();
     }
 
     private void playVideoDesktop(int id, String path) throws IOException, InterruptedException {
@@ -158,10 +154,9 @@ public class MovieController extends RootController implements Initializable {
 
         trySetTableWithMovies();
 
-
     }
 
-    protected void setIsCategoryView(int categoryId) {
+    protected void setIsCategoryView(int categoryId){
         this.isCategoryView = true;
         this.categoryId = categoryId;
 
@@ -195,15 +190,6 @@ public class MovieController extends RootController implements Initializable {
         controller.setEditableView(updateMovie);
         return controller;
     }
-
-    private void trySetTableWithMovies() {
-        try {
-            moviesTable.getItems().setAll(movieModel.getAllMovies());
-        } catch (SQLException e) {
-            throw new RuntimeException(e); //TODO: Lets look at this later to fix it
-        }
-    }
-
 
     /**
      * method that tries to delete movie by id
@@ -251,9 +237,8 @@ public class MovieController extends RootController implements Initializable {
     protected void refreshTable() {
         if(moviesTable != null){
             if(moviesTable.getItems() != null){
-                moviesTable.getItems().clear();
                 try {
-                    moviesTable.getItems().setAll(movieModel.getAllMovies());
+                    movieModel.getAllMovies();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -271,19 +256,19 @@ public class MovieController extends RootController implements Initializable {
 
 
     private void trySetTableByCategory(int categoryId){
-        javafx.collections.ObservableList<Movie> test;
         try {
-            test = movieModel.getAllMoviesInTheCategory(categoryId);
-
+            movieModel.getAllMoviesInTheCategory(categoryId);
         } catch (SQLException e) {
             throw new RuntimeException(e); //TODO: Lets look at this later to fix it                no result rows
         }
-        if(test.size() > 0){
-           moviesTable.getItems().setAll(test);
-        } else {
-            List<Movie> moviesEmpty =  List.of();
-            moviesTable.getItems().setAll(moviesEmpty);
-        }
+    }
+
+    /**
+     * method that tries to set table with all movies
+     */
+
+    private void trySetTableWithMovies() {
+        moviesTable.setItems(movieModel.getFilteredMovies());
     }
 
     protected void setPath(Path fileName, String mediaPlayerPath) {
