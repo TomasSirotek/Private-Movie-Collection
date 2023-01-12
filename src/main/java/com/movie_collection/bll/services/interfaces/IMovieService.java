@@ -2,6 +2,8 @@ package com.movie_collection.bll.services.interfaces;
 
 import com.movie_collection.be.Movie;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -38,6 +40,15 @@ public interface IMovieService {
      * @throws SQLException if the connection to the database fails
      */
     int deleteMovie(int id) throws SQLException;
+
+    /**
+     * Update timeStamp when a movie is played based on the id
+     *
+     * @param id id of movie to be played
+     * @return number of rows affected
+     * @throws SQLException if the connection to the database fails
+     */
+    int updateTimeStamp(int id) throws SQLException;
 
     /**
      * method to get all movies in a category

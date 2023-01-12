@@ -9,6 +9,8 @@ import com.movie_collection.bll.util.IFilter;
 import com.movie_collection.dal.interfaces.IMovieDAO;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,9 +49,16 @@ public class MovieService implements IMovieService {
     }
 
     @Override
+    public int updateTimeStamp(int id) throws SQLException {
+        return movieDAO.updateTimeStamp(id);
+    }
+
+    @Override
+
     public List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException {
         return movieDAO.getAllMoviesInTheCategory(categoryId);
     }
+
 
     private Movie linkingCategoriesToId(Movie movie) throws SQLException {
         ArrayList<Category> allCategories = new ArrayList<>(categoryService.getAllCategories());

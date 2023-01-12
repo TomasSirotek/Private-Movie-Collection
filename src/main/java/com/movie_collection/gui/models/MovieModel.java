@@ -55,6 +55,11 @@ public class MovieModel implements  IMovieModel{
     public int deleteMovie(int id) throws SQLException {
         return movieService.deleteMovie(id);
     }
+
+    @Override
+    public int updateTimeStamp(int id) throws SQLException {
+        return movieService.updateTimeStamp(id);
+    }
     @Override
     public void searchMovies(String query, String buttonText, double spinnerValue) {
         filteredMovies.setAll(movieService.searchMovie(allMovies, query, buttonText, spinnerValue));

@@ -6,7 +6,7 @@ import javafx.collections.ObservableList;
 import java.sql.SQLException;
 
 public interface IMovieModel {
-
+    
     ObservableList<Movie> getAllMovies() throws SQLException;
     void getAllMoviesInTheCategory(int categoryId) throws SQLException;
     ObservableList<Movie> getFilteredMovies();
@@ -14,8 +14,8 @@ public interface IMovieModel {
     int createMovie(Movie movie) throws SQLException;
 
     int deleteMovie(int id) throws SQLException;
-
     int updateMovie(Movie movie) throws SQLException;
 
     void searchMovies(String query, String buttonText, double spinnerValue);
+	int updateTimeStamp(int id) throws SQLException;
 }

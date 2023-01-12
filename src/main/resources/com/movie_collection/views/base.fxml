@@ -70,6 +70,11 @@
                     <left>
                         <VBox prefHeight="530.0" prefWidth="202.0" BorderPane.alignment="CENTER">
                             <children>
+                        <Button mnemonicParsing="false" onAction="#onActionSelectMedia" prefHeight="26.0" prefWidth="170.0" text="Select Media Player">
+                           <VBox.margin>
+                              <Insets left="20.0" top="20.0" />
+                           </VBox.margin>
+                        </Button>
                                 <Button mnemonicParsing="false" onAction="#onActionGoHome" prefHeight="26.0" prefWidth="170.0" text="Home">
                                     <VBox.margin>
                                         <Insets left="20.0" top="20.0" />
