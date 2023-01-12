@@ -196,6 +196,17 @@ public class BaseController extends RootController implements Initializable {
     }
 
     /**
+     * method to invoke action to Choose Media Player Path
+     * @param actionEvent event
+     */
+    @FXML
+    private void onActionSelectMedia(ActionEvent actionEvent) throws IOException {
+        RootController parent = loadNodesView(ViewType.MEDIA_PLAYER_SELECTION);
+        show(parent.getView(),"Select Media Player Path");
+        actionEvent.consume();
+    }
+
+    /**
      * private method for showing new stages whenever its need
      * @param parent root that will be set
      * @param title title for new stage
@@ -255,6 +266,7 @@ public class BaseController extends RootController implements Initializable {
         show(parent.getView(),"Add new Category");
         actionEvent.consume();
     }
+
 
 
     /** TODO:
