@@ -51,15 +51,6 @@ public interface IMovieService {
     int updateTimeStamp(int id) throws SQLException;
 
     /**
-     * method to get a movie by id
-     *
-     * @param id of the movie
-     * @return movie object
-     * @throws SQLException if the connection to the database fails
-     */
-    Movie getMovieById(int id) throws SQLException;
-
-    /**
      * method to get all movies in a category
      *
      * @param categoryId of the category

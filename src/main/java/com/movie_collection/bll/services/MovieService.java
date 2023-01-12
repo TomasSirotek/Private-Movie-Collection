@@ -50,10 +50,7 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public Movie getMovieById(int id) throws SQLException {
-        return movieDAO.getMovieById(id);
-    }
-    @Override
+
     public List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException {
         return movieDAO.getAllMoviesInTheCategory(categoryId);
     }

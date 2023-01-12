@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public interface IMovieDAO {
     /**
@@ -30,7 +31,7 @@ public interface IMovieDAO {
      * @return returns a movie object with the id
      * @throws SQLException if the connection to the database fails
      */
-    Movie getMovieById(int id) throws SQLException;
+    Optional<Movie> getMovieById(int id) throws SQLException;
 
     /**
      * Creates a new movie in the database with given properties
