@@ -1,6 +1,8 @@
 package com.movie_collection.dal.interfaces;
 
+import com.movie_collection.be.Category2;
 import com.movie_collection.be.Movie;
+import com.movie_collection.be.Movie2;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -13,6 +15,9 @@ public interface IMovieDAO {
     * @throws SQLException if the connection to the database fails
      */
     List<Movie> getAllMovies() throws SQLException;
+
+
+    List<Movie2> getAllMoviesTest();
 
 //    /**
 //     * Class responsible for getting all movies in a given category
@@ -30,14 +35,16 @@ public interface IMovieDAO {
      */
     Movie getMovieById(int id) throws SQLException;
 
-//    /**
-//     * Creates a new movie in the database with given properties
-//     *
-//     * @param movie an object of type Movie with necessary properties
-//     * @return number of rows affected
-//     * @throws SQLException if the connection to the database fails
-//     */
-//    int createMovie(Movie movie) throws SQLException;
+    /**
+     * Creates a new movie in the database with given properties
+     *
+     * @param movie an object of type Movie with necessary properties
+     * @return number of rows affected
+     * @throws SQLException if the connection to the database fails
+     */
+    int createMovieTest(Movie2 movie);
+
+    int addCategoryToMovie(Category2 category2, Movie2 movie2);
 
     /**
      * Updates a movie in the database depending on the id of the movie

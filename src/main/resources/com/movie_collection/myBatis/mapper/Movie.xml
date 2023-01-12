@@ -55,14 +55,34 @@
             parameterType="Movie"
             flushCache="true"
             statementType="PREPARED"
-            keyProperty=""
-            keyColumn=""
+            keyProperty="id"
+            keyColumn="id"
             useGeneratedKeys="true"
             timeout="20">
 
+--      insert new movie into table with params still need to make them safer
         INSERT INTO Movie (name, rating, path) VALUES (#{name},#{rating},#{absolutePath})
+
+--      selects the generated key
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+        SELECT @@IDENTITY
+        </selectKey>
+
     </insert>
 
+
+    <insert
+            id="addCategoryToMovie"
+            flushCache="true"
+            statementType="PREPARED"
+            keyProperty=""
+            keyColumn=""
+            useGeneratedKeys="true">
+
+--       insert categoryId and movieId to joining table
+        INSERT INTO CatMovie (categoryId, movieId) VALUES (#{catValue},#{movieValue})
+
+    </insert>
 
 <!--  cache should be cleared before the statement is executed  ->  ensure that stale data is not used-->
 <!--     timeout 20 to prevent any issues with a query taking too long to execute -->

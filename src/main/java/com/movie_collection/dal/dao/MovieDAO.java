@@ -2,6 +2,7 @@ package com.movie_collection.dal.dao;
 
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
+import com.movie_collection.be.Category2;
 import com.movie_collection.be.Movie;
 import com.movie_collection.be.Movie2;
 import com.movie_collection.dal.ConnectionManager;
@@ -24,8 +25,8 @@ public class MovieDAO implements IMovieDAO {
    private static final ConnectionManager cm = new ConnectionManager();
 
     public static void main(String[] args) {
-//       var test = getAllMoviesTest();
-//       //est.forEach(System.out::println);
+       // var test = getAllMoviesTest();
+       //test.forEach(System.out::println);
 //        System.out.println(test.size());
 //       // var getAllMoviesInTheCategoryTest = getAllMoviesInTheCategoryTest(1210);
 //
@@ -43,32 +44,49 @@ public class MovieDAO implements IMovieDAO {
 //            System.out.println("Could not delete with id " + toDelete);
 //        }
 
-        var test2 = getAllMoviesTest();
-        System.out.println(test2.size());
-
+//        var test2 = getAllMoviesTest();
+//        System.out.println(test2.size());
+//
         Movie2 movieToCreate = new Movie2();
 
-        movieToCreate.setName("TestMovieBatis");
+
+        movieToCreate.setName("TestMovieBatis2222");
         movieToCreate.setRating(4.9);
-        movieToCreate.setAbsolutePath("/C:Tomas/here");
+        movieToCreate.setAbsolutePath("/C:Tomas/hereeee");
 
-        int result = createMovieTest(movieToCreate);
-        if(result > 0){
-        System.out.println(result + "We did it Jesus");
+        //Movie2 result = createMovieTest(movieToCreate);
+//        if(result != null){
+//        System.out.println(result.toString() + "We did it Jesus");
+//
+//        }
+//
+//        var afterCreate = getAllMoviesTest();
+//        System.out.println(afterCreate.size());
 
-        }
 
-        var afterCreate = getAllMoviesTest();
-        System.out.println(afterCreate.size());
+//        Movie2 movieToCreateId = new Movie2();
+//        movieToCreateId.setId(1205);
+//
+//        Category2 category2 = new Category2();
+//        category2.setId(26);
+//
+//
+//        int categoryResult = addCategoryToMovie(category2,movieToCreateId);
+//        System.out.println(categoryResult);
     }
 
 
-    public static List<Movie2> getAllMoviesTest(){
+    @Override
+    public List<Movie2> getAllMoviesTest(){
         List<Movie2> allMovies;
+        long starttime;
+
         try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+            starttime = System.currentTimeMillis();
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
             allMovies = mapper.getAllMovies();
         }
+        System.out.println("Time to get all the movies: " + (System.currentTimeMillis() - starttime));
         return allMovies;
     }
 
@@ -79,10 +97,20 @@ public class MovieDAO implements IMovieDAO {
         }
     }
 
-    public static int createMovieTest(Movie2 movie){
+    @Override
+    public int createMovieTest(Movie2 movie){
         try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
             int affectedRows = mapper.createMovieTest(movie);
+            session.commit();//  after commit if rows > 0 returns the generated key
+            return affectedRows > 0 ? movie.getId() : 0;
+        }
+    }
+    @Override
+    public int addCategoryToMovie(Category2 category2,Movie2 movie2){
+        try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+            MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
+            int affectedRows = mapper.addCategoryToMovie(category2.getId(),movie2.getId());
             session.commit();
             return affectedRows;
         }

@@ -34,6 +34,6 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public Category getCategoryByName(String name) throws SQLException {
-        return categoryDAO.getCategoryByName(name);
+        return null;
     }
 }

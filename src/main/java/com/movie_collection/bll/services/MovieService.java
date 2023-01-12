@@ -2,35 +2,70 @@ package com.movie_collection.bll.services;
 
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
+import com.movie_collection.be.Category2;
 import com.movie_collection.be.Movie;
+import com.movie_collection.be.Movie2;
 import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.bll.services.interfaces.IMovieService;
+import com.movie_collection.dal.interfaces.ICategoryDAO;
 import com.movie_collection.dal.interfaces.IMovieDAO;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MovieService implements IMovieService {
+
     private final IMovieDAO movieDAO;
+
+    private final ICategoryDAO categoryDAO;
     private final ICategoryService categoryService;
 
     @Inject
-    public MovieService(IMovieDAO movieDAO, ICategoryService categoryService) {
+    public MovieService(IMovieDAO movieDAO,ICategoryDAO categoryDAO, ICategoryService categoryService) {
         this.movieDAO = movieDAO;
+        this.categoryDAO = categoryDAO;
         this.categoryService = categoryService;
     }
 
     @Override
-    public List<Movie> getAllMovies() throws SQLException {
-        return movieDAO.getAllMovies();
+    public List<Movie2> getAllMovies() throws SQLException {
+        return movieDAO.getAllMoviesTest();
     }
 
-//    @Override
-//    public int createMovie(Movie movie) throws SQLException {
-//        return movieDAO.createMovie(linkingCategoriesToId(movie));
-//    }
+
+    @Override
+    public int createMovie(Movie2 movie) {
+        // -> block to prepare categoriesList
+//        List<Category2> category2List = new ArrayList<>();
+//
+//        for (var category : movie.getCategories()
+//             ) {
+//            Category2 category2 = new Category2();
+//            category2.setName(category.getName());
+//            category2List.add(category2);
+//        }
+//        movie.setCategories(category2List);
+
+
+        // -> create movie and for each movie add to category
+
+        int result = movieDAO.createMovieTest(movie);
+        if(result > 0){
+            movie.setId(result);
+            for (Category2 category : movie.getCategories()
+                 ) {
+                Optional<Category2> category2 = categoryDAO.getCategoryByName(category.getName());// -> inject categoryDAO
+                if(category2.isPresent()){
+                    movieDAO.addCategoryToMovie(category2.get(),movie);
+                }
+            }
+        }
+
+        return result;
+    }
 
     @Override
     public int updateMovie(Movie movie) throws SQLException {

@@ -65,25 +65,25 @@ public class BaseController extends RootController implements Initializable {
     }
 
     private void showMoviesToDelete() throws SQLException {
-        List<Movie> allMovies = movieModel.getAllMovies();
-        List<Movie> moviesToDelete = allMovies.stream()
-                .filter(m -> m.rating() < 6.0 || (m.lastview() != null && (Instant.now().toEpochMilli() - m.lastview().getTime() > 63113852000L))) // add movie if rating is < 6 or if lastview is not null and Current time - (lastview time is more than time of 2 years in miliseconds)
-                .toList();
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Do you want to delete these movies ?");
-        String str = "";
-        for (Movie m:moviesToDelete) {
-            str += m.name().get() + "\n";
-        }
-        alert.setContentText(str);
-        alert.getButtonTypes().setAll(new ButtonType("Delete"), new ButtonType("Cancel"));
-        Optional<ButtonType> btn= alert.showAndWait();
-        String button = btn.isPresent() ? btn.get().getText() : "Cancel";
-        if (button.equals("Delete")){
-            for (Movie m: moviesToDelete) {
-                movieModel.deleteMovie(m.id());
-            }
-        }
+//        List<Movie> allMovies = movieModel.getAllMovies();
+//        List<Movie> moviesToDelete = allMovies.stream()
+//                .filter(m -> m.rating() < 6.0 || (m.lastview() != null && (Instant.now().toEpochMilli() - m.lastview().getTime() > 63113852000L))) // add movie if rating is < 6 or if lastview is not null and Current time - (lastview time is more than time of 2 years in miliseconds)
+//                .toList();
+//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//        alert.setHeaderText("Do you want to delete these movies ?");
+//        String str = "";
+//        for (Movie m:moviesToDelete) {
+//            str += m.name().get() + "\n";
+//        }
+//        alert.setContentText(str);
+//        alert.getButtonTypes().setAll(new ButtonType("Delete"), new ButtonType("Cancel"));
+//        Optional<ButtonType> btn= alert.showAndWait();
+//        String button = btn.isPresent() ? btn.get().getText() : "Cancel";
+//        if (button.equals("Delete")){
+//            for (Movie m: moviesToDelete) {
+//                movieModel.deleteMovie(m.id());
+//            }
+//        }
     }
 
     /**

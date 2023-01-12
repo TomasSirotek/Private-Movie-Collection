@@ -18,6 +18,8 @@ public interface MovieMapperDAO {
     int createMovieTest(Movie2 movie2);
     int deleteMovieById(@Param("value") int id);
 
+    int addCategoryToMovie(@Param("catValue") int categoryId,@Param("movieValue") int movieId);
+
 
     //    @Select(" SELECT movie.id ,movie.name, movie.rating, movie.path, movie.lastview,category.id as c_category_id, category.name as c_name\n" +
 //            "        FROM movie\n" +

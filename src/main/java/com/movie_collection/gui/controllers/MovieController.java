@@ -186,11 +186,11 @@ public class MovieController extends RootController implements Initializable{
         if(moviesTable != null){
             if(moviesTable.getItems() != null){
                 moviesTable.getItems().clear();
-                try {
-                    moviesTable.getItems().setAll(movieModel.getAllMovies());
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+//                try {
+//                   // moviesTable.getItems().setAll(movieModel.getAllMovies());
+//                } catch (SQLException e) {
+//                    throw new RuntimeException(e);
+//                }
             }
         }
     }
@@ -217,11 +217,11 @@ public class MovieController extends RootController implements Initializable{
      */
 
     private void trySetTableWithMovies() {
-        try {
-            moviesTable.getItems().setAll(movieModel.getAllMovies());
-        } catch (SQLException e) {
-            throw new RuntimeException(e); //TODO: Lets look at this later to fix it
-        }
+//        try {
+//            moviesTable.getItems().setAll(movieModel.getAllMovies());
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e); //TODO: Lets look at this later to fix it
+//        }
     }
 
     /**

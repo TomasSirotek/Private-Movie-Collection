@@ -2,7 +2,9 @@ package com.movie_collection.gui.models;
 
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
+import com.movie_collection.be.Category2;
 import com.movie_collection.be.Movie;
+import com.movie_collection.be.Movie2;
 import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.bll.services.interfaces.IMovieService;
 import javafx.collections.FXCollections;
@@ -16,15 +18,13 @@ import java.util.List;
 public class MovieModel implements IMovieModel{
     private final IMovieService movieService;
 
-   // private ObservableList<Movie> moviesList = FXCollections.observableArrayList();
-
     @Inject
     public MovieModel(IMovieService categoryService) {
         this.movieService = categoryService;
     }
 
     @Override
-    public ObservableList<Movie> getAllMovies() throws SQLException {
+    public ObservableList<Movie2> getAllMovies() throws SQLException {
         return FXCollections.observableArrayList(
                 movieService.getAllMovies()
         );
@@ -38,9 +38,8 @@ public class MovieModel implements IMovieModel{
     }
 
     @Override
-    public int createMovie(Movie movie) throws SQLException {
-        return 0;
-        //return // movieService.createMovie(movie);
+    public int createMovie(Movie2 movie) {
+        return movieService.createMovie(movie);
     }
     @Override
     public int updateMovie(Movie movie) throws SQLException {

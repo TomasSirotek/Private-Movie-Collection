@@ -1,6 +1,7 @@
 package com.movie_collection.bll.services.interfaces;
 
 import com.movie_collection.be.Movie;
+import com.movie_collection.be.Movie2;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -11,16 +12,16 @@ public interface IMovieService {
      *
      * @return List<Movie> to be created
      */
-    List<Movie> getAllMovies() throws SQLException;
+    List<Movie2> getAllMovies() throws SQLException;
 
-//    /**
-//     * method to create a movie
-//     *
-//     * @param movie to be created
-//     * @return number of rows affected
-//     * @throws SQLException if the connection to the database fails
-//     */
-//    int createMovie(Movie movie) throws SQLException;
+    /**
+     * method to create a movie
+     *
+     * @param movie to be created
+     * @return number of rows affected
+     * @throws SQLException if the connection to the database fails
+     */
+    int createMovie(Movie2 movie);
 
     /**
      * method to update a movie

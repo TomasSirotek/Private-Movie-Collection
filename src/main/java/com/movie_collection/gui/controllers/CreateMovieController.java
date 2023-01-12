@@ -2,7 +2,9 @@ package com.movie_collection.gui.controllers;
 
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
+import com.movie_collection.be.Category2;
 import com.movie_collection.be.Movie;
+import com.movie_collection.be.Movie2;
 import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.models.ICategoryModel;
@@ -112,32 +114,37 @@ public class CreateMovieController extends RootController implements Initializab
         if(!isEditable){
             if(isValidatedInput()){
                 var collectedCategory = mapSelectedCategories();
-                Movie movie = new Movie(
-                        0,
-                        new SimpleStringProperty(movieName.getText().trim()),
-                        personalRatingSpin.getValue(),
-                        new SimpleStringProperty(path.getText().trim()),
-                        collectedCategory,
-                        null);
+//                Movie movie = new Movie(
+//                        0,
+//                        new SimpleStringProperty(movieName.getText().trim()),
+//                        personalRatingSpin.getValue(),
+//                        new SimpleStringProperty(path.getText().trim()),
+//                        collectedCategory,
+//                        null);
 
-                int result = tryCreateMovie(movie);
-                closeAndUpdate(result,movie.id());
+                Movie2 movie2 = new Movie2();
+                movie2.setName(movieName.getText().trim());
+                movie2.setRating(personalRatingSpin.getValue());
+                movie2.setAbsolutePath(path.getText().trim());
+                movie2.setCategories(collectedCategory);
+                int result = tryCreateMovie(movie2);
+                closeAndUpdate(result,movie2.getId());
                 e.consume();
             }
         }else {
             if(isValidatedInput()){
-                var collectedCategory = mapSelectedCategories();
-                Movie movie = new Movie(
-                        editableMovie.id(),
-                        new SimpleStringProperty(movieName.getText().trim()),
-                        personalRatingSpin.getValue(),
-                        new SimpleStringProperty(path.getText().trim()),
-                        collectedCategory,
-                        editableMovie.lastview());
-
-                int result = tryUpdateMovie(movie);
-                closeAndUpdate(result,movie.id());
-                e.consume();
+//                var collectedCategory = mapSelectedCategories();
+//                Movie movie = new Movie(
+//                        editableMovie.id(),
+//                        new SimpleStringProperty(movieName.getText().trim()),
+//                        personalRatingSpin.getValue(),
+//                        new SimpleStringProperty(path.getText().trim()),
+//                        collectedCategory,
+//                        editableMovie.lastview());
+//
+//                int result = tryUpdateMovie(movie);
+//                closeAndUpdate(result,movie.id());
+//                e.consume();
             }
 
         }
@@ -205,13 +212,25 @@ public class CreateMovieController extends RootController implements Initializab
      * maps selected categories
      * @return list of Categories
      */
-    private List<Category> mapSelectedCategories() {
-        return categoryMenuButton.getItems().stream()
+    private List<Category2> mapSelectedCategories() {
+//        return categoryMenuButton.getItems().stream()
+//                .filter(item -> item instanceof CheckMenuItem)
+//                .map(CheckMenuItem.class::cast)
+//                .filter(CheckMenuItem::isSelected)
+//                .map(button ->  new Category2(0, button.getText()))
+//                .toList();
+
+        List<Category2> categories = new ArrayList<>();
+        categoryMenuButton.getItems().stream()
                 .filter(item -> item instanceof CheckMenuItem)
                 .map(CheckMenuItem.class::cast)
                 .filter(CheckMenuItem::isSelected)
-                .map(button -> new Category(0,new SimpleStringProperty(button.getText())))
-                .toList();
+                .forEach(button -> {
+                    Category2 category = new Category2();
+                    category.setName(button.getText());
+                    categories.add(category);
+                });
+        return categories;
     }
 
     /**
@@ -235,12 +254,8 @@ public class CreateMovieController extends RootController implements Initializab
      * @param movie object that will be created
      * @return 0 or 1 where 0 is fail and 1 is success
      */
-    private int tryCreateMovie(Movie movie) {
-        try {
-            return movieModel.createMovie(movie);
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
+    private int tryCreateMovie(Movie2 movie) {
+        return movieModel.createMovie(movie);
     }
 
     /**
