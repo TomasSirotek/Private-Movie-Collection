@@ -286,10 +286,10 @@ public class CreateMovieController extends RootController implements Initializab
      * @return list of Categories with id,name
      */
     private List<Category> tryToGetCategory() {
-        try {
-            return categoryModel.getAllCategories();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        List<Category2> categories = categoryModel.getAllCategories();
+        List<Category> categories1 =
+                categories.stream().map(c -> new Category(c.getId(),new SimpleStringProperty(c.getName()))).toList();
+            return categories1;
+
     }
 }

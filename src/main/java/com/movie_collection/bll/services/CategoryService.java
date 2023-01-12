@@ -2,6 +2,7 @@ package com.movie_collection.bll.services;
 
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
+import com.movie_collection.be.Category2;
 import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.dal.interfaces.ICategoryDAO;
 
@@ -18,22 +19,17 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public List<Category> getAllCategories() throws SQLException {
+    public List<Category2> getAllCategories() {
         return categoryDAO.getAllCategories();
     }
 
     @Override
-    public int createCategory(Category category) throws SQLException {
+    public int createCategory(Category2 category){
         return categoryDAO.addCategory(category);
     }
 
     @Override
-    public int deleteCategory(int id) throws SQLException {
+    public int deleteCategory(int id) {
         return categoryDAO.deleteCategory(id);
-    }
-
-    @Override
-    public Category getCategoryByName(String name) throws SQLException {
-        return null;
     }
 }

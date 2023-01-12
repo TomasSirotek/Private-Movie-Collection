@@ -13,18 +13,14 @@ public interface ICategoryDAO {
      * Retrieves all Categories from the database and store into a list
      * @return a list of all the Categories from database
      */
-    List<Category> getAllCategories() throws SQLException;
-
+    List<Category2> getAllCategories();
     Optional<Category2> getCategoryByName(String categoryName);
 
     /**
-     * Saves the new information about a new Caterogy into the database
+     * Saves the new information about a new Category into the database
      * @param category the Category to be added
      */
-    int addCategory(Category category) throws SQLException;
-
-
-
+    int addCategory(Category2 category);
     /**
      * Deletes the desired Category from the Category database
      * @param Category the Category to be deleted
@@ -34,7 +30,6 @@ public interface ICategoryDAO {
      *
      * @return
      */
-    int deleteCategory(int id) throws SQLException;
+    int deleteCategory(int id);
 
-    // Category2 getCategoryByName(String name) throws SQLException;
 }

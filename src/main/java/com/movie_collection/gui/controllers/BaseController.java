@@ -2,12 +2,14 @@ package com.movie_collection.gui.controllers;
 
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
+import com.movie_collection.be.Category2;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
 import com.movie_collection.gui.models.ICategoryModel;
 import com.movie_collection.gui.models.IMovieModel;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -56,8 +58,11 @@ public class BaseController extends RootController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        List<Category2> categories = categoryModel.getAllCategories();
+        List<Category> categories1 =
+        categories.stream().map(c -> new Category(c.getId(),new SimpleStringProperty(c.getName()))).toList();
         try {
-            setCategoriesScrollPane(categoryModel.getAllCategories());
+            setCategoriesScrollPane(categories1);
             showMoviesToDelete();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -91,9 +96,12 @@ public class BaseController extends RootController implements Initializable {
      * and then set it back to all categories
      */
     protected void refreshScrollPane() throws SQLException {
+        List<Category2> categories = categoryModel.getAllCategories();
+        List<Category> categories1 =
+                categories.stream().map(c -> new Category(c.getId(),new SimpleStringProperty(c.getName()))).toList();
         if(scroll_pane.getContent() != null){
             scroll_pane.setContent(null);
-            setCategoriesScrollPane(categoryModel.getAllCategories());
+            setCategoriesScrollPane(categories1);
         }
     }
 
@@ -165,11 +173,7 @@ public class BaseController extends RootController implements Initializable {
      * @return for now int that must be > 0 in order to successfully delete it
      */
     private int tryToDeleteCategory(int id) {
-        try {
             return categoryModel.deleteCategory(id);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.movie_collection.gui.models;
 
 import com.movie_collection.be.Category;
+import com.movie_collection.be.Category2;
 import javafx.collections.ObservableList;
 
 import java.sql.SQLException;
@@ -11,7 +12,7 @@ public interface ICategoryModel {
      * abstract method to retrieve all the categories
      * @return Observable list with all its categories objects
      */
-    ObservableList<Category> getAllCategories() throws SQLException;
+    ObservableList<Category2> getAllCategories();
 
     /**
      * abstract method to createCategory from an object
@@ -19,7 +20,7 @@ public interface ICategoryModel {
      * @return 0 if no category fails to be  created | 1 if successfully created
      *
      */
-    int createCategory(Category category) throws SQLException;
+    int createCategory(Category2 category);
 
-    int deleteCategory(int id) throws SQLException;
+    int deleteCategory(int id);
 }

@@ -127,12 +127,7 @@ public class MovieController extends RootController implements Initializable{
             });
             return new SimpleObjectProperty<>(deleteButton);
         });
-
-
         trySetTableWithMovies();
-
-
-
     }
 
     protected void setIsCategoryView(int categoryId){
@@ -202,19 +197,12 @@ public class MovieController extends RootController implements Initializable{
                         }).toList();
 
                 moviesTable.getItems().setAll(test);
-//                } catch (SQLException e) {
-//                    throw new RuntimeException(e);
-//                }
             }
         }
     }
 
 
     private void trySetTableByCategory(int categoryId){
-
-        // ObservableList<Optional<List<Movie2>>> movie = movieModel.getAllMoviesInTheCategory(categoryId);
-      //  ObservableList<Optional<List<Movie2>>> movie = movieModel.getAllMoviesInTheCategory(categoryId);
-
         ObservableList<Optional<List<Movie2>>> movie = movieModel.getAllMoviesInTheCategory(categoryId);
 
         if(!movie.isEmpty()){

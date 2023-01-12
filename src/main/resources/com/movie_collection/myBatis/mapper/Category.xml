@@ -10,9 +10,21 @@
         <result property="name" column="nameCat"/>
     </resultMap>
 
+    <select id="getAllCategories"
+            resultType="Category"
+            resultMap="categoryResult">
+
+        SELECT
+            C.id as idCat,
+            C.name as nameCat -->
+        FROM Category C;
+
+    </select>
+
     <select id="getCategoryByName"
             resultType="Category"
             resultMap="categoryResult">
+
         SELECT
                C.id as idCat,
                C.name as nameCat-->
@@ -20,4 +32,38 @@
         WHERE C.name = #{value}
 
     </select>
-    </mapper>
+
+
+    <insert
+            id="createCategory"
+            parameterType="Category"
+            flushCache="true"
+            statementType="PREPARED"
+            keyProperty="id"
+            keyColumn="id"
+            useGeneratedKeys="true"
+            timeout="20">
+
+        -- insert new category into table with params still need to make them safer
+        INSERT INTO Category (name) VALUES (#{name})
+
+        -- selects the generated key
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            SELECT @@IDENTITY
+        </selectKey>
+
+    </insert>
+
+    <delete id="deleteCategory"
+            parameterType="Category"
+            flushCache="true"
+            statementType="PREPARED"
+            timeout="20">
+
+        --         executes delete query
+        DELETE FROM Category WHERE id = #{catId}
+    </delete>
+
+</mapper>
+
+

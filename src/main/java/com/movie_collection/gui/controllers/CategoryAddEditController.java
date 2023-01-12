@@ -2,6 +2,7 @@ package com.movie_collection.gui.controllers;
 
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
+import com.movie_collection.be.Category2;
 import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.models.CategoryModel;
@@ -46,7 +47,8 @@ public class CategoryAddEditController extends RootController implements Initial
      */
     private void createCategoryOnAction(String categoryName) {
         Objects.requireNonNull(categoryName,"Category name cannot be empty");
-        Category newCategory = new Category(0,new SimpleStringProperty(categoryName));
+        Category2 newCategory = new Category2();
+        newCategory.setName(categoryName);
         var result = tryToCreateCategory(newCategory);
 
         if(result > 0){
@@ -74,12 +76,8 @@ public class CategoryAddEditController extends RootController implements Initial
      * @param newCategory that will be created
 
      */
-    private int tryToCreateCategory(Category newCategory) {
-        try {
-            return categoryModel.createCategory(newCategory);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    private int tryToCreateCategory(Category2 newCategory) {
+        return categoryModel.createCategory(newCategory);
     }
 
 }

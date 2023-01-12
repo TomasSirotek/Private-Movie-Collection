@@ -1,17 +1,19 @@
 package com.movie_collection.dal.mappers;
 
 import com.movie_collection.be.Category2;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
-import java.util.Optional;
+
 
 
 public interface CategoryMapperDAO {
 
-    List<Category2> selectCategories(List<Category2> categories);
+    List<Category2> getAllCategories();
 
     Category2 getCategoryByName(@Param("value")String categoryName);
+
+    int createCategory(Category2 category2);
+
+    int deleteCategory(@Param("catId") int id);
 }
