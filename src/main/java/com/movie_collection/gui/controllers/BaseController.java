@@ -229,6 +229,11 @@ public class BaseController extends RootController implements Initializable {
         RootController parent = loadNodesView(ViewType.MOVIES);
         switchToView(parent.getView());
         e.consume();
+        try {
+            movieModel.getAllMovies();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     /**
@@ -306,5 +311,10 @@ public class BaseController extends RootController implements Initializable {
         RootController parent = loadNodesView(ViewType.MOVIES);
         switchToView(parent.getView());
         actionEvent.consume();
+        try {
+            movieModel.getAllMovies();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }
