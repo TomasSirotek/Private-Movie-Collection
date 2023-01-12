@@ -270,7 +270,7 @@ public class BaseController extends RootController implements Initializable {
     private void filterBar() {
         searchMovies.textProperty().addListener((obs, oldValue, newValue) -> {
             TableView tableView = (TableView) getStage().getScene().lookup("#moviesTable");
-            if(tableView != null){
+            if (tableView != null) {
                 movieModel.searchMovies(newValue);
                 tableView.refresh();
             } else {
@@ -278,27 +278,7 @@ public class BaseController extends RootController implements Initializable {
 
             }
         });
-
-
-        //System.out.println(movieModel.getAllMovies());
-//        System.out.println("TEST");
-//        searchMovies.textProperty().addListener(new ChangeListener<String>() {
-//            @Override
-//            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-//                movies.clear();
-//                System.out.println("TEST");
-//                //TODO FIX TRIGGER ERROR FROM MOVIE Observable and communication with MovieController
-//                //movies.addAll(filter.filteringMovies(newValue));
-//
-//
-//            }
-//        });
     }
-    //Force one of the tables and change the Content/Info
-
-
-
-
 
     /** TODO:
      * This method does nothing for now it is just prepared for later extension

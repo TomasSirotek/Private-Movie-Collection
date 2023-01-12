@@ -62,7 +62,5 @@ public class MovieModel implements  IMovieModel{
         } else {
             filteredMovies.setAll(allMovies);
         }
-//        System.out.println("----");
-//        filteredMovies.forEach(movie -> System.out.println(movie.name().get()));
     }
 }
