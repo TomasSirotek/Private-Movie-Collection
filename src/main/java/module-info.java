@@ -7,13 +7,14 @@ module com.movie_collection.private_movie_collection {
     requires java.naming;
     requires javafx.media;
     requires org.mybatis;
+    requires org.slf4j;
 
 
     exports com.movie_collection.gui.controllers;
 
     opens com.movie_collection.gui.controllers to javafx.fxml,com.google.guice;
 
-    opens com.movie_collection to javafx.fxml,com.google.guice;
+    opens com.movie_collection to javafx.fxml,com.google.guice,org.slf4j;
     exports com.movie_collection.bll.helpers;
     exports com.movie_collection.bll.services;
     exports com.movie_collection.bll.services.interfaces;
@@ -32,8 +33,8 @@ module com.movie_collection.private_movie_collection {
     exports com.movie_collection.dal.dao to com.google.guice;
     exports com.movie_collection.dal.interfaces;
     exports com.movie_collection.bll.utilities;
-    opens myBatis to org.mybatis, javafx.fxml;
-    exports myBatis  to javafx.fxml;
+    opens myBatis to org.mybatis, javafx.fxml,org.slf4j;
+    exports myBatis to javafx.fxml;
     opens com.movie_collection.dal.mappers to org.mybatis;
 
 
