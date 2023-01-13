@@ -3,9 +3,17 @@ package com.movie_collection.bll.services;
 import com.google.inject.Inject;
 import com.movie_collection.be.Category2;
 import com.movie_collection.be.Movie2;
+import com.movie_collection.be.Category;
+import com.movie_collection.be.Movie;
+import com.movie_collection.bll.helpers.CompareSigns;
+import com.movie_collection.bll.services.interfaces.IAPIService;
+import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.bll.services.interfaces.IMovieService;
+import com.movie_collection.bll.util.IFilter;
 import com.movie_collection.dal.interfaces.ICategoryDAO;
 import com.movie_collection.dal.interfaces.IMovieDAO;
+import com.movie_collection.gui.DTO.MovieDTO;
+import javafx.beans.property.SimpleStringProperty;
 
 import java.util.List;
 import java.util.Objects;
@@ -14,13 +22,20 @@ import java.util.Optional;
 public class MovieService implements IMovieService {
 
     private final IMovieDAO movieDAO;
+    private final ICategoryService categoryService;
+    private final ICategoryDAO categoryDAO; // this should not be here use srvice isntead
 
-    private final ICategoryDAO categoryDAO;
+    private final IFilter filterUtil;
+
+    private final IAPIService apiService;
 
     @Inject
-    public MovieService(IMovieDAO movieDAO,ICategoryDAO categoryDAO) {
+    public MovieService(IMovieDAO movieDAO,ICategoryDAO categoryDAO,ICategoryService categoryService) {
         this.movieDAO = movieDAO;
         this.categoryDAO = categoryDAO;
+        this.categoryService = categoryService;
+        this.filterUtil = filter;
+        this.apiService = apiService;
     }
 
     @Override
@@ -53,6 +68,10 @@ public class MovieService implements IMovieService {
     }
 
     @Override
+    public int updateTimeStamp(int id) throws SQLException {
+        return movieDAO.updateTimeStamp(id);
+
+    }
     public int updateMovie(Movie2 movie){
         // try to update movie
         int finalResult = 0;
@@ -88,5 +107,4 @@ public class MovieService implements IMovieService {
     public int deleteMovie(int id) {
         return movieDAO.deleteMovieById(id);
     }
-
 }

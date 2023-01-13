@@ -9,6 +9,11 @@ import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -119,7 +124,20 @@ public class MovieDAO implements IMovieDAO {
             return affectedRows;
         } catch (Exception ex) {
             logger.error("An error occurred mapping tables", ex);
+
+        }
+    }
+    // this needs to be updated and fixed
+    public int updateTimeStamp(int id) throws SQLException{
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+        Timestamp ts = Timestamp.from(Instant.now());
+        String date = dateFormat.format(ts);
+        try(Connection con = cm.getConnection()){
+            String sql = "UPDATE Movie SET lastview = '"+ date +"'" + "WHERE id='"+id+"'";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            return preparedStatement.executeUpdate();
         }
         return finalAffectedRows;
     }
+
 }

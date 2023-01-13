@@ -38,6 +38,7 @@
             <version>3.5.11</version>
         </dependency>
 
+
         <!-- https://mvnrepository.com/artifact/com.google.inject/guice -->
         <dependency>
             <groupId>com.google.inject</groupId>
@@ -51,6 +52,7 @@
             <artifactId>javafx-controls</artifactId>
             <version>19</version>
         </dependency>
+
 
         <!-- https://mavenlibs.com/maven/dependency/org.openjfx/javafx-fxml -->
         <dependency>
@@ -67,6 +69,7 @@
             <scope>test</scope>
         </dependency>
 
+
         <!-- https://mavenlibs.com/maven/dependency/org.junit.jupiter/junit-jupiter-engine -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -81,6 +84,22 @@
             <artifactId>mssql-jdbc</artifactId>
             <version>11.2.2.jre18</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.github.openfeign/feign-core -->
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-core</artifactId>
+            <version>12.1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.github.openfeign/feign-gson -->
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-gson</artifactId>
+            <version>12.1</version>
+        </dependency>
+
+
 
     </dependencies>
 

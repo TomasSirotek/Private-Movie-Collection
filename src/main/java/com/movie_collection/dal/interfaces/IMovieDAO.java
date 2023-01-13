@@ -3,6 +3,8 @@ package com.movie_collection.dal.interfaces;
 import com.movie_collection.be.Category2;
 import com.movie_collection.be.Movie2;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -73,6 +75,17 @@ public interface IMovieDAO {
      * @param id id of movie to be deleted
      * @return number of rows affected
      */
+    int deleteMovie(int id) throws SQLException;
+
+    /**
+     * Update timeStamp when a movie is played based on the id of the movie and date of opening
+     *
+     * @param id id of movie to be played
+     * @return number of rows affected
+     * @throws SQLException if the connection to the database fails
+     */
+    int updateTimeStamp(int id) throws SQLException;
+
     int deleteMovieById(int id);
 
     /**

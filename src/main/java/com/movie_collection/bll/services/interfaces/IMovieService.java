@@ -1,6 +1,9 @@
 package com.movie_collection.bll.services.interfaces;
 
 import com.movie_collection.be.Movie2;
+import com.movie_collection.be.Movie;
+import com.movie_collection.bll.helpers.CompareSigns;
+import com.movie_collection.gui.DTO.MovieDTO;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -49,4 +52,31 @@ public interface IMovieService {
      */
     int deleteMovie(int id) throws SQLException;
 
+    /**
+     * Update timeStamp when a movie is played based on the id
+     *
+     * @param id id of movie to be played
+     * @return number of rows affected
+     * @throws SQLException if the connection to the database fails
+     */
+    int updateTimeStamp(int id) throws SQLException;
+
+    /**
+     * docs
+     *
+     * @param listToSearch
+     * @param query
+     * @param buttonValue
+     * @param spinnerValue
+     * @return
+     */
+
+    List<Movie> searchMovie(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue);
+
+    /**
+     * method to retrieve movie by name with the api
+     * @param title to be searched as query
+     * @return
+     */
+    MovieDTO getMovieByNameAPI(String title);
 }

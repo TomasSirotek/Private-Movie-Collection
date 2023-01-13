@@ -8,7 +8,8 @@ module com.movie_collection.private_movie_collection {
     requires javafx.media;
     requires org.mybatis;
     requires org.slf4j;
-
+    requires feign.core;
+    requires feign.gson;
 
     exports com.movie_collection.gui.controllers;
 
@@ -20,6 +21,8 @@ module com.movie_collection.private_movie_collection {
     exports com.movie_collection.bll.services.interfaces;
     exports com.movie_collection to javafx.graphics;
 
+    exports com.movie_collection.bll.util;
+    opens com.movie_collection.bll.util to com.google.guice,javafx.fxml;
     exports com.movie_collection.gui.controllers.abstractController;
     opens com.movie_collection.gui.controllers.abstractController to com.google.guice, javafx.fxml;
     exports com.movie_collection.gui.controllers.controllerFactory;
@@ -36,6 +39,11 @@ module com.movie_collection.private_movie_collection {
     opens myBatis to org.mybatis, javafx.fxml,org.slf4j;
     exports myBatis to javafx.fxml;
     opens com.movie_collection.dal.mappers to org.mybatis;
+    opens com.movie_collection.bll.services.api to com.google.guice, feign.core,feign.gson ;
+    exports com.movie_collection.bll.services.api;
+    exports com.movie_collection.gui.DTO;
+    exports com.movie_collection.bll.services.api.contract;
+    opens com.movie_collection.bll.services.api.contract to com.google.guice, feign.core, feign.gson;
 
 
 }

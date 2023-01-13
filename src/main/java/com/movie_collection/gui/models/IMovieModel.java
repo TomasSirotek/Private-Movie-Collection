@@ -1,6 +1,9 @@
 package com.movie_collection.gui.models;
 
 import com.movie_collection.be.Movie;
+import com.movie_collection.bll.helpers.CompareSigns;
+import com.movie_collection.gui.DTO.MovieDTO;
+import javafx.beans.property.StringProperty;
 import com.movie_collection.be.Movie2;
 import javafx.collections.ObservableList;
 
@@ -18,4 +21,9 @@ public interface IMovieModel {
     int updateMovie(Movie2 movie);
 
     int deleteMovie(int id) throws SQLException;
+
+    void searchMovies(String query, CompareSigns buttonValue, double spinnerValue);
+	int updateTimeStamp(int id) throws SQLException;
+
+    MovieDTO findMovieByNameAPI(String title);
 }

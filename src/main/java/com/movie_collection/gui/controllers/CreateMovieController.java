@@ -10,18 +10,20 @@ import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.models.ICategoryModel;
 import com.movie_collection.gui.models.IMovieModel;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.media.Media;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.scene.media.Media;
+
 import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CreateMovieController extends RootController implements Initializable {
@@ -130,6 +132,11 @@ public class CreateMovieController extends RootController implements Initializab
                 int result = tryCreateMovie(movie2);
                 closeAndUpdate(result,movie2.getId());
                 e.consume();
+                try {
+                    movieModel.getAllMovies();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         }else {
             if(isValidatedInput()){
