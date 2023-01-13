@@ -88,13 +88,10 @@ public class MovieController extends RootController implements Initializable {
     private void listenToClickRow() {
         moviesTable.setOnMouseClicked(event -> {
             Movie selectedMovie = moviesTable.getSelectionModel().getSelectedItem();
-
             if (selectedMovie != null) {
                 // tries to find the movie by name
                 MovieDTO movieDTO = movieModel.findMovieByNameAPI(selectedMovie.name().getValue());
                 fillDescriptionWithAPIData(movieDTO,selectedMovie);
-                // search movie by name from the api call and return it into mapped DTO
-
             }
         });
     }

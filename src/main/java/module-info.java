@@ -37,6 +37,8 @@ module com.movie_collection.private_movie_collection {
     opens com.movie_collection.bll.services.api to com.google.guice, feign.core,feign.gson ;
     exports com.movie_collection.bll.services.api;
     exports com.movie_collection.gui.DTO;
+    exports com.movie_collection.bll.services.api.contract;
+    opens com.movie_collection.bll.services.api.contract to com.google.guice, feign.core, feign.gson;
 
 
 }

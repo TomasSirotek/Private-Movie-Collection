@@ -1,4 +1,4 @@
-package com.movie_collection.bll.services.api;
+package com.movie_collection.bll.services.api.contract;
 
 
 import com.movie_collection.gui.DTO.MovieDTO;

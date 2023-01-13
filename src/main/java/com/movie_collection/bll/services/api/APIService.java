@@ -1,5 +1,6 @@
 package com.movie_collection.bll.services.api;
 
+import com.movie_collection.bll.services.api.contract.IMovie;
 import com.movie_collection.bll.services.interfaces.IAPIService;
 import com.movie_collection.gui.DTO.MovieDTO;
 import feign.Feign;
