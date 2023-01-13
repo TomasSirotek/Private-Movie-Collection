@@ -2,6 +2,8 @@ package com.movie_collection.gui.models;
 
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.CompareSigns;
+import com.movie_collection.gui.DTO.MovieDTO;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
 import java.sql.SQLException;
@@ -19,4 +21,6 @@ public interface IMovieModel {
 
     void searchMovies(String query, CompareSigns buttonValue, double spinnerValue);
 	int updateTimeStamp(int id) throws SQLException;
+
+    MovieDTO findMovieByNameAPI(String title);
 }

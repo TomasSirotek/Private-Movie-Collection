@@ -4,7 +4,9 @@ import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.ViewType;
+import com.movie_collection.bll.services.interfaces.IAPIService;
 import com.movie_collection.bll.utilities.AlertHelper;
+import com.movie_collection.gui.DTO.MovieDTO;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
 import com.movie_collection.gui.models.IMovieModel;
@@ -16,6 +18,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -33,8 +37,20 @@ import java.util.stream.Collectors;
  */
 public class MovieController extends RootController implements Initializable {
 
+    // -> Optional table description
     @FXML
-    private Label descrMovieTitle, descrIMDBRating;
+    private ImageView movieImage;
+    @FXML
+    private TextArea desPlot;
+    @FXML
+    private Label desReleased,
+            desRunTime,
+            desCast,
+            desDirector,
+            descrIReleased1,
+            desImdbRating, desPrRating,
+            descrMovieTitle, descrIMDBRating;
+
     @FXML
     private TableView<Movie> moviesTable;
     @FXML
@@ -66,15 +82,35 @@ public class MovieController extends RootController implements Initializable {
         listenToClickRow();
     }
 
+
     /**
      * method that check which row is selected and sets description
      */
     private void listenToClickRow() {
         moviesTable.setOnMouseClicked(event -> {
             Movie selectedMovie = moviesTable.getSelectionModel().getSelectedItem();
+
             if (selectedMovie != null) {
+
+                MovieDTO movieDTO = movieModel.
+                        findMovieByNameAPI(
+                               selectedMovie.name().getValue()
+                        );
+
+                // search movie by name from the api call and return it into mapped DTO
+                if(movieDTO.Poster != null){
+                    movieImage.setImage(new Image(movieDTO.Poster));
+                }
+
                 descrMovieTitle.setText(selectedMovie.name().getValue());
-                descrIMDBRating.setText(String.valueOf(selectedMovie.rating()));
+                desPlot.setText(movieDTO.Plot);
+                desRunTime.setText(movieDTO.Runtime);
+                desCast.setText(movieDTO.imdbRating);
+                descrIReleased1.setText(movieDTO.Released);
+                desImdbRating.setText(movieDTO.imdbRating);
+                desDirector.setText(movieDTO.Director);
+                descrMovieTitle.setText(selectedMovie.name().getValue());
+                desPrRating.setText(String.valueOf(selectedMovie.rating()));
             }
         });
     }
@@ -91,6 +127,7 @@ public class MovieController extends RootController implements Initializable {
             });
             return new SimpleObjectProperty<>(playButton);
         });
+        // ->
         colMovieTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().name().getValue())); // set movie title
         movieYear.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().name().getValue())); // does not have anything now from model
         colMovieRating.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().rating())));
@@ -151,12 +188,11 @@ public class MovieController extends RootController implements Initializable {
         }
 
 
-
         trySetTableWithMovies();
 
     }
 
-    protected void setIsCategoryView(int categoryId){
+    protected void setIsCategoryView(int categoryId) {
         this.isCategoryView = true;
         this.categoryId = categoryId;
 
@@ -226,7 +262,7 @@ public class MovieController extends RootController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Select your Media Player");
         alert.getButtonTypes().setAll(new ButtonType("OK"));
-        Optional<ButtonType> btn= alert.showAndWait();
+        Optional<ButtonType> btn = alert.showAndWait();
     }
 
 
@@ -235,8 +271,8 @@ public class MovieController extends RootController implements Initializable {
      */
 
     protected void refreshTable() {
-        if(moviesTable != null){
-            if(moviesTable.getItems() != null){
+        if (moviesTable != null) {
+            if (moviesTable.getItems() != null) {
                 try {
                     movieModel.getAllMovies();
                 } catch (SQLException e) {
@@ -246,7 +282,7 @@ public class MovieController extends RootController implements Initializable {
         }
     }
 
-    private void actionPlay (TableColumn.CellDataFeatures < Movie, Button > col){
+    private void actionPlay(TableColumn.CellDataFeatures<Movie, Button> col) {
         try {
             playVideoDesktop(col.getValue().id(), col.getValue().absolutePath().getValue());
         } catch (IOException | InterruptedException ex) {
@@ -255,7 +291,7 @@ public class MovieController extends RootController implements Initializable {
     }
 
 
-    private void trySetTableByCategory(int categoryId){
+    private void trySetTableByCategory(int categoryId) {
         try {
             movieModel.getAllMoviesInTheCategory(categoryId);
         } catch (SQLException e) {
@@ -273,7 +309,7 @@ public class MovieController extends RootController implements Initializable {
 
     protected void setPath(Path fileName, String mediaPlayerPath) {
         try {
-            Files.writeString(fileName,mediaPlayerPath);
+            Files.writeString(fileName, mediaPlayerPath);
             txtContent = Files.readString(fileName);
         } catch (IOException e) {
             throw new RuntimeException(e);

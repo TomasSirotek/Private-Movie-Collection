@@ -4,10 +4,12 @@ import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.CompareSigns;
+import com.movie_collection.bll.services.interfaces.IAPIService;
 import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.bll.services.interfaces.IMovieService;
 import com.movie_collection.bll.util.IFilter;
 import com.movie_collection.dal.interfaces.IMovieDAO;
+import com.movie_collection.gui.DTO.MovieDTO;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.sql.SQLException;
@@ -20,11 +22,14 @@ public class MovieService implements IMovieService {
 
     private final IFilter filterUtil;
 
+    private final IAPIService apiService;
+
     @Inject
-    public MovieService(IMovieDAO movieDAO, ICategoryService categoryService, IFilter filter) {
+    public MovieService(IMovieDAO movieDAO, ICategoryService categoryService, IFilter filter, IAPIService apiService) {
         this.movieDAO = movieDAO;
         this.categoryService = categoryService;
         this.filterUtil = filter;
+        this.apiService = apiService;
     }
 
     @Override
@@ -73,5 +78,10 @@ public class MovieService implements IMovieService {
     @Override
     public List<Movie> searchMovie(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue){
         return filterUtil.filteringMovies(listToSearch, query, buttonValue, spinnerValue);
+    }
+
+    @Override
+    public MovieDTO getMovieByNameAPI(String title) {
+        return apiService.getMovieByTitle(title);
     }
 }
