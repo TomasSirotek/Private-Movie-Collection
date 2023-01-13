@@ -21,7 +21,7 @@ public class ApiKeyRequestInterceptor implements RequestInterceptor {
     }
 
     /**
-     * idk if this is the right place
+     * Getting the secrets to run API
      */
     private String tryLoadConfig(){
         Properties props = new Properties();
