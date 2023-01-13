@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.bll.services.interfaces.IMovieService;
+import com.movie_collection.gui.DTO.MovieDTO;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -61,6 +63,12 @@ public class MovieModel implements  IMovieModel{
     public int updateTimeStamp(int id) throws SQLException {
         return movieService.updateTimeStamp(id);
     }
+
+    @Override
+    public MovieDTO findMovieByNameAPI(String title) {
+        return movieService.getMovieByNameAPI(title);
+    }
+
     @Override
     public void searchMovies(String query, CompareSigns buttonValue, double spinnerValue) {
         filteredMovies.setAll(movieService.searchMovie(allMovies, query, buttonValue, spinnerValue));

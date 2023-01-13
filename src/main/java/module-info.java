@@ -6,6 +6,8 @@ module com.movie_collection.private_movie_collection {
     requires com.microsoft.sqlserver.jdbc;
     requires java.naming;
     requires javafx.media;
+    requires feign.core;
+    requires feign.gson;
 
     exports com.movie_collection.gui.controllers;
 
@@ -32,7 +34,11 @@ module com.movie_collection.private_movie_collection {
     exports com.movie_collection.dal.dao to com.google.guice;
     exports com.movie_collection.dal.interfaces;
     exports com.movie_collection.bll.utilities;
-
+    opens com.movie_collection.bll.services.api to com.google.guice, feign.core,feign.gson ;
+    exports com.movie_collection.bll.services.api;
+    exports com.movie_collection.gui.DTO;
+    exports com.movie_collection.bll.services.api.contract;
+    opens com.movie_collection.bll.services.api.contract to com.google.guice, feign.core, feign.gson;
 
 
 }
