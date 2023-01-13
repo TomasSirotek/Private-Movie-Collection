@@ -176,16 +176,15 @@ public class MovieController extends RootController implements Initializable {
         if (!txtContent.isEmpty()) {
             String s[] = new String[]{txtContent, path};
                int result = movieModel.updateTimeStamp(id);
-               // do some check for updating the time stamp
+               if(result <= 0){
+                   AlertHelper.showDefaultAlert("Error: Could not update time stamp for movie as last viewed. ", Alert.AlertType.ERROR);
+               }
             runTime.exec(s);
         } else {
             showMediaPlayerUnselected();
 
         }
-
-
         trySetTableWithMovies();
-
     }
 
     protected void setIsCategoryView(int categoryId) {
@@ -300,5 +299,4 @@ public class MovieController extends RootController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-
     }
