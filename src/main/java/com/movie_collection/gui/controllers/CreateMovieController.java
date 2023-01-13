@@ -30,7 +30,7 @@ public class CreateMovieController extends RootController implements Initializab
     @FXML
     private Spinner<Double> personalRatingSpin;
     @FXML
-    private TextField movieName,path,durationField;
+    private TextField movieName,path;
     @FXML
     public Button onClickSelectFile,confirm_action,cancelOnAction;
     @FXML

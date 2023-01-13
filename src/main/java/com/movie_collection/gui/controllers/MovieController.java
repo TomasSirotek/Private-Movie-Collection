@@ -55,7 +55,7 @@ public class MovieController extends RootController implements Initializable {
     @FXML
     private TableColumn<Movie, Button> colPlayMovie, colEditMovies, colDeleteMovie;
     @FXML
-    private TableColumn<Movie, String> colMovieTitle, movieYear, colMovieCategory;
+    private TableColumn<Movie, String> colMovieTitle, colMovieCategory;
     @FXML
     private TableColumn<Movie, String> colMovieRating;
 
