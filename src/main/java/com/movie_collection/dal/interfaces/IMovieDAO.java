@@ -3,7 +3,6 @@ package com.movie_collection.dal.interfaces;
 import com.movie_collection.be.Category2;
 import com.movie_collection.be.Movie2;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,7 +64,7 @@ public interface IMovieDAO {
      * @param id id of movie to be played
      * @return number of rows affected
      */
-    int updateTimeStamp(int id);
+    int updateTimeStamp(String date,int id);
 
     /**
      * Removes a movie from the database based on the id

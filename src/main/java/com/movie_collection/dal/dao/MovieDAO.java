@@ -9,12 +9,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
-import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -131,24 +125,18 @@ public class MovieDAO implements IMovieDAO {
 
     @Override
     // this needs to be updated and fixed
-    public int updateTimeStamp(int id) {
+    public int updateTimeStamp(String date,int id) {
         int finalAffectedRows = 0;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
-        Timestamp ts = Timestamp.from(Instant.now());
-        String date = dateFormat.format(ts);
         try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
-            // int affectedRows = mapper.updateTimeStamp(id);
+             int affectedRows = mapper.updateTimeStamp(date,id);
             session.commit(); // end a unit of work -> if u want to do more open new session -> ensure no leftovers
-            // return affectedRows;
+            return affectedRows;
         } catch (Exception ex) {
             logger.error("An error occurred mapping tables", ex);
         }
         return finalAffectedRows;
     }
-
-
-//        String sql = "UPDATE Movie SET lastview = '"+ date +"'" + "WHERE id='"+id+"'";
 
 
 }

@@ -3,6 +3,7 @@ package com.movie_collection.dal.mappers;
 import com.movie_collection.be.Movie2;
 import org.apache.ibatis.annotations.Param;
 
+import java.sql.Date;
 import java.util.List;
 
 public interface MovieMapperDAO {
@@ -48,6 +49,14 @@ public interface MovieMapperDAO {
      * @return @Identity id of updated movie
      */
     int updateMovie(@Param("name") String name, @Param("rating") double rating, @Param("path") String path, @Param("id") int id);
+
+    /**
+     * retrieves the result of an update movie last vied time
+     * @param lastView of a snapshot date as String
+     * @param id of movie that will get the updated date
+     * @return affected rows
+     */
+    int updateTimeStamp(@Param("lastView") String lastView,@Param("movieId") int id);
 
     /**
      * Removes a movie from the database based on the id

@@ -2,6 +2,7 @@ package com.movie_collection.bll.services.interfaces;
 
 import com.movie_collection.be.Category2;
 import java.util.List;
+import java.util.Optional;
 
 public interface ICategoryService {
     /**
@@ -18,6 +19,7 @@ public interface ICategoryService {
      */
     int createCategory(Category2 category);
 
+    Optional<Category2> getCategoryByName(String categoryName);
     /**
      * Deletes the desired Category from the Category database
      *

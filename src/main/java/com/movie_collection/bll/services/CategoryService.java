@@ -6,6 +6,7 @@ import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.dal.interfaces.ICategoryDAO;
 
 import java.util.List;
+import java.util.Optional;
 
 public class CategoryService implements ICategoryService {
 
@@ -21,9 +22,15 @@ public class CategoryService implements ICategoryService {
         return categoryDAO.getAllCategories();
     }
 
+
     @Override
     public int createCategory(Category2 category){
         return categoryDAO.createCategory(category);
+    }
+
+    @Override
+    public Optional<Category2> getCategoryByName(String categoryName) {
+        return categoryDAO.getCategoryByName(categoryName);
     }
 
     @Override
