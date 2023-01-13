@@ -1,11 +1,13 @@
 package com.movie_collection.bll.utilities;
 
+import com.movie_collection.Main;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.stage.StageStyle;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class AlertHelper {
@@ -27,6 +29,8 @@ public class AlertHelper {
         alert.setResizable(false);
         alert.getDialogPane().setMaxWidth(350);
         alert.initStyle(StageStyle.UNDECORATED);
+
+        alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("css/bootstrap3.css")).toExternalForm());
         return alert.showAndWait();
     }
 
@@ -42,6 +46,7 @@ public class AlertHelper {
         alert.setResizable(false);
         alert.getDialogPane().setMaxWidth(350);
         alert.initStyle(StageStyle.UNDECORATED);
+        alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("css/bootstrap3.css")).toExternalForm());
         alert.show();
     }
 }
