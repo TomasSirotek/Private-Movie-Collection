@@ -46,9 +46,8 @@ public class MovieController extends RootController implements Initializable {
             desRunTime,
             desCast,
             desDirector,
-            descrIReleased1,
             desImdbRating, desPrRating,
-            descrMovieTitle, descrIMDBRating;
+            descrMovieTitle, desMatRating;
 
     @FXML
     private TableView<Movie> moviesTable;
@@ -110,11 +109,12 @@ public class MovieController extends RootController implements Initializable {
         desPlot.setText(movieDTO.Plot);
         desRunTime.setText(movieDTO.Runtime);
         desCast.setText(movieDTO.imdbRating);
-        descrIReleased1.setText(movieDTO.Released);
+        desReleased.setText(movieDTO.Released);
         desImdbRating.setText(movieDTO.imdbRating);
         desDirector.setText(movieDTO.Director);
         descrMovieTitle.setText(selectedMovie.name().getValue());
         desPrRating.setText(String.valueOf(selectedMovie.rating()));
+        desMatRating.setText(movieDTO.Rated);
     }
 
     /**
