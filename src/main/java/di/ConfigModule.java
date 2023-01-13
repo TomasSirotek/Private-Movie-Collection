@@ -4,6 +4,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.movie_collection.bll.services.CategoryService;
 import com.movie_collection.bll.services.MovieService;
+import com.movie_collection.bll.services.api.APIService;
+import com.movie_collection.bll.services.interfaces.IAPIService;
 import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.bll.services.interfaces.IMovieService;
 import com.movie_collection.bll.util.Filter;
@@ -24,6 +26,7 @@ import com.movie_collection.gui.models.MovieModel;
 public class ConfigModule extends AbstractModule {
     @Override
     public void configure(){
+
         /**
         * Bind the MovieDAO interface to the implementation
          */
@@ -70,6 +73,11 @@ public class ConfigModule extends AbstractModule {
          * Injection of main controller
          */
         bind(MovieController.class).in(Singleton.class);
+
+        /**
+         * Binds api service
+         */
+        bind(IAPIService.class).to(APIService.class);
 
     }
 }

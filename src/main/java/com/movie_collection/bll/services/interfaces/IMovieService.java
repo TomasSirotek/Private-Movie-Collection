@@ -2,6 +2,7 @@ package com.movie_collection.bll.services.interfaces;
 
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.CompareSigns;
+import com.movie_collection.gui.DTO.MovieDTO;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -69,4 +70,11 @@ public interface IMovieService {
      */
 
     List<Movie> searchMovie(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue);
+
+    /**
+     * method to retrieve movie by name with the api
+     * @param title to be searched as query
+     * @return
+     */
+    MovieDTO getMovieByNameAPI(String title);
 }
