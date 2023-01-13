@@ -27,7 +27,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -263,7 +262,7 @@ public class MovieController extends RootController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Select your Media Player");
         alert.getButtonTypes().setAll(new ButtonType("OK"));
-        Optional<ButtonType> btn = alert.showAndWait();
+        alert.showAndWait();
     }
 
 
