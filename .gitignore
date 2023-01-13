@@ -144,3 +144,5 @@ fabric.properties
 /src/main/resources/config.cfg
 
 
+/logs/
+/config.cfg
