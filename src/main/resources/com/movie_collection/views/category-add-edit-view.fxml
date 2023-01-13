@@ -5,12 +5,18 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 
-<VBox alignment="CENTER" prefHeight="227.0" prefWidth="302.0" spacing="20.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.CategoryAddEditController">
+<VBox alignment="CENTER" prefHeight="261.0" prefWidth="365.0" spacing="20.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.CategoryAddEditController">
    <children>
-      <HBox alignment="CENTER" prefHeight="46.0" prefWidth="264.0" spacing="10.0">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add category">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Text>
+      <HBox alignment="CENTER" prefHeight="80.0" prefWidth="305.0" spacing="10.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name: " />
             <TextField fx:id="category_name" promptText="Category Name" />
