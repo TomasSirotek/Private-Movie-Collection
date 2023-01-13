@@ -104,6 +104,7 @@ public class BaseController extends RootController implements Initializable {
      * and then set it back to all categories
      */
     protected void refreshScrollPane() {
+        var scrollPane = scroll_pane;
         if(scroll_pane != null){
             scroll_pane.setContent(null);
             setCategoriesScrollPane(categoryModel.getAllCategories());
@@ -278,20 +279,6 @@ public class BaseController extends RootController implements Initializable {
         searchMovies.textProperty().addListener((obs, oldValue, newValue) -> searchMovies());
     }
 
-
-    /** TODO:
-     * This method does nothing for now it is just prepared for later extension
-     * depens on what ever we going to use it for it can be deleted or it
-     * @param actionEvent
-     * @throws IOException
-     */
-    @FXML
-    private void onActionGoHome(ActionEvent actionEvent) throws IOException {
-        RootController parent = loadNodesView(ViewType.MOVIES);
-        switchToView(parent.getView());
-        actionEvent.consume();
-        movieModel.getAllMovies();
-    }
 
     @FXML
     private void ratingFilterButtonAction(ActionEvent actionEvent) {
