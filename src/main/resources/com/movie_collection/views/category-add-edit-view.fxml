@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<VBox alignment="CENTER" prefHeight="261.0" prefWidth="365.0" spacing="20.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.CategoryAddEditController">
+<VBox stylesheets="@../css/bootstrap3.css" alignment="CENTER" prefHeight="261.0" prefWidth="365.0" spacing="20.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.CategoryAddEditController">
    <children>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add category">
          <font>

@@ -119,7 +119,7 @@ public class BaseController extends RootController implements Initializable {
      * @param allCategories list of all categories
      */
     private void setCategoriesScrollPane(List<Category> allCategories) {
-        int deleteButtonWidth = 30;
+        int deleteButtonWidth = 40;
         // This code is creating a new Map object that is populated with the key-value pairs of a given Map,
         //  and then returning it.
         LinkedHashMap<Button, Button> scrollPaneContentMap = allCategories.stream()
