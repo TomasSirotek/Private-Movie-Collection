@@ -58,7 +58,7 @@ public class ConfigModule extends AbstractModule {
         /**
          * Injection of base controller
          */
-        bind(BaseController.class);
+        bind(BaseController.class).in(Singleton.class);
 
         /*
          * docs
