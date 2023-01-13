@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Category2;
 import com.movie_collection.be.Movie;
+import com.movie_collection.be.Movie2;
 import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.bll.utilities.AlertHelper;
@@ -27,6 +28,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,7 +39,7 @@ import java.util.stream.Collectors;
  */
 public class BaseController extends RootController implements Initializable {
 
-    private CompareSigns currentCompare = CompareSigns.MORE_THAN_OR_EQUAL;
+
     @FXML
     private Spinner<Double> ratingFilterSpinner;
     @FXML
@@ -46,16 +48,16 @@ public class BaseController extends RootController implements Initializable {
     private ScrollPane scroll_pane;
     @FXML
     private StackPane app_content;
-
-    private IControllerFactory controllerFactory;
     @FXML
     private TextField searchMovies;
+    private final IControllerFactory controllerFactory;
 
-
-    private IMovieModel movieModel;
+    private final IMovieModel movieModel;
 
     @Inject
     private ICategoryModel categoryModel;
+
+    private CompareSigns currentCompare = CompareSigns.MORE_THAN_OR_EQUAL;
 
     @Inject
     public BaseController(IControllerFactory controllerFactory,ICategoryModel categoryModel,IMovieModel movieModel) {
@@ -64,46 +66,35 @@ public class BaseController extends RootController implements Initializable {
         this.movieModel = movieModel;
     }
 
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         filterBar();
         setupSpinner();
-        List<Category2> categories = categoryModel.getAllCategories();
-        List<Category> categories1 =
-        categories.stream().map(c -> new Category(c.getId(),new SimpleStringProperty(c.getName()))).toList();
-        setCategoriesScrollPane(categories1);
+        setCategoriesScrollPane(categoryModel.getAllCategories());
         showMoviesToDelete();
 
     }
 
+    /**
+     * needs docs @patrik
+     */
     private void showMoviesToDelete()  {
-        var allMovies = movieModel.getAllMovies();
-        var test = allMovies.stream()
-                .map(m -> {
-                    List<Category> movieCategoriesList = m.getCategories().stream()
-                            .map(c -> new Category(c.getId(), new SimpleStringProperty(c.getName())))
-                            .collect(Collectors.toList());
-                    return new Movie(m.getId(), new SimpleStringProperty(m.getName()), m.getRating(), new SimpleStringProperty(m.getAbsolutePath()), m.getLastview(), movieCategoriesList);
-                }).toList();
+        var test = movieModel.getAllMovies();
+        List<Movie2> moviesToDelete = movieModel.getAllMovies().stream()
+                .filter(m -> m.getRating() < 6.0 || (m.getLastview() != null && (Instant.now().toEpochMilli() - m.getLastview().toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()> 63113852000L)))
+                .collect(Collectors.toList());
 
-        List<Movie> moviesToDelete = test.stream()
-                .filter(m -> m.rating() < 6.0 || (m.lastview() != null && (Instant.now().toEpochMilli() - m.lastview().getTime() > 63113852000L))) // add movie if rating is < 6 or if lastview is not null and Current time - (lastview time is more than time of 2 years in miliseconds)
-                .toList();
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Do you want to delete these movies ?");
         String str = "";
-        for (Movie m:moviesToDelete) {
-            str += m.name().get() + "\n";
-        }
-        alert.setContentText(str);
-        alert.getButtonTypes().setAll(new ButtonType("Delete"), new ButtonType("Cancel"));
-        Optional<ButtonType> btn= alert.showAndWait();
-        String button = btn.isPresent() ? btn.get().getText() : "Cancel";
-        if (button.equals("Delete")){
-            for (Movie m: moviesToDelete) {
-                movieModel.deleteMovieById(m.id());
+        if(!moviesToDelete.isEmpty()){
+            for (Movie2 m:moviesToDelete) {
+                str += m.getName() + "\n";
+            }
+            var alert = AlertHelper.showOptionalAlertWindow("Do you want to delete these movies ? " , str, Alert.AlertType.CONFIRMATION);
+
+            if(alert.isPresent() && alert.get().equals(ButtonType.OK)){
+                for (Movie2 m: moviesToDelete) {
+                    movieModel.deleteMovieById(m.getId());
+                }
             }
         }
     }
@@ -113,12 +104,9 @@ public class BaseController extends RootController implements Initializable {
      * and then set it back to all categories
      */
     protected void refreshScrollPane() {
-        List<Category2> categories = categoryModel.getAllCategories();
-        List<Category> categories1 =
-                categories.stream().map(c -> new Category(c.getId(),new SimpleStringProperty(c.getName()))).toList();
         if(scroll_pane != null){
             scroll_pane.setContent(null);
-            setCategoriesScrollPane(categories1);
+            setCategoriesScrollPane(categoryModel.getAllCategories());
         }
     }
 
@@ -130,41 +118,42 @@ public class BaseController extends RootController implements Initializable {
      * TODO: Maybe all of the body can be exctracted into separated class since it look so hoooge
      * @param allCategories list of all categories
      */
-    private void setCategoriesScrollPane(List<Category> allCategories) {
+    private void setCategoriesScrollPane(List<Category2> allCategories) {
         // This code is creating a new Map object that is populated with the key-value pairs of a given Map,
         //  and then returning it.
-        LinkedHashMap<Button, Button> scrollPaneContentMap = allCategories.stream()
+        LinkedHashMap<Button, Button> scrollPaneContentMap = allCategories
+                .stream()
                 .map(category -> {
-                    Button categoryBtn = new Button(category.name().getValue());
+                    Button categoryBtn = new Button(category.getName());
                     Button deleteBtn = new Button("Delete");
 
                     // Setting on the action for switching views
                     categoryBtn.setOnAction(event -> {
                         MovieController parent = (MovieController) tryToLoadView();
-                        parent.setIsCategoryView(category.id());
+                        parent.setIsCategoryView(category.getId());
                         switchToView(parent.getView()); // switches into chosen view
                     });
                     categoryBtn.setPrefWidth(140);
 
                     deleteBtn.setOnAction(event -> {
-                        int result = tryToDeleteCategory(category.id());
+                        int result = tryToDeleteCategory(category.getId());
                         if (result > 0) {
                             refreshScrollPane();
                         } else {
-                            AlertHelper.showDefaultAlert("Could not delete category with id: " + category.id(), Alert.AlertType.ERROR);
+                            AlertHelper.showDefaultAlert("Could not delete category with id: " + category.getId(), Alert.AlertType.ERROR);
                         }
                     });
                     deleteBtn.setPrefWidth(50);
                     return new AbstractMap.SimpleEntry<>(categoryBtn, deleteBtn);
                 })
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
                 // (oldValue, newValue) -> oldValue - a "merge function" that is used to resolve
                 // conflicts when two keys are mapped to the same value. In this case, if there is a conflict,
                 // the old value is kept and the new value is discarded.
 
                 // LinkedHashmap::new  is a function that creates a new, empty Map object. In this case, a LinkedHashMap is created.
                 // collect method is called in order to finish up what we opened at the begging stream
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 
         if (scrollPaneContentMap.isEmpty()) {
             scroll_pane.setContent(new Label("Empty")); // sets content if no buttons are filled

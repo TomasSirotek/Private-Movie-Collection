@@ -16,9 +16,9 @@ public class AlertHelper {
      * @param type java fx scene control Alert enum type
      * @return alert that will be shown and will be waiting for user action
      */
-    public static Optional<ButtonType> showOptionalAlertWindow(String content, Alert.AlertType type) {
+    public static Optional<ButtonType> showOptionalAlertWindow(String title,String content, Alert.AlertType type) {
         alert = new Alert(type);
-        alert.setHeaderText(null);
+        alert.setHeaderText(title);
         alert.setContentText(content);
         alert.getDialogPane().getChildren()
                 .stream()

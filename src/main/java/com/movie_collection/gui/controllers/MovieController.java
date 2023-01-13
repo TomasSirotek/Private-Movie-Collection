@@ -159,8 +159,8 @@ public class MovieController extends RootController implements Initializable {
             deleteButton.setOnAction(e -> {
                 Movie movie = col.getValue(); // get movie object from the current row
                 if (movie != null) {
-                    var resultNotify = AlertHelper.showOptionalAlertWindow("Are you sure you want delete movie with id: " + movie.id(), Alert.AlertType.CONFIRMATION);
-                    if (resultNotify.get().equals(ButtonType.OK)) {
+                    var resultNotify = AlertHelper.showOptionalAlertWindow("Are you sure you want delete movie with id: " + movie.id(),"", Alert.AlertType.CONFIRMATION);
+                    if (resultNotify.isPresent() && resultNotify.get().equals(ButtonType.OK)) {
                         int result = tryDeleteMovie(movie.id()); // tries to delete movie by id inside the row
                         refreshTableAndNotify(result,movie.id());
                     }
@@ -180,11 +180,8 @@ public class MovieController extends RootController implements Initializable {
                // do some check for updating the time stamp
             runTime.exec(s);
         } else {
-            try {
-                showMediaPlayerUnselected();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            showMediaPlayerUnselected();
+
         }
 
 
@@ -245,11 +242,11 @@ public class MovieController extends RootController implements Initializable {
     }
 
 
-    private void showMediaPlayerUnselected() throws SQLException {
+    private void showMediaPlayerUnselected() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Select your Media Player");
         alert.getButtonTypes().setAll(new ButtonType("OK"));
-        Optional<ButtonType> btn = alert.showAndWait();
+        alert.showAndWait();
     }
 
 

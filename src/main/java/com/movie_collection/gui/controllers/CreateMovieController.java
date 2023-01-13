@@ -34,7 +34,7 @@ public class CreateMovieController extends RootController implements Initializab
     @FXML
     private Spinner<Double> personalRatingSpin;
     @FXML
-    private TextField movieName,path,durationField;
+    private TextField movieName,path;
     @FXML
     public Button onClickSelectFile,confirm_action,cancelOnAction;
     @FXML
@@ -73,9 +73,6 @@ public class CreateMovieController extends RootController implements Initializab
         File selectedMovieFile = chooseFile.showOpenDialog(new Stage());
         if (selectedMovieFile != null) {
             path.setText(selectedMovieFile.toURI().toString());
-            var media = new Media(selectedMovieFile.toURI().toString().replace("\\", "/"));
-            var duration = (int) media.getDuration().toSeconds();
-            durationField.setText(duration / 60 + ":" + duration % 60);
             if (movieName.getText().isBlank())
                 movieName.setText(selectedMovieFile.getName());
         }

@@ -1,10 +1,12 @@
 package com.movie_collection.gui.controllers;
 
 import com.google.inject.Inject;
+import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
@@ -27,6 +29,8 @@ public class MediaPlayerSelectionController extends RootController implements In
 
     private final MovieController movieController;
 
+    private final static String MEDIA_PLAYER_PATH = "mediaPlayerPath.txt";
+
     @Inject
     public MediaPlayerSelectionController(MovieController movieController) {
         this.movieController = movieController;
@@ -43,9 +47,8 @@ public class MediaPlayerSelectionController extends RootController implements In
     private void movieOnClickAction(ActionEvent actionEvent) {
         if(!path.getText().isEmpty()){
             getStage().close();
-            System.out.println("Successfully");
         }else {
-            System.out.println("bleh");
+            AlertHelper.showDefaultAlert("Warning: Please fill the path", Alert.AlertType.WARNING);
         }
     }
 
@@ -59,7 +62,7 @@ public class MediaPlayerSelectionController extends RootController implements In
         if (selectedExecutableFile != null) {
             path.setText(selectedExecutableFile.toURI().toString());
             String mediaPlayerPath = selectedExecutableFile.toString();
-            File txt = new File("mediaPlayerPath.txt");
+            File txt = new File(MEDIA_PLAYER_PATH);
             Path fileName = Path.of(txt.getAbsolutePath());
             movieController.setPath(fileName, mediaPlayerPath);
         }
