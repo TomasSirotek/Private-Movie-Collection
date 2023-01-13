@@ -25,8 +25,8 @@ public class APIService implements IAPIService {
     @Override
     public MovieDTO getMovieByTitle(String title) {
         IMovie movieCall = privateBuiltDto();
-        System.out.println(movieCall.movieById("blade"));
-        return movieCall.movieById(title);
+        System.out.println(movieCall.movieByName("blade"));
+        return movieCall.movieByName(title);
     }
 
 

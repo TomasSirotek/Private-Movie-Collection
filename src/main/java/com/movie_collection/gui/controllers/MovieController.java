@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.ViewType;
-import com.movie_collection.bll.services.interfaces.IAPIService;
 import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.DTO.MovieDTO;
 import com.movie_collection.gui.controllers.abstractController.RootController;
@@ -91,28 +90,34 @@ public class MovieController extends RootController implements Initializable {
             Movie selectedMovie = moviesTable.getSelectionModel().getSelectedItem();
 
             if (selectedMovie != null) {
-
-                MovieDTO movieDTO = movieModel.
-                        findMovieByNameAPI(
-                               selectedMovie.name().getValue()
-                        );
-
+                // tries to find the movie by name
+                MovieDTO movieDTO = movieModel.findMovieByNameAPI(selectedMovie.name().getValue());
+                fillDescriptionWithAPIData(movieDTO,selectedMovie);
                 // search movie by name from the api call and return it into mapped DTO
-                if(movieDTO.Poster != null){
-                    movieImage.setImage(new Image(movieDTO.Poster));
-                }
 
-                descrMovieTitle.setText(selectedMovie.name().getValue());
-                desPlot.setText(movieDTO.Plot);
-                desRunTime.setText(movieDTO.Runtime);
-                desCast.setText(movieDTO.imdbRating);
-                descrIReleased1.setText(movieDTO.Released);
-                desImdbRating.setText(movieDTO.imdbRating);
-                desDirector.setText(movieDTO.Director);
-                descrMovieTitle.setText(selectedMovie.name().getValue());
-                desPrRating.setText(String.valueOf(selectedMovie.rating()));
             }
         });
+    }
+
+    /**
+     * fill all the description data
+     * @param movieDTO
+     * @param selectedMovie
+     */
+    private void fillDescriptionWithAPIData(MovieDTO movieDTO, Movie selectedMovie) {
+        if(movieDTO.Poster != null){
+            movieImage.setImage(new Image(movieDTO.Poster));
+        }
+
+        descrMovieTitle.setText(selectedMovie.name().getValue());
+        desPlot.setText(movieDTO.Plot);
+        desRunTime.setText(movieDTO.Runtime);
+        desCast.setText(movieDTO.imdbRating);
+        descrIReleased1.setText(movieDTO.Released);
+        desImdbRating.setText(movieDTO.imdbRating);
+        desDirector.setText(movieDTO.Director);
+        descrMovieTitle.setText(selectedMovie.name().getValue());
+        desPrRating.setText(String.valueOf(selectedMovie.rating()));
     }
 
     /**
