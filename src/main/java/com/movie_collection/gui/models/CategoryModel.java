@@ -1,12 +1,10 @@
 package com.movie_collection.gui.models;
 
 import com.google.inject.Inject;
-import com.movie_collection.be.Category2;
+import com.movie_collection.be.Category;
 import com.movie_collection.bll.services.interfaces.ICategoryService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import java.sql.SQLException;
 
 
 public class CategoryModel implements ICategoryModel {
@@ -21,13 +19,13 @@ public class CategoryModel implements ICategoryModel {
     }
 
     @Override
-    public ObservableList<Category2> getAllCategories() {
+    public ObservableList<Category> getAllCategories() {
         return FXCollections.observableArrayList(
                 categoryService.getAllCategories());
     }
 
     @Override
-    public int createCategory(Category2 category) {
+    public int createCategory(Category category) {
          return categoryService.createCategory(category);
     }
 

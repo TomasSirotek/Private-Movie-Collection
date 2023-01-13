@@ -1,8 +1,8 @@
 package com.movie_collection.gui.controllers;
 
 import com.google.inject.Inject;
-import com.movie_collection.be.Category2;
-import com.movie_collection.be.Movie2;
+import com.movie_collection.be.Category;
+import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.DTO.MovieDTO;
@@ -11,9 +11,6 @@ import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory
 import com.movie_collection.gui.models.IMovieModel;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -28,10 +25,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.SQLException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -55,13 +48,13 @@ public class MovieController extends RootController implements Initializable {
             descrMovieTitle, descrIMDBRating;
 
     @FXML
-    private TableView<Movie2> moviesTable;
+    private TableView<Movie> moviesTable;
     @FXML
-    private TableColumn<Movie2, Button> colPlayMovie, colEditMovies, colDeleteMovie;
+    private TableColumn<Movie, Button> colPlayMovie, colEditMovies, colDeleteMovie;
     @FXML
-    private TableColumn<Movie2, String> colMovieTitle, colMovieCategory;
+    private TableColumn<Movie, String> colMovieTitle, colMovieCategory;
     @FXML
-    private TableColumn<Movie2, String> colMovieRating;
+    private TableColumn<Movie, String> colMovieRating;
 
     private final IMovieModel movieModel;
 
@@ -91,7 +84,7 @@ public class MovieController extends RootController implements Initializable {
      */
     private void listenToClickRow() {
         moviesTable.setOnMouseClicked(event -> {
-            Movie2 selectedMovie = moviesTable.getSelectionModel().getSelectedItem();
+            Movie selectedMovie = moviesTable.getSelectionModel().getSelectedItem();
             if (selectedMovie != null) {
                 // tries to find the movie by name
                 MovieDTO movieDTO = movieModel.findMovieByNameAPI(selectedMovie.getName());
@@ -105,7 +98,7 @@ public class MovieController extends RootController implements Initializable {
      * @param movieDTO
      * @param selectedMovie
      */
-    private void fillDescriptionWithAPIData(MovieDTO movieDTO, Movie2 selectedMovie) {
+    private void fillDescriptionWithAPIData(MovieDTO movieDTO, Movie selectedMovie) {
         if(movieDTO.Poster != null){
             movieImage.setImage(new Image(movieDTO.Poster));
         }
@@ -139,13 +132,13 @@ public class MovieController extends RootController implements Initializable {
 
         // sets value factory for movie category column data are collected by name and joined by "," -> action,horror
         colMovieCategory.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategories().stream()
-                .map(Category2::getName)
+                .map(Category::getName)
                 .collect(Collectors.joining(","))
         ));
         // sets value factory for edit column
         colEditMovies.setCellValueFactory(col -> {
             Button editButton = new Button("⚙️");
-            Movie2 updateMovie = col.getValue();
+            Movie updateMovie = col.getValue();
             editButton.setOnAction(e -> {
                 CreateMovieController controller = loadSetEditController(updateMovie);
                 showUpdateWindow(controller.getView());
@@ -156,7 +149,7 @@ public class MovieController extends RootController implements Initializable {
         colDeleteMovie.setCellValueFactory(col -> {
             Button deleteButton = new Button("❌");
             deleteButton.setOnAction(e -> {
-                Movie2 movie = col.getValue(); // get movie object from the current row
+                Movie movie = col.getValue(); // get movie object from the current row
                 if (movie != null) {
                     var resultNotify = AlertHelper.showOptionalAlertWindow("Are you sure you want delete movie with id: " + movie.getId(),"", Alert.AlertType.CONFIRMATION);
                     if (resultNotify.isPresent() && resultNotify.get().equals(ButtonType.OK)) {
@@ -211,7 +204,7 @@ public class MovieController extends RootController implements Initializable {
         stage.show();
     }
 
-    private CreateMovieController loadSetEditController(Movie2 updateMovie) {
+    private CreateMovieController loadSetEditController(Movie updateMovie) {
         CreateMovieController controller;
         try {
             controller = (CreateMovieController) controllerFactory.loadFxmlFile(ViewType.CREATE_EDIT);
@@ -261,7 +254,7 @@ public class MovieController extends RootController implements Initializable {
         }
     }
 
-    private void actionPlay(TableColumn.CellDataFeatures<Movie2, Button> col) {
+    private void actionPlay(TableColumn.CellDataFeatures<Movie, Button> col) {
         try {
             playVideoDesktop(col.getValue().getId(), col.getValue().getAbsolutePath());
         } catch (IOException | InterruptedException ex) {

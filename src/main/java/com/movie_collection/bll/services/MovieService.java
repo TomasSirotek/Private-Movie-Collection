@@ -1,7 +1,7 @@
 package com.movie_collection.bll.services;
 
 import com.google.inject.Inject;
-import com.movie_collection.be.Movie2;
+import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.bll.helpers.DateFormat;
 import com.movie_collection.bll.services.interfaces.IAPIService;
@@ -38,22 +38,22 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public List<Movie2> getAllMovies() {
+    public List<Movie> getAllMovies() {
         return movieDAO.getAllMovies();
     }
 
     @Override
-    public Optional<Movie2> getMovieById(int id) {
+    public Optional<Movie> getMovieById(int id) {
         return Optional.of(movieDAO.getMovieById(id).get());
     }
 
     @Override
-    public Optional<List<Movie2>> getAllMoviesInTheCategory(int categoryId) {
+    public Optional<List<Movie>> getAllMoviesInTheCategory(int categoryId) {
         return Optional.of(movieDAO.getAllMoviesInTheCategoryById(categoryId).get());
     }
 
     @Override
-    public int createMovie(Movie2 movie) {
+    public int createMovie(Movie movie) {
         int result = movieDAO.createMovieTest(movie);
         if (result != 0) {
             movie.setId(result);
@@ -72,8 +72,8 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public List<Movie2> searchMovie(List<Movie2> listToSearch, String query, CompareSigns buttonValue, double spinnerValue) {
-        return null;
+    public List<Movie> searchMovie(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue) {
+        return filterUtil.filteringMovies(listToSearch,query,buttonValue,spinnerValue);
     }
 
 //    @Override
@@ -86,7 +86,7 @@ public class MovieService implements IMovieService {
         return apiService.getMovieByTitle(title);
     }
 
-    public int updateMovie(Movie2 movie) {
+    public int updateMovie(Movie movie) {
         int finalResult = 0; // there is plenty of ways of logic with update categories this one worked for us atm
         Objects.requireNonNull(movie, "Movie cannot be null");
 
@@ -111,7 +111,7 @@ public class MovieService implements IMovieService {
 
     private int getCatNameAndRemove(int resultId) {
         int resultHere = 0;
-        Optional<Movie2> fetchedMovie = movieDAO.getMovieById(resultId);
+        Optional<Movie> fetchedMovie = movieDAO.getMovieById(resultId);
         if (fetchedMovie.isPresent()) {
             resultHere = 1;
             int resultRemove = movieDAO.removeCategoryFromMovie(fetchedMovie.get().getId());
@@ -128,7 +128,7 @@ public class MovieService implements IMovieService {
      *
      * @param movie that will be assigned list of categories
      */
-    private void getCatAndAdd(Movie2 movie) {
+    private void getCatAndAdd(Movie movie) {
         Objects.requireNonNull(movie.getCategories(), "Error: Categories cannot be empty for movie with id: " + movie.getId());
 
         movie.getCategories().stream()

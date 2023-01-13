@@ -1,7 +1,7 @@
 package com.movie_collection.dal.interfaces;
 
-import com.movie_collection.be.Category2;
-import com.movie_collection.be.Movie2;
+import com.movie_collection.be.Category;
+import com.movie_collection.be.Movie;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +13,7 @@ public interface IMovieDAO {
      *
      * @return list of Movies
      */
-    List<Movie2> getAllMovies();
+    List<Movie> getAllMovies();
 
     /**
      * Retrieves all Movies from the database by categoryId and store into a list
@@ -21,7 +21,7 @@ public interface IMovieDAO {
      * @param categoryId that could have all movies
      * @return Optional list of Movies - not all movies can be found in that category
      */
-    Optional<List<Movie2>> getAllMoviesInTheCategoryById(int categoryId);
+    Optional<List<Movie>> getAllMoviesInTheCategoryById(int categoryId);
 
     /**
      * Retrieves optional Movie by its id
@@ -29,7 +29,7 @@ public interface IMovieDAO {
      * @param id of movie that will be retrieved
      * @return Optional Movie by its id that might not be there
      */
-    Optional<Movie2> getMovieById(int id);
+    Optional<Movie> getMovieById(int id);
 
     /**
      * Creates a new movie in the database with given properties
@@ -37,17 +37,17 @@ public interface IMovieDAO {
      * @param movie that will be created
      * @return @Identity -> id of the movie
      */
-    int createMovieTest(Movie2 movie);
+    int createMovieTest(Movie movie);
 
     /**
      * Add Category to movie and is inserted into joining table
      *
-     * @param category2 that its id will be inserted into the table
-     * @param movie2    that its id will be inserted into the table
+     * @param category that its id will be inserted into the table
+     * @param movie    that its id will be inserted into the table
      * @return affected rows 0 or 1 - 0 fail | 1 - success
      */
 
-    int addCategoryToMovie(Category2 category2, Movie2 movie2);
+    int addCategoryToMovie(Category category, Movie movie);
 
     /**
      * Updates a movie in the database depending on the id of the movie
@@ -56,7 +56,7 @@ public interface IMovieDAO {
      * @param id    by its will be deleted -> this could be done better but works for now
      * @return @Identity id of updated movie
      */
-    int updateMovieById(Movie2 movie, int id);
+    int updateMovieById(Movie movie, int id);
 
     /**
      * Update timeStamp when a movie is played based on the id of the movie and date of opening

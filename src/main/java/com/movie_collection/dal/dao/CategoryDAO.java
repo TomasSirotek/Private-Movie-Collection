@@ -1,7 +1,7 @@
 package com.movie_collection.dal.dao;
 
 
-import com.movie_collection.be.Category2;
+import com.movie_collection.be.Category;
 import com.movie_collection.dal.interfaces.ICategoryDAO;
 import com.movie_collection.dal.mappers.CategoryMapperDAO;
 import myBatis.MyBatisConnectionFactory;
@@ -18,8 +18,8 @@ public class CategoryDAO implements ICategoryDAO {
     Logger logger = LoggerFactory.getLogger(CategoryDAO.class);
 
     @Override
-    public List<Category2> getAllCategories(){
-        List<Category2> allCategories = new ArrayList<>();
+    public List<Category> getAllCategories(){
+        List<Category> allCategories = new ArrayList<>();
         try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             CategoryMapperDAO mapper = session.getMapper(CategoryMapperDAO.class);
             allCategories = mapper.getAllCategories();
@@ -30,8 +30,8 @@ public class CategoryDAO implements ICategoryDAO {
     }
 
     @Override
-    public Optional<Category2> getCategoryByName(String categoryName) {
-        Category2 movie2 = new Category2();
+    public Optional<Category> getCategoryByName(String categoryName) {
+        Category movie2 = new Category();
         try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             CategoryMapperDAO mapper = session.getMapper(CategoryMapperDAO.class);
             movie2 = mapper.getCategoryByName(categoryName);
@@ -42,7 +42,7 @@ public class CategoryDAO implements ICategoryDAO {
     }
 
     @Override
-    public int createCategory(Category2 category) {
+    public int createCategory(Category category) {
         int finalAffectedRows = 0;
         try(SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             CategoryMapperDAO mapper = session.getMapper(CategoryMapperDAO.class);

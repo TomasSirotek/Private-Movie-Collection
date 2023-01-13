@@ -43,7 +43,7 @@ public class ConfigModule extends AbstractModule {
         /**
          * Injection of movie service
          */
-        bind(IMovieService.class).to(MovieService.class).in(Singleton.class);
+        bind(IMovieService.class).to(MovieService.class);
 
         /**
          * Injection of movie service
@@ -72,7 +72,7 @@ public class ConfigModule extends AbstractModule {
         /**
          * Injection of main controller
          */
-        bind(MovieController.class);
+        bind(MovieController.class).in(Singleton.class);
 
         /**
          * Binds api service

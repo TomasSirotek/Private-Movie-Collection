@@ -1,6 +1,6 @@
 package com.movie_collection.bll.services.interfaces;
 
-import com.movie_collection.be.Movie2;
+import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.gui.DTO.MovieDTO;
 
@@ -14,7 +14,7 @@ public interface IMovieService {
      *
      * @return list of Movies
      */
-    List<Movie2> getAllMovies();
+    List<Movie> getAllMovies();
 
     /**
      * Retrieves all Movies from the database by categoryId and store into a list
@@ -22,7 +22,7 @@ public interface IMovieService {
      * @param categoryId that could have all movies
      * @return Optional list of Movies - not all movies can be found in that category
      */
-    Optional<List<Movie2>> getAllMoviesInTheCategory(int categoryId);
+    Optional<List<Movie>> getAllMoviesInTheCategory(int categoryId);
 
     /**
      * Creates a new movie in the database with given properties
@@ -30,7 +30,7 @@ public interface IMovieService {
      * @param movie
      * @return @Identity -> id of the movie
      */
-    int createMovie(Movie2 movie);
+    int createMovie(Movie movie);
 
     /**
      * Retrieves optional Movie by its id
@@ -38,9 +38,9 @@ public interface IMovieService {
      * @param id of movie that will be retrieved
      * @return Optional Movie by its id that might not be there
      */
-    Optional<Movie2> getMovieById(int id);
+    Optional<Movie> getMovieById(int id);
 
-    int updateMovie(Movie2 movie);
+    int updateMovie(Movie movie);
 
 
     /**
@@ -70,7 +70,7 @@ public interface IMovieService {
      * @return
      */
 
-    List<Movie2> searchMovie(List<Movie2> listToSearch, String query, CompareSigns buttonValue, double spinnerValue);
+    List<Movie> searchMovie(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue);
 
     /**
      * method to retrieve movie by name with the api

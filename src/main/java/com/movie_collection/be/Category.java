@@ -1,6 +1,6 @@
 package com.movie_collection.be;
 
-public class Category2 {
+public class Category {
     private int id;
 
     private String name;

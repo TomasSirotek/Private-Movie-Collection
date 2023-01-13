@@ -1,6 +1,6 @@
 package com.movie_collection.dal.mappers;
 
-import com.movie_collection.be.Category2;
+import com.movie_collection.be.Category;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public interface CategoryMapperDAO {
      * @return a list of all the Categories from database
      */
 
-    List<Category2> getAllCategories();
+    List<Category> getAllCategories();
 
     /**
      * Retrieves Category by name from the database
@@ -22,14 +22,14 @@ public interface CategoryMapperDAO {
      * @param categoryName that will be get Category by name
      * @return Optional Category that might not be found
      */
-    Category2 getCategoryByName(@Param("categoryName") String categoryName);
+    Category getCategoryByName(@Param("categoryName") String categoryName);
 
     /**
      * Saves the new information about a new Category into the database
      *
-     * @param category2 the Category to be added
+     * @param category the Category to be added
      */
-    int createCategory(Category2 category2);
+    int createCategory(Category category);
 
     /**
      * Deletes the desired Category from the Category database

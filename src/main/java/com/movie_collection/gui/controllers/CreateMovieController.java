@@ -1,24 +1,21 @@
 package com.movie_collection.gui.controllers;
 
 import com.google.inject.Inject;
-import com.movie_collection.be.Category2;
-import com.movie_collection.be.Movie2;
+import com.movie_collection.be.Category;
+import com.movie_collection.be.Movie;
 import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.models.ICategoryModel;
 import com.movie_collection.gui.models.IMovieModel;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.media.Media;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -41,7 +38,7 @@ public class CreateMovieController extends RootController implements Initializab
     private final ICategoryModel categoryModel;
     private final MovieController movieController;
 
-    private Movie2 editableMovie;
+    private Movie editableMovie;
     private boolean isEditable = false;
 
     @Inject
@@ -88,7 +85,7 @@ public class CreateMovieController extends RootController implements Initializab
      * fill all the categories from all available categories
      */
     private void fillCategorySelection() {
-        List<Category2> categoryList = tryToGetCategory();
+        List<Category> categoryList = tryToGetCategory();
         if(categoryMenuButton.getItems() != null){
             categoryMenuButton.getItems().clear();
             categoryList.stream()
@@ -113,14 +110,14 @@ public class CreateMovieController extends RootController implements Initializab
             if(isValidatedInput()){
                 var collectedCategory = mapSelectedCategories();
 
-                Movie2 movie2 = new Movie2();
-                movie2.setName(movieName.getText().trim());
-                movie2.setRating(personalRatingSpin.getValue());
-                movie2.setAbsolutePath(path.getText().trim());
-                movie2.setCategories(collectedCategory);
+                Movie movie = new Movie();
+                movie.setName(movieName.getText().trim());
+                movie.setRating(personalRatingSpin.getValue());
+                movie.setAbsolutePath(path.getText().trim());
+                movie.setCategories(collectedCategory);
 
-                int result = tryCreateMovie(movie2);
-                closeAndUpdate(result,movie2.getId());
+                int result = tryCreateMovie(movie);
+                closeAndUpdate(result, movie.getId());
                 e.consume();
 
                 movieModel.getAllMovies();
@@ -130,15 +127,15 @@ public class CreateMovieController extends RootController implements Initializab
             if(isValidatedInput()){
                 var collectedCategory = mapSelectedCategories();
 
-                Movie2 movie2 = new Movie2();
-                movie2.setId(editableMovie.getId());
-                movie2.setName(movieName.getText().trim());
-                movie2.setRating(personalRatingSpin.getValue());
-                movie2.setAbsolutePath(path.getText().trim());
-                movie2.setCategories(collectedCategory);
+                Movie movie = new Movie();
+                movie.setId(editableMovie.getId());
+                movie.setName(movieName.getText().trim());
+                movie.setRating(personalRatingSpin.getValue());
+                movie.setAbsolutePath(path.getText().trim());
+                movie.setCategories(collectedCategory);
 
-                int result = tryUpdateMovie(movie2);
-                closeAndUpdate(result,movie2.getId());
+                int result = tryUpdateMovie(movie);
+                closeAndUpdate(result, movie.getId());
 
                 e.consume();
             }
@@ -150,7 +147,7 @@ public class CreateMovieController extends RootController implements Initializab
      * method that sets movie to be editable from passed movie object
      * @param movie object that will be displayed to be edited
      */
-    protected void setEditableView(Movie2 movie){
+    protected void setEditableView(Movie movie){
         isEditable = true;
         editableMovie = movie;
 
@@ -173,8 +170,8 @@ public class CreateMovieController extends RootController implements Initializab
      * load and sets correctly all the categories depends if movie has them
      */
     private void setEditableCategories() {
-        List<Category2> categoryList = tryToGetCategory();
-        Set<String> categorySet = editableMovie.getCategories().stream().map(Category2::getName).collect(Collectors.toSet());
+        List<Category> categoryList = tryToGetCategory();
+        Set<String> categorySet = editableMovie.getCategories().stream().map(Category::getName).collect(Collectors.toSet());
 
         categoryList.stream()
                 .map(category -> {
@@ -208,15 +205,15 @@ public class CreateMovieController extends RootController implements Initializab
      * maps selected categories
      * @return list of Categories
      */
-    private List<Category2> mapSelectedCategories() {
+    private List<Category> mapSelectedCategories() {
 
-        List<Category2> categories = new ArrayList<>();
+        List<Category> categories = new ArrayList<>();
         categoryMenuButton.getItems().stream()
                 .filter(item -> item instanceof CheckMenuItem)
                 .map(CheckMenuItem.class::cast)
                 .filter(CheckMenuItem::isSelected)
                 .forEach(button -> {
-                    Category2 category = new Category2();
+                    Category category = new Category();
                     category.setName(button.getText());
                     categories.add(category);
                 });
@@ -244,7 +241,7 @@ public class CreateMovieController extends RootController implements Initializab
      * @param movie object that will be created
      * @return 0 or 1 where 0 is fail and 1 is success
      */
-    private int tryCreateMovie(Movie2 movie) {
+    private int tryCreateMovie(Movie movie) {
         return movieModel.createMovie(movie);
     }
 
@@ -254,7 +251,7 @@ public class CreateMovieController extends RootController implements Initializab
      * @return 0 or 1 where 0 is fail and 1 is success
      */
 
-    private int tryUpdateMovie(Movie2 movie) {
+    private int tryUpdateMovie(Movie movie) {
             return movieModel.updateMovie(movie);
     }
 
@@ -262,7 +259,7 @@ public class CreateMovieController extends RootController implements Initializab
      * tries to get the List of categories
      * @return list of Categories with id,name
      */
-    private List<Category2> tryToGetCategory() {
+    private List<Category> tryToGetCategory() {
         return categoryModel.getAllCategories();
 
     }

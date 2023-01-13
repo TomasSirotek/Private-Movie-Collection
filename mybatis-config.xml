@@ -14,8 +14,8 @@
 
     <!-- table aliases -->
     <typeAliases>
-        <typeAlias alias="Movie" type="com.movie_collection.be.Movie2"/>
-        <typeAlias alias="Category" type="com.movie_collection.be.Category2"/>
+        <typeAlias alias="Movie" type="com.movie_collection.be.Movie"/>
+        <typeAlias alias="Category" type="com.movie_collection.be.Category"/>
     </typeAliases>
 
     <!-- main environment -->

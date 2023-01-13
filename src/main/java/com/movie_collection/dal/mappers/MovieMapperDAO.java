@@ -1,9 +1,8 @@
 package com.movie_collection.dal.mappers;
 
-import com.movie_collection.be.Movie2;
+import com.movie_collection.be.Movie;
 import org.apache.ibatis.annotations.Param;
 
-import java.sql.Date;
 import java.util.List;
 
 public interface MovieMapperDAO {
@@ -12,7 +11,7 @@ public interface MovieMapperDAO {
      *
      * @return list of Movies
      */
-    List<Movie2> getAllMovies();
+    List<Movie> getAllMovies();
 
     /**
      * Retrieves optional Movie by its id
@@ -20,7 +19,7 @@ public interface MovieMapperDAO {
      * @param id of movie that will be retrieved
      * @return Optional Movie by its id that might not be there
      */
-    Movie2 getMovieById(@Param("movieId") int id);
+    Movie getMovieById(@Param("movieId") int id);
 
     /**
      * Retrieves all Movies from the database by categoryId and store into a list
@@ -29,15 +28,15 @@ public interface MovieMapperDAO {
      * @return Optional list of Movies - not all movies can be found in that category
      */
 
-    List<Movie2> getAllMoviesByCategoryId(@Param("categoryId") int categoryId);
+    List<Movie> getAllMoviesByCategoryId(@Param("categoryId") int categoryId);
 
     /**
      * Creates a new movie in the database with given properties
      *
-     * @param movie2
+     * @param movie
      * @return @Identity -> id of the movie
      */
-    int createMovieTest(Movie2 movie2);
+    int createMovieTest(Movie movie);
 
     /**
      * Updates a movie in the database depending on the id of the movie

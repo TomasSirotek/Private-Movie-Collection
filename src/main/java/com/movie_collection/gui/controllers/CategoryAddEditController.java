@@ -1,7 +1,7 @@
 package com.movie_collection.gui.controllers;
 
 import com.google.inject.Inject;
-import com.movie_collection.be.Category2;
+import com.movie_collection.be.Category;
 import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.models.ICategoryModel;
@@ -40,7 +40,7 @@ public class CategoryAddEditController extends RootController implements Initial
      */
     private void createCategoryOnAction(String categoryName) {
         if(validateLengthAndFill()){
-            Category2 newCategory = new Category2();
+            Category newCategory = new Category();
             newCategory.setName(categoryName);
             var result = tryToCreateCategory(newCategory);
 
@@ -78,7 +78,7 @@ public class CategoryAddEditController extends RootController implements Initial
      * @param newCategory that will be created
 
      */
-    private int tryToCreateCategory(Category2 newCategory) {
+    private int tryToCreateCategory(Category newCategory) {
         return categoryModel.createCategory(newCategory);
     }
 

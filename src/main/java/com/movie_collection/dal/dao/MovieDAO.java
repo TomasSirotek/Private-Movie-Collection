@@ -1,7 +1,7 @@
 package com.movie_collection.dal.dao;
 
-import com.movie_collection.be.Category2;
-import com.movie_collection.be.Movie2;
+import com.movie_collection.be.Category;
+import com.movie_collection.be.Movie;
 import com.movie_collection.dal.interfaces.IMovieDAO;
 import com.movie_collection.dal.mappers.MovieMapperDAO;
 import myBatis.MyBatisConnectionFactory;
@@ -18,8 +18,8 @@ public class MovieDAO implements IMovieDAO {
     Logger logger = LoggerFactory.getLogger(MovieDAO.class);
 
     @Override
-    public List<Movie2> getAllMovies() {
-        List<Movie2> allMovies = new ArrayList<>();
+    public List<Movie> getAllMovies() {
+        List<Movie> allMovies = new ArrayList<>();
         try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
             allMovies = mapper.getAllMovies();
@@ -30,20 +30,20 @@ public class MovieDAO implements IMovieDAO {
     }
 
     @Override
-    public Optional<Movie2> getMovieById(int id) {
-        Movie2 movie2 = new Movie2();
+    public Optional<Movie> getMovieById(int id) {
+        Movie movie = new Movie();
         try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
-            movie2 = mapper.getMovieById(id);
+            movie = mapper.getMovieById(id);
         } catch (Exception ex) {
             logger.error("An error occurred mapping tables", ex);
         }
-        return Optional.ofNullable(movie2);
+        return Optional.ofNullable(movie);
     }
 
     @Override
-    public Optional<List<Movie2>> getAllMoviesInTheCategoryById(int categoryId) {
-        List<Movie2> fetchedMovieInRole = new ArrayList<>();
+    public Optional<List<Movie>> getAllMoviesInTheCategoryById(int categoryId) {
+        List<Movie> fetchedMovieInRole = new ArrayList<>();
         try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
             fetchedMovieInRole = mapper.getAllMoviesByCategoryId(categoryId);
@@ -54,7 +54,7 @@ public class MovieDAO implements IMovieDAO {
     }
 
     @Override
-    public int createMovieTest(Movie2 movie) {
+    public int createMovieTest(Movie movie) {
         int returnedId = 0;
         try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
@@ -68,7 +68,7 @@ public class MovieDAO implements IMovieDAO {
     }
 
     @Override
-    public int updateMovieById(Movie2 movie, int id) {
+    public int updateMovieById(Movie movie, int id) {
         int resultId = 0;
         try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
@@ -82,11 +82,11 @@ public class MovieDAO implements IMovieDAO {
     }
 
     @Override
-    public int addCategoryToMovie(Category2 category2, Movie2 movie2) {
+    public int addCategoryToMovie(Category category, Movie movie) {
         int finalAffectedRows = 0;
         try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
-            int affectedRows = mapper.addCategoryToMovie(category2.getId(), movie2.getId());
+            int affectedRows = mapper.addCategoryToMovie(category.getId(), movie.getId());
             session.commit();
             return affectedRows;
         } catch (Exception ex) {

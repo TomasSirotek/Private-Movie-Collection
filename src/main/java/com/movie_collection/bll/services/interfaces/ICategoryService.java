@@ -1,6 +1,6 @@
 package com.movie_collection.bll.services.interfaces;
 
-import com.movie_collection.be.Category2;
+import com.movie_collection.be.Category;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,16 +10,16 @@ public interface ICategoryService {
      *
      * @return a list of all the Categories from database
      */
-    List<Category2> getAllCategories();
+    List<Category> getAllCategories();
 
     /**
      * Saves the new information about a new Category into the database
      *
      * @param category the Category to be added
      */
-    int createCategory(Category2 category);
+    int createCategory(Category category);
 
-    Optional<Category2> getCategoryByName(String categoryName);
+    Optional<Category> getCategoryByName(String categoryName);
     /**
      * Deletes the desired Category from the Category database
      *

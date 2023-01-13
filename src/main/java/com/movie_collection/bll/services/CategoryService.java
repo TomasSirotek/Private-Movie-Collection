@@ -1,7 +1,7 @@
 package com.movie_collection.bll.services;
 
 import com.google.inject.Inject;
-import com.movie_collection.be.Category2;
+import com.movie_collection.be.Category;
 import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.dal.interfaces.ICategoryDAO;
 
@@ -18,18 +18,18 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public List<Category2> getAllCategories() {
+    public List<Category> getAllCategories() {
         return categoryDAO.getAllCategories();
     }
 
 
     @Override
-    public int createCategory(Category2 category){
+    public int createCategory(Category category){
         return categoryDAO.createCategory(category);
     }
 
     @Override
-    public Optional<Category2> getCategoryByName(String categoryName) {
+    public Optional<Category> getCategoryByName(String categoryName) {
         return categoryDAO.getCategoryByName(categoryName);
     }
 

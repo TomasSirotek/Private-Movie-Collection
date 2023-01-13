@@ -1,8 +1,8 @@
 package com.movie_collection.gui.controllers;
 
 import com.google.inject.Inject;
-import com.movie_collection.be.Category2;
-import com.movie_collection.be.Movie2;
+import com.movie_collection.be.Category;
+import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.bll.utilities.AlertHelper;
@@ -10,7 +10,7 @@ import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
 import com.movie_collection.gui.models.ICategoryModel;
 import com.movie_collection.gui.models.IMovieModel;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -78,19 +78,19 @@ public class BaseController extends RootController implements Initializable {
      */
     private void showMoviesToDelete()  {
         var test = movieModel.getAllMovies();
-        List<Movie2> moviesToDelete = movieModel.getAllMovies().stream()
+        List<Movie> moviesToDelete = movieModel.getAllMovies().stream()
                 .filter(m -> m.getRating() < 6.0 || (m.getLastview() != null && (Instant.now().toEpochMilli() - m.getLastview().toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()> 63113852000L)))
                 .collect(Collectors.toList());
 
         String str = "";
         if(!moviesToDelete.isEmpty()){
-            for (Movie2 m:moviesToDelete) {
+            for (Movie m:moviesToDelete) {
                 str += m.getName() + "\n";
             }
             var alert = AlertHelper.showOptionalAlertWindow("Do you want to delete these movies ? " , str, Alert.AlertType.CONFIRMATION);
 
             if(alert.isPresent() && alert.get().equals(ButtonType.OK)){
-                for (Movie2 m: moviesToDelete) {
+                for (Movie m: moviesToDelete) {
                     movieModel.deleteMovieById(m.getId());
                 }
             }
@@ -116,7 +116,7 @@ public class BaseController extends RootController implements Initializable {
      * TODO: Maybe all of the body can be exctracted into separated class since it look so hoooge
      * @param allCategories list of all categories
      */
-    private void setCategoriesScrollPane(List<Category2> allCategories) {
+    private void setCategoriesScrollPane(List<Category> allCategories) {
         // This code is creating a new Map object that is populated with the key-value pairs of a given Map,
         //  and then returning it.
         LinkedHashMap<Button, Button> scrollPaneContentMap = allCategories
@@ -299,8 +299,9 @@ public class BaseController extends RootController implements Initializable {
     private void searchMovies() {
         TableView tableView = (TableView) getStage().getScene().lookup("#moviesTable");
         if (tableView != null) {
-            movieModel.searchMovies(searchMovies.getText(), currentCompare, ratingFilterSpinner.getValue());
-            tableView.refresh();
+            List<Movie> list = movieModel.searchMovies(searchMovies.getText(), currentCompare, ratingFilterSpinner.getValue());
+            tableView.getItems().clear();
+            tableView.setItems(FXCollections.observableArrayList(list));
         } else {
             System.out.println("The table view could not be found");
         }

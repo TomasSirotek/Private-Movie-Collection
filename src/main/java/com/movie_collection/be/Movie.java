@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 
-public class Movie2{
+public class Movie {
 
     private int id;
     private String name;
@@ -14,7 +14,7 @@ public class Movie2{
 
     private Date lastview;
 
-    private List<Category2> categories;
+    private List<Category> categories;
 
     public int getId() {
         return id;
@@ -57,11 +57,11 @@ public class Movie2{
         this.lastview = lastview;
     }
 
-    public List<Category2> getCategories() {
+    public List<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category2> categories) {
+    public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
 

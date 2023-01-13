@@ -2,26 +2,23 @@ package com.movie_collection.gui.models;
 
 import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.gui.DTO.MovieDTO;
-import com.movie_collection.be.Movie2;
+import com.movie_collection.be.Movie;
 import javafx.collections.ObservableList;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IMovieModel {
     
-    ObservableList<Movie2> getAllMovies();
-    ObservableList<Movie2> getAllMoviesInTheCategory(int categoryId);
+    ObservableList<Movie> getAllMovies();
+    ObservableList<Movie> getAllMoviesInTheCategory(int categoryId);
 
-    ObservableList<Movie2> getFilteredMovies();
+    int createMovie(Movie movie) ;
 
-    int createMovie(Movie2 movie) ;
-
-    int updateMovie(Movie2 movie);
+    int updateMovie(Movie movie);
 
     int deleteMovieById(int id);
 
-    void searchMovies(String query, CompareSigns buttonValue, double spinnerValue);
+    List<Movie> searchMovies(String query, CompareSigns buttonValue, double spinnerValue);
 	int updateTimeStamp(int id);
 
     MovieDTO findMovieByNameAPI(String title);
