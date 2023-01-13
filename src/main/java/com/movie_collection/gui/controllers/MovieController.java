@@ -131,7 +131,6 @@ public class MovieController extends RootController implements Initializable {
         });
         // ->
         colMovieTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().name().getValue())); // set movie title
-        movieYear.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().name().getValue())); // does not have anything now from model
         colMovieRating.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().rating())));
 
         // sets value factory for movie category column data are collected by name and joined by "," -> action,horror

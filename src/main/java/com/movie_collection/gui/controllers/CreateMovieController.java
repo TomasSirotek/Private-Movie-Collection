@@ -12,7 +12,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.media.Media;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -69,12 +68,7 @@ public class CreateMovieController extends RootController implements Initializab
 
         File selectedMovieFile = chooseFile.showOpenDialog(new Stage());
         if (selectedMovieFile != null) {
-            path.setText(selectedMovieFile.toURI().toString());
-            var media = new Media(selectedMovieFile.toURI().toString().replace("\\", "/"));
-            var duration = (int) media.getDuration().toSeconds();
-            durationField.setText(duration / 60 + ":" + duration % 60);
-            if (movieName.getText().isBlank())
-                movieName.setText(selectedMovieFile.getName());
+            path.setText(selectedMovieFile.toURI().toString().substring(6));
         }
     }
 

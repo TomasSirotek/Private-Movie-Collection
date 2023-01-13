@@ -5,7 +5,6 @@ import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.bll.services.interfaces.IMovieService;
 import com.movie_collection.gui.DTO.MovieDTO;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

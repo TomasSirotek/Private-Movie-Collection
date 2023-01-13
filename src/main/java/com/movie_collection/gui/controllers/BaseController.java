@@ -119,12 +119,13 @@ public class BaseController extends RootController implements Initializable {
      * @param allCategories list of all categories
      */
     private void setCategoriesScrollPane(List<Category> allCategories) {
+        int deleteButtonWidth = 30;
         // This code is creating a new Map object that is populated with the key-value pairs of a given Map,
         //  and then returning it.
         LinkedHashMap<Button, Button> scrollPaneContentMap = allCategories.stream()
                 .map(category -> {
                     Button categoryBtn = new Button(category.name().getValue());
-                    Button deleteBtn = new Button("Delete");
+                    Button deleteBtn = new Button("❌");
 
                     // Setting on the action for switching views
                     categoryBtn.setOnAction(event -> {
@@ -132,7 +133,7 @@ public class BaseController extends RootController implements Initializable {
                         parent.setIsCategoryView(category.id());
                         switchToView(parent.getView()); // switches into chosen view
                     });
-                    categoryBtn.setPrefWidth(140);
+                    categoryBtn.setPrefWidth(183);
 
                     deleteBtn.setOnAction(event -> {
                         int result = tryToDeleteCategory(category.id());
@@ -146,7 +147,7 @@ public class BaseController extends RootController implements Initializable {
                             throw new RuntimeException("Could not delete category with id: " + category.id()); // TODO: Fix to have better handeling
                         }
                     });
-                    deleteBtn.setPrefWidth(50);
+                    deleteBtn.setPrefWidth(deleteButtonWidth);
                     return new AbstractMap.SimpleEntry<>(categoryBtn, deleteBtn);
                 })
                 // (oldValue, newValue) -> oldValue - a "merge function" that is used to resolve
@@ -169,6 +170,7 @@ public class BaseController extends RootController implements Initializable {
                 vBox.getChildren().add(hBox); // sets the vbox to hold HBox
             }
             scroll_pane.setContent(vBox); // finally sets the content into the scroll pane
+            scroll_pane.setPannable(false);
         }
     }
 
