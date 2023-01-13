@@ -1,6 +1,7 @@
 package com.movie_collection.gui.controllers;
 
 import com.google.inject.Inject;
+import com.movie_collection.be.Category2;
 import com.movie_collection.be.Movie2;
 import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.bll.utilities.AlertHelper;
@@ -137,11 +138,10 @@ public class MovieController extends RootController implements Initializable {
         colMovieRating.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getRating())));
 
         // sets value factory for movie category column data are collected by name and joined by "," -> action,horror
-//        colMovieCategory.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategories().stream()
-//                .map(Category2::name)
-//                .map(StringProperty::getValue)
-//                .collect(Collectors.joining(","))
-//        ));
+        colMovieCategory.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategories().stream()
+                .map(Category2::getName)
+                .collect(Collectors.joining(","))
+        ));
         // sets value factory for edit column
         colEditMovies.setCellValueFactory(col -> {
             Button editButton = new Button("⚙️");
