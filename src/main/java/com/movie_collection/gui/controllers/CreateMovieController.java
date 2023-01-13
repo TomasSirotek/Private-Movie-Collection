@@ -1,9 +1,7 @@
 package com.movie_collection.gui.controllers;
 
 import com.google.inject.Inject;
-import com.movie_collection.be.Category;
 import com.movie_collection.be.Category2;
-import com.movie_collection.be.Movie;
 import com.movie_collection.be.Movie2;
 import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
@@ -43,7 +41,7 @@ public class CreateMovieController extends RootController implements Initializab
     private final ICategoryModel categoryModel;
     private final MovieController movieController;
 
-    private Movie editableMovie;
+    private Movie2 editableMovie;
     private boolean isEditable = false;
 
     @Inject
@@ -90,13 +88,13 @@ public class CreateMovieController extends RootController implements Initializab
      * fill all the categories from all available categories
      */
     private void fillCategorySelection() {
-        List<Category> categoryList = tryToGetCategory();
+        List<Category2> categoryList = tryToGetCategory();
         if(categoryMenuButton.getItems() != null){
             categoryMenuButton.getItems().clear();
             categoryList.stream()
                     .map(category -> {
                         CheckMenuItem menuItem = new CheckMenuItem();
-                        menuItem.setText(category.name().getValue());
+                        menuItem.setText(category.getName());
 
                         return menuItem;
                     })
@@ -133,7 +131,7 @@ public class CreateMovieController extends RootController implements Initializab
                 var collectedCategory = mapSelectedCategories();
 
                 Movie2 movie2 = new Movie2();
-                movie2.setId(editableMovie.id());
+                movie2.setId(editableMovie.getId());
                 movie2.setName(movieName.getText().trim());
                 movie2.setRating(personalRatingSpin.getValue());
                 movie2.setAbsolutePath(path.getText().trim());
@@ -152,15 +150,15 @@ public class CreateMovieController extends RootController implements Initializab
      * method that sets movie to be editable from passed movie object
      * @param movie object that will be displayed to be edited
      */
-    protected void setEditableView(Movie movie){
+    protected void setEditableView(Movie2 movie){
         isEditable = true;
         editableMovie = movie;
 
-        movieName.setText(editableMovie.name().getValue());
+        movieName.setText(editableMovie.getName());
 
-        SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(1.0, 10.0, editableMovie.rating(),0.5);
+        SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(1.0, 10.0, editableMovie.getRating(),0.5);
         personalRatingSpin.setValueFactory(valueFactory);
-        path.setText(editableMovie.absolutePath().getValue());
+        path.setText(editableMovie.getAbsolutePath());
 
         if(categoryMenuButton.getItems() != null){
             categoryMenuButton.getItems().clear();
@@ -175,15 +173,15 @@ public class CreateMovieController extends RootController implements Initializab
      * load and sets correctly all the categories depends if movie has them
      */
     private void setEditableCategories() {
-        List<Category> categoryList = tryToGetCategory();
-        Set<String> categorySet = editableMovie.categories().stream().map(category -> category.name().getValue()).collect(Collectors.toSet());
+        List<Category2> categoryList = tryToGetCategory();
+        Set<String> categorySet = editableMovie.getCategories().stream().map(Category2::getName).collect(Collectors.toSet());
 
         categoryList.stream()
                 .map(category -> {
                     CheckMenuItem menuItem = new CheckMenuItem();
-                    menuItem.setText(category.name().getValue());
+                    menuItem.setText(category.getName());
 
-                    if(categorySet.contains(category.name().getValue())){
+                    if(categorySet.contains(category.getName())){
                         menuItem.setSelected(true);
                     }
 
@@ -264,11 +262,8 @@ public class CreateMovieController extends RootController implements Initializab
      * tries to get the List of categories
      * @return list of Categories with id,name
      */
-    private List<Category> tryToGetCategory() {
-        List<Category2> categories = categoryModel.getAllCategories();
-        List<Category> categories1 =
-                categories.stream().map(c -> new Category(c.getId(),new SimpleStringProperty(c.getName()))).toList();
-            return categories1;
+    private List<Category2> tryToGetCategory() {
+        return categoryModel.getAllCategories();
 
     }
 }

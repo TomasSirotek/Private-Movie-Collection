@@ -1,7 +1,6 @@
 package com.movie_collection.gui.models;
 
 import com.google.inject.Inject;
-import com.movie_collection.be.Category;
 import com.movie_collection.be.Category2;
 import com.movie_collection.bll.services.interfaces.ICategoryService;
 import javafx.collections.FXCollections;

@@ -1,8 +1,6 @@
 package com.movie_collection.gui.controllers;
 
 import com.google.inject.Inject;
-import com.movie_collection.be.Category;
-import com.movie_collection.be.Movie;
 import com.movie_collection.be.Movie2;
 import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.bll.utilities.AlertHelper;
@@ -13,6 +11,7 @@ import com.movie_collection.gui.models.IMovieModel;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -29,6 +28,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -54,13 +54,13 @@ public class MovieController extends RootController implements Initializable {
             descrMovieTitle, descrIMDBRating;
 
     @FXML
-    private TableView<Movie> moviesTable;
+    private TableView<Movie2> moviesTable;
     @FXML
-    private TableColumn<Movie, Button> colPlayMovie, colEditMovies, colDeleteMovie;
+    private TableColumn<Movie2, Button> colPlayMovie, colEditMovies, colDeleteMovie;
     @FXML
-    private TableColumn<Movie, String> colMovieTitle, movieYear, colMovieCategory;
+    private TableColumn<Movie2, String> colMovieTitle, colMovieCategory;
     @FXML
-    private TableColumn<Movie, String> colMovieRating;
+    private TableColumn<Movie2, String> colMovieRating;
 
     private final IMovieModel movieModel;
 
@@ -90,10 +90,10 @@ public class MovieController extends RootController implements Initializable {
      */
     private void listenToClickRow() {
         moviesTable.setOnMouseClicked(event -> {
-            Movie selectedMovie = moviesTable.getSelectionModel().getSelectedItem();
+            Movie2 selectedMovie = moviesTable.getSelectionModel().getSelectedItem();
             if (selectedMovie != null) {
                 // tries to find the movie by name
-                MovieDTO movieDTO = movieModel.findMovieByNameAPI(selectedMovie.name().getValue());
+                MovieDTO movieDTO = movieModel.findMovieByNameAPI(selectedMovie.getName());
                 fillDescriptionWithAPIData(movieDTO,selectedMovie);
             }
         });
@@ -104,20 +104,19 @@ public class MovieController extends RootController implements Initializable {
      * @param movieDTO
      * @param selectedMovie
      */
-    private void fillDescriptionWithAPIData(MovieDTO movieDTO, Movie selectedMovie) {
+    private void fillDescriptionWithAPIData(MovieDTO movieDTO, Movie2 selectedMovie) {
         if(movieDTO.Poster != null){
             movieImage.setImage(new Image(movieDTO.Poster));
         }
 
-        descrMovieTitle.setText(selectedMovie.name().getValue());
+        descrMovieTitle.setText(selectedMovie.getName());
         desPlot.setText(movieDTO.Plot);
         desRunTime.setText(movieDTO.Runtime);
         desCast.setText(movieDTO.imdbRating);
         descrIReleased1.setText(movieDTO.Released);
         desImdbRating.setText(movieDTO.imdbRating);
         desDirector.setText(movieDTO.Director);
-        descrMovieTitle.setText(selectedMovie.name().getValue());
-        desPrRating.setText(String.valueOf(selectedMovie.rating()));
+        desPrRating.setText(String.valueOf(selectedMovie.getRating()));
     }
 
     /**
@@ -133,20 +132,20 @@ public class MovieController extends RootController implements Initializable {
             return new SimpleObjectProperty<>(playButton);
         });
         // ->
-        colMovieTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().name().getValue())); // set movie title
-        movieYear.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().name().getValue())); // does not have anything now from model
-        colMovieRating.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().rating())));
+        colMovieTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName())); // set movie title
+
+        colMovieRating.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getRating())));
 
         // sets value factory for movie category column data are collected by name and joined by "," -> action,horror
-        colMovieCategory.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().categories().stream()
-                .map(Category::name)
-                .map(StringProperty::getValue)
-                .collect(Collectors.joining(","))
-        ));
+//        colMovieCategory.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategories().stream()
+//                .map(Category2::name)
+//                .map(StringProperty::getValue)
+//                .collect(Collectors.joining(","))
+//        ));
         // sets value factory for edit column
         colEditMovies.setCellValueFactory(col -> {
             Button editButton = new Button("⚙️");
-            Movie updateMovie = col.getValue();
+            Movie2 updateMovie = col.getValue();
             editButton.setOnAction(e -> {
                 CreateMovieController controller = loadSetEditController(updateMovie);
                 showUpdateWindow(controller.getView());
@@ -157,12 +156,12 @@ public class MovieController extends RootController implements Initializable {
         colDeleteMovie.setCellValueFactory(col -> {
             Button deleteButton = new Button("❌");
             deleteButton.setOnAction(e -> {
-                Movie movie = col.getValue(); // get movie object from the current row
+                Movie2 movie = col.getValue(); // get movie object from the current row
                 if (movie != null) {
-                    var resultNotify = AlertHelper.showOptionalAlertWindow("Are you sure you want delete movie with id: " + movie.id(),"", Alert.AlertType.CONFIRMATION);
+                    var resultNotify = AlertHelper.showOptionalAlertWindow("Are you sure you want delete movie with id: " + movie.getId(),"", Alert.AlertType.CONFIRMATION);
                     if (resultNotify.isPresent() && resultNotify.get().equals(ButtonType.OK)) {
-                        int result = tryDeleteMovie(movie.id()); // tries to delete movie by id inside the row
-                        refreshTableAndNotify(result,movie.id());
+                        int result = tryDeleteMovie(movie.getId()); // tries to delete movie by id inside the row
+                        refreshTableAndNotify(result,movie.getId());
                     }
                 }
             });
@@ -213,7 +212,7 @@ public class MovieController extends RootController implements Initializable {
         stage.show();
     }
 
-    private CreateMovieController loadSetEditController(Movie updateMovie) {
+    private CreateMovieController loadSetEditController(Movie2 updateMovie) {
         CreateMovieController controller;
         try {
             controller = (CreateMovieController) controllerFactory.loadFxmlFile(ViewType.CREATE_EDIT);
@@ -258,24 +257,14 @@ public class MovieController extends RootController implements Initializable {
         if(moviesTable != null){
             if(moviesTable.getItems() != null){
                 moviesTable.getItems().clear();
-//                try {
-                ObservableList<Movie2> movie = movieModel.getAllMovies();
-                var test = movie.stream()
-                        .map(m -> {
-                            List<Category> movieCategoriesList = m.getCategories().stream()
-                                    .map(c -> new Category(c.getId(), new SimpleStringProperty(c.getName())))
-                                    .collect(Collectors.toList());
-                            return new Movie(m.getId(), new SimpleStringProperty(m.getName()), m.getRating(), new SimpleStringProperty(m.getAbsolutePath()), m.getLastview(), movieCategoriesList);
-                        }).toList();
-
-                moviesTable.getItems().setAll(test);
+                moviesTable.getItems().setAll( movieModel.getAllMovies());
             }
         }
     }
 
-    private void actionPlay(TableColumn.CellDataFeatures<Movie, Button> col) {
+    private void actionPlay(TableColumn.CellDataFeatures<Movie2, Button> col) {
         try {
-            playVideoDesktop(col.getValue().id(), col.getValue().absolutePath().getValue());
+            playVideoDesktop(col.getValue().getId(), col.getValue().getAbsolutePath());
         } catch (IOException | InterruptedException ex) {
             throw new RuntimeException(ex);
         }
@@ -283,24 +272,7 @@ public class MovieController extends RootController implements Initializable {
 
 
     private void trySetTableByCategory(int categoryId){
-        ObservableList<Optional<List<Movie2>>> movie = movieModel.getAllMoviesInTheCategory(categoryId);
-
-        if(!movie.isEmpty()){
-            List<Movie> test = movie.stream()
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .flatMap(List::stream)
-                    .map(m -> {
-                        List<Category> movieCategoriesList = m.getCategories().stream()
-                                .map(c -> new Category(c.getId(), new SimpleStringProperty(c.getName())))
-                                .collect(Collectors.toList());
-                        return new Movie(m.getId(), new SimpleStringProperty(m.getName()), m.getRating(), new SimpleStringProperty(m.getAbsolutePath()), m.getLastview(), movieCategoriesList);
-                    }).toList();
-            moviesTable.getItems().setAll(test);
-
-        }else {
-            moviesTable.getItems().setAll(List.of());
-        }
+        moviesTable.setItems(movieModel.getAllMoviesInTheCategory(categoryId));
     }
 
     /**
@@ -308,16 +280,7 @@ public class MovieController extends RootController implements Initializable {
      */
 
     private void trySetTableWithMovies() {
-        ObservableList<Movie2> movie = movieModel.getAllMovies();
-         var test = movie.stream()
-                .map(m -> {
-                    List<Category> movieCategoriesList = m.getCategories().stream()
-                            .map(c -> new Category(c.getId(), new SimpleStringProperty(c.getName())))
-                            .collect(Collectors.toList());
-                    return new Movie(m.getId(), new SimpleStringProperty(m.getName()), m.getRating(), new SimpleStringProperty(m.getAbsolutePath()), m.getLastview(), movieCategoriesList);
-                }).toList();
-
-            moviesTable.getItems().setAll(test);
+        moviesTable.setItems(movieModel.getAllMovies());
     }
 
     /**

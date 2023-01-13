@@ -1,9 +1,7 @@
 package com.movie_collection.gui.controllers;
 
 import com.google.inject.Inject;
-import com.movie_collection.be.Category;
 import com.movie_collection.be.Category2;
-import com.movie_collection.be.Movie;
 import com.movie_collection.be.Movie2;
 import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.bll.helpers.ViewType;
@@ -104,7 +102,6 @@ public class BaseController extends RootController implements Initializable {
      * and then set it back to all categories
      */
     protected void refreshScrollPane() {
-        var scrollPane = scroll_pane;
         if(scroll_pane != null){
             scroll_pane.setContent(null);
             setCategoriesScrollPane(categoryModel.getAllCategories());

@@ -1,6 +1,5 @@
 package com.movie_collection.gui.models;
 
-import com.movie_collection.be.Category;
 import com.movie_collection.be.Category2;
 import javafx.collections.ObservableList;
 

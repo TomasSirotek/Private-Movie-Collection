@@ -2,7 +2,6 @@ package com.movie_collection.bll.services;
 
 import com.google.inject.Inject;
 import com.movie_collection.be.Movie2;
-import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.bll.helpers.DateFormat;
 import com.movie_collection.bll.services.interfaces.IAPIService;
@@ -73,9 +72,14 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public List<Movie> searchMovie(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue) {
-        return filterUtil.filteringMovies(listToSearch, query, buttonValue, spinnerValue);
+    public List<Movie2> searchMovie(List<Movie2> listToSearch, String query, CompareSigns buttonValue, double spinnerValue) {
+        return null;
     }
+
+//    @Override
+//    public List<Movie> searchMovie(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue) {
+//        return filterUtil.filteringMovies(listToSearch, query, buttonValue, spinnerValue);
+//    }
 
     @Override
     public MovieDTO getMovieByNameAPI(String title) {
