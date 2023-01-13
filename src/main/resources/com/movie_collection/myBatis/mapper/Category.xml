@@ -25,7 +25,7 @@
         SELECT C.id   as idCat,
                C.name as nameCat-->
         FROM Category C
-        WHERE C.name = #{value}
+        WHERE C.name = #{categoryName}
     </select>
 
 
@@ -55,7 +55,7 @@
         -- executes delete query
         DELETE
         FROM Category
-        WHERE id = #{catId}
+        WHERE id = #{categoryId}
     </delete>
 
 </mapper>

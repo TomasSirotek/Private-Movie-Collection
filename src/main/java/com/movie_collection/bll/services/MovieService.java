@@ -10,10 +10,12 @@ import com.movie_collection.bll.services.interfaces.IAPIService;
 import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.bll.services.interfaces.IMovieService;
 import com.movie_collection.bll.util.IFilter;
+import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.dal.interfaces.ICategoryDAO;
 import com.movie_collection.dal.interfaces.IMovieDAO;
 import com.movie_collection.gui.DTO.MovieDTO;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.Alert;
 
 import java.util.List;
 import java.util.Objects;
@@ -56,21 +58,21 @@ public class MovieService implements IMovieService {
     @Override
     public int createMovie(Movie2 movie) {
         int result = movieDAO.createMovieTest(movie);
-        if(result != 0){ // -> this is sktchy atm
+        if(result != 0){
             movie.setId(result);
-            for (Category2 category : movie.getCategories()
-                 ) {
-                Optional<Category2> category2 = categoryDAO.getCategoryByName(category.getName());// -> inject categoryDAO
-                category2.ifPresent(value -> movieDAO.addCategoryToMovie(value, movie)); // -> check if category present and tries to add it
-            }
+            getCatAndAdd(movie);
         }
         return result;
     }
 
+    /**
+     * TODO : THIS NEEDS TO BE MAPPED INSIDE THE XML !!
+     * @param id id of movie to be played
+     * @return
+     */
     @Override
     public int updateTimeStamp(int id) {
         return movieDAO.updateTimeStamp(id);
-
     }
 
     @Override
@@ -84,32 +86,19 @@ public class MovieService implements IMovieService {
     }
 
     public int updateMovie(Movie2 movie){
-        // try to update movie
-        int finalResult = 0;
+        int finalResult = 0; // there is plenty of ways of logic with update categories this one worked for us atm
         Objects.requireNonNull(movie,"Movie cannot be null");
 
+        // tries to update movie
         int resultId = movieDAO.updateMovieById(movie,movie.getId());
 
-        // tries to get movie by id
+        // tries to find and remove the category
         if(resultId > 0){
-            finalResult = 1;
-            Optional<Movie2> fetchedMovie = movieDAO.getMovieById(resultId);
-            // if found tries to delete categories for it so that they can be assigned
-            if(fetchedMovie.isPresent()){
-                int resultRemove = movieDAO.removeCategoryFromMovie(fetchedMovie.get().getId());
-                if(resultRemove < 0) {
-                    finalResult = 0;
-                    System.out.println("Could not remove role for movie with id :" + fetchedMovie.get().getId());
-                }
-            }
+            finalResult = getCatNameAndRemove(resultId);
         }
-        // if ok tries to assign the new categories again
+        //  tries to assign the new categories again
         if(finalResult > 0){
-            for (Category2 category : movie.getCategories()
-            ) {
-                Optional<Category2> category2 = categoryDAO.getCategoryByName(category.getName());// -> inject categoryDAO
-                category2.ifPresent(value -> movieDAO.addCategoryToMovie(value, movie)); // -> check if category present and tries to add it
-            }
+            getCatAndAdd(movie);
         }
         return finalResult;
     }
@@ -118,4 +107,46 @@ public class MovieService implements IMovieService {
     public int deleteMovie(int id) {
         return movieDAO.deleteMovieById(id);
     }
+
+    private int getCatNameAndRemove(int resultId) {
+        int resultHere = 0;
+        Optional<Movie2> fetchedMovie = movieDAO.getMovieById(resultId);
+        if(fetchedMovie.isPresent()){
+            resultHere = 1;
+            int resultRemove = movieDAO.removeCategoryFromMovie(fetchedMovie.get().getId());
+            if(resultRemove > 0) {
+                AlertHelper.showDefaultAlert("Error: Failed to remove category from movie." + fetchedMovie.get().getId(), Alert.AlertType.ERROR);
+            }
+        }
+        return resultHere;
+    }
+    /**
+     * handles mapping the categories by name and trying to add them to each movie
+     * @param movie that will be assigned list of categories
+     */
+    private void getCatAndAdd(Movie2 movie) {
+        Objects.requireNonNull(movie.getCategories(),"Error: Categories cannot be empty for movie with id: "  + movie.getId());
+
+        movie.getCategories().stream()
+                .map(category -> categoryDAO.getCategoryByName(category.getName()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .forEach(category -> {
+                    int addResult = movieDAO.addCategoryToMovie(category, movie);
+                    if (addResult <= 0) {
+                        AlertHelper.showDefaultAlert("Error: Failed to add category to movie." + category.getId(), Alert.AlertType.ERROR);
+                    }
+                });
+    }
+//      movie.getCategories().stream()
+//                    .map(category -> categoryDAO.getCategoryByName(category.getName()))
+//            .filter(Optional::isPresent)
+//                    .map(Optional::get)
+//                    .forEach(category -> {
+//        int result = movieDAO.addCategoryToMovie(category, movie);
+//        if (result <= 0) {
+//            // same maybe just loggers for this since its internal implementation should user know ?
+//            AlertHelper.showDefaultAlert("Error: Failed to add category to movie." + category.getId(), Alert.AlertType.ERROR);
+//        }
+//    });
 }

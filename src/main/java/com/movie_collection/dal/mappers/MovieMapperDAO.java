@@ -19,7 +19,7 @@ public interface MovieMapperDAO {
      * @param id of movie that will be retrieved
      * @return Optional Movie by its id that might not be there
      */
-    Movie2 getMovieById(@Param("userValue") int id);
+    Movie2 getMovieById(@Param("movieId") int id);
 
     /**
      * Retrieves all Movies from the database by categoryId and store into a list
@@ -28,7 +28,7 @@ public interface MovieMapperDAO {
      * @return Optional list of Movies - not all movies can be found in that category
      */
 
-    List<Movie2> getAllMoviesByCategoryId(@Param("value") int categoryId);
+    List<Movie2> getAllMoviesByCategoryId(@Param("categoryId") int categoryId);
 
     /**
      * Creates a new movie in the database with given properties
@@ -55,7 +55,7 @@ public interface MovieMapperDAO {
      * @param id id of movie to be deleted
      * @return number of rows affected
      */
-    int deleteMovieById(@Param("value") int id);
+    int deleteMovieById(@Param("movieId") int id);
 
     /**
      * Add Category to movie and is inserted into joining table
@@ -64,7 +64,7 @@ public interface MovieMapperDAO {
      * @param movieId    that will be added to joining table
      * @return affected rows 0 or 1 - 0 fail | 1 - success
      */
-    int addCategoryToMovie(@Param("catValue") int categoryId, @Param("movieValue") int movieId);
+    int addCategoryToMovie(@Param("categoryId") int categoryId, @Param("movieId") int movieId);
 
     /**
      * Removes a category from the database based on the id

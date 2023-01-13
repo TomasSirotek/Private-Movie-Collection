@@ -22,7 +22,7 @@ public interface CategoryMapperDAO {
      * @param categoryName that will be get Category by name
      * @return Optional Category that might not be found
      */
-    Category2 getCategoryByName(@Param("value") String categoryName);
+    Category2 getCategoryByName(@Param("categoryName") String categoryName);
 
     /**
      * Saves the new information about a new Category into the database
@@ -37,5 +37,5 @@ public interface CategoryMapperDAO {
      * @param id which by the category will be deleted from database
      * @return 0 if no rows affected otherwise return 1 as success
      */
-    int deleteCategory(@Param("catId") int id);
+    int deleteCategory(@Param("categoryId") int id);
 }

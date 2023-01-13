@@ -47,7 +47,7 @@
         FROM Movie AS M -->
                  left outer join CatMovie PT on M.id = PT.movieId
                  left outer join Category C on PT.categoryId = C.id
-        WHERE C.id = #{value}
+        WHERE C.id = #{categoryId}
     </select>
 
     <select id="getMovieById"
@@ -63,7 +63,7 @@
         FROM Movie AS M -->
                  left outer join CatMovie PT on M.id = PT.movieId
                  left outer join Category C on PT.categoryId = C.id
-        WHERE M.id = #{userValue}
+        WHERE M.id = #{movieId}
     </select>
 
 
@@ -96,7 +96,7 @@
             timeout="20">
         --  insert categoryId and movieId to joining table
         INSERT INTO CatMovie (categoryId, movieId)
-        VALUES (#{catValue}, #{movieValue})
+        VALUES (#{categoryId}, #{movieId})
 
     </insert>
 
@@ -120,6 +120,8 @@
             SELECT @@IDENTITY
         </selectKey>
     </update>
+
+
     <!--  cache should be cleared before the statement is executed  ->  ensure that stale data is not used-->
     <!--     timeout 20 to prevent any issues with a query taking too long to execute -->
     <delete id="deleteMovieById"
@@ -130,7 +132,7 @@
         --  executes delete query
         DELETE
         FROM MOVIE
-        WHERE id = #{value}
+        WHERE id = #{movieId}
     </delete>
     <!--  cache should be cleared before the statement is executed  ->  ensure that stale data is not used-->
     <!--     timeout 20 to prevent any issues with a query taking too long to execute -->

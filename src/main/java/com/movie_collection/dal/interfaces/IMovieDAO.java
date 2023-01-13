@@ -35,7 +35,7 @@ public interface IMovieDAO {
     /**
      * Creates a new movie in the database with given properties
      *
-     * @param movie
+     * @param movie that will be created
      * @return @Identity -> id of the movie
      */
     int createMovieTest(Movie2 movie);
@@ -53,30 +53,26 @@ public interface IMovieDAO {
     /**
      * Updates a movie in the database depending on the id of the movie
      *
-     * @param movie a movie object with the new values
-     * @return number of rows affected
-     * @throws SQLException if the connection to the database fails
-     */
-
-    /**
-     * Updates a movie in the database depending on the id of the movie
-     *
      * @param movie that will be updated
      * @param id    by its will be deleted -> this could be done better but works for now
      * @return @Identity id of updated movie
      */
     int updateMovieById(Movie2 movie, int id);
 
-
     /**
      * Update timeStamp when a movie is played based on the id of the movie and date of opening
      *
      * @param id id of movie to be played
      * @return number of rows affected
-     * @throws SQLException if the connection to the database fails
      */
     int updateTimeStamp(int id);
 
+    /**
+     * Removes a movie from the database based on the id
+     *
+     * @param id id of movie to be deleted
+     * @return number of rows affected
+     */
     int deleteMovieById(int id);
 
     /**
