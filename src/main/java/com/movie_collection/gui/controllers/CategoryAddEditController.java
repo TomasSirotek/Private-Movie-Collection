@@ -64,11 +64,7 @@ public class CategoryAddEditController extends RootController implements Initial
      * tries to refresh category pane inside baseController
      */
     private void refreshMovieTable() {
-        try {
             baseController.refreshScrollPane();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     /**

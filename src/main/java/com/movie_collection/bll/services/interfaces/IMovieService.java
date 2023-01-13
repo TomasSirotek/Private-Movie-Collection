@@ -50,7 +50,7 @@ public interface IMovieService {
      * @param id id of movie to be deleted
      * @return number of rows affected
      */
-    int deleteMovie(int id) throws SQLException;
+    int deleteMovie(int id);
 
     /**
      * Update timeStamp when a movie is played based on the id
@@ -59,7 +59,7 @@ public interface IMovieService {
      * @return number of rows affected
      * @throws SQLException if the connection to the database fails
      */
-    int updateTimeStamp(int id) throws SQLException;
+    int updateTimeStamp(int id);
 
     /**
      * docs

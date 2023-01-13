@@ -1,11 +1,13 @@
 package com.movie_collection.gui.models;
 
 import com.google.inject.Inject;
+import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.be.Movie2;
 import com.movie_collection.bll.services.interfaces.IMovieService;
 import com.movie_collection.gui.DTO.MovieDTO;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +15,7 @@ import javafx.collections.ObservableList;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class MovieModel implements  IMovieModel{
 
@@ -33,20 +36,33 @@ public class MovieModel implements  IMovieModel{
 
     @Override
     public ObservableList<Movie2> getAllMovies() {
-        allMovies.setAll(FXCollections.observableArrayList(movieService.getAllMovies()));
-        filteredMovies.setAll(allMovies);
-        return allMovies; // so we only return here
+        return FXCollections.observableArrayList(
+                movieService.getAllMovies()
+        );
+//        var movie = movieService.getAllMovies();
+//        var test = movie.stream()
+//                .map(m -> {
+//                    List<Category> movieCategoriesList = m.getCategories().stream()
+//                            .map(c -> new Category(c.getId(), new SimpleStringProperty(c.getName())))
+//                            .collect(Collectors.toList());
+//                    return new Movie(m.getId(), new SimpleStringProperty(m.getName()), m.getRating(), new SimpleStringProperty(m.getAbsolutePath()), m.getLastview(), movieCategoriesList);
+//                }).toList();
+//        allMovies.setAll(FXCollections.observableArrayList(test));
+//        filteredMovies.setAll(allMovies);
+
+       // return test; // so we only return here
     }
 
     @Override
     public ObservableList<Optional<List<Movie2>>> getAllMoviesInTheCategory(int categoryId) {
-        allMovies.setAll(FXCollections.observableArrayList(movieService.getAllMoviesInTheCategory(categoryId)));
-        filteredMovies.setAll(allMovies); // but we never retur nhere ?
-        return null;
-        // this needs to be looked at later
-//        return FXCollections.observableArrayList(
-//                movieService.getAllMoviesInTheCategory(categoryId)
-//        );
+
+//        allMovies.setAll(FXCollections.observableArrayList(movieService.getAllMoviesInTheCategory(categoryId)));
+//        filteredMovies.setAll(allMovies); // but we never retur nhere ?
+//        return null;
+
+        return FXCollections.observableArrayList(
+                movieService.getAllMoviesInTheCategory(categoryId)
+        );
     }
 
     @Override
@@ -63,12 +79,12 @@ public class MovieModel implements  IMovieModel{
         return movieService.updateMovie(movie);
     }
     @Override
-    public int deleteMovie(int id) throws SQLException {
+    public int deleteMovieById(int id) {
         return movieService.deleteMovie(id);
     }
 
     @Override
-    public int updateTimeStamp(int id) throws SQLException {
+    public int updateTimeStamp(int id) {
         return movieService.updateTimeStamp(id);
     }
 

@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -116,27 +117,19 @@ public class CreateMovieController extends RootController implements Initializab
         if(!isEditable){
             if(isValidatedInput()){
                 var collectedCategory = mapSelectedCategories();
-//                Movie movie = new Movie(
-//                        0,
-//                        new SimpleStringProperty(movieName.getText().trim()),
-//                        personalRatingSpin.getValue(),
-//                        new SimpleStringProperty(path.getText().trim()),
-//                        collectedCategory,
-//                        null);
 
                 Movie2 movie2 = new Movie2();
                 movie2.setName(movieName.getText().trim());
                 movie2.setRating(personalRatingSpin.getValue());
                 movie2.setAbsolutePath(path.getText().trim());
                 movie2.setCategories(collectedCategory);
+
                 int result = tryCreateMovie(movie2);
                 closeAndUpdate(result,movie2.getId());
                 e.consume();
-                try {
-                    movieModel.getAllMovies();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
+
+                movieModel.getAllMovies();
+
             }
         }else {
             if(isValidatedInput()){
@@ -153,18 +146,6 @@ public class CreateMovieController extends RootController implements Initializab
                 closeAndUpdate(result,movie2.getId());
 
                 e.consume();
-//                var collectedCategory = mapSelectedCategories();
-//                Movie movie = new Movie(
-//                        editableMovie.id(),
-//                        new SimpleStringProperty(movieName.getText().trim()),
-//                        personalRatingSpin.getValue(),
-//                        new SimpleStringProperty(path.getText().trim()),
-//                        collectedCategory,
-//                        editableMovie.lastview());
-//
-//                int result = tryUpdateMovie(movie);
-//                closeAndUpdate(result,movie.id());
-//                e.consume();
             }
 
         }
@@ -233,12 +214,6 @@ public class CreateMovieController extends RootController implements Initializab
      * @return list of Categories
      */
     private List<Category2> mapSelectedCategories() {
-//        return categoryMenuButton.getItems().stream()
-//                .filter(item -> item instanceof CheckMenuItem)
-//                .map(CheckMenuItem.class::cast)
-//                .filter(CheckMenuItem::isSelected)
-//                .map(button ->  new Category2(0, button.getText()))
-//                .toList();
 
         List<Category2> categories = new ArrayList<>();
         categoryMenuButton.getItems().stream()

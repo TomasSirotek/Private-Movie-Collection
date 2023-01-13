@@ -13,14 +13,12 @@ import com.movie_collection.gui.models.IMovieModel;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.shape.MoveTo;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
@@ -32,7 +30,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -179,11 +176,8 @@ public class MovieController extends RootController implements Initializable {
         Runtime runTime = Runtime.getRuntime();
         if (!txtContent.isEmpty()) {
             String s[] = new String[]{txtContent, path};
-            try {
-                movieModel.updateTimeStamp(id);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+               int result = movieModel.updateTimeStamp(id);
+               // do some check for updating the time stamp
             runTime.exec(s);
         } else {
             try {
@@ -233,19 +227,6 @@ public class MovieController extends RootController implements Initializable {
         return controller;
     }
 
-    /**
-     * method that tries to delete movie by id
-     * result success if > 0 ... else err display/handel
-     *
-     * @param id of movie that will be deleted
-     */
-    private int tryDeleteMovie(int id) {
-        try {
-            return movieModel.deleteMovie(id);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     /**
      * refreshed the table and notify user about the status of his actions
@@ -348,10 +329,7 @@ public class MovieController extends RootController implements Initializable {
      * @param id of movie that will be deleted
      */
     private int tryDeleteMovie(int id) {
-        try {
-            return movieModel.deleteMovie(id);
-        } catch (SQLException e) {
-        moviesTable.setItems(movieModel.getFilteredMovies());
+        return movieModel.deleteMovieById(id);
     }
 
     protected void setPath(Path fileName, String mediaPlayerPath) {
@@ -362,7 +340,5 @@ public class MovieController extends RootController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
     }
-
-
-}

@@ -30,11 +30,11 @@ public class MovieService implements IMovieService {
     private final IAPIService apiService;
 
     @Inject
-    public MovieService(IMovieDAO movieDAO,ICategoryDAO categoryDAO,ICategoryService categoryService) {
+    public MovieService(IMovieDAO movieDAO,ICategoryDAO categoryDAO,ICategoryService categoryService,IAPIService apiService,IFilter filterUtil) {
         this.movieDAO = movieDAO;
         this.categoryDAO = categoryDAO;
         this.categoryService = categoryService;
-        this.filterUtil = filter;
+        this.filterUtil = filterUtil;
         this.apiService = apiService;
     }
 
@@ -68,10 +68,21 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public int updateTimeStamp(int id) throws SQLException {
+    public int updateTimeStamp(int id) {
         return movieDAO.updateTimeStamp(id);
 
     }
+
+    @Override
+    public List<Movie> searchMovie(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue) {
+        return filterUtil.filteringMovies(listToSearch, query, buttonValue, spinnerValue);
+    }
+
+    @Override
+    public MovieDTO getMovieByNameAPI(String title) {
+        return apiService.getMovieByTitle(title);
+    }
+
     public int updateMovie(Movie2 movie){
         // try to update movie
         int finalResult = 0;

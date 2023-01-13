@@ -6,6 +6,7 @@ import com.movie_collection.be.Category2;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.bll.helpers.ViewType;
+import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
 import com.movie_collection.gui.models.ICategoryModel;
@@ -25,7 +26,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -73,17 +73,22 @@ public class BaseController extends RootController implements Initializable {
         List<Category2> categories = categoryModel.getAllCategories();
         List<Category> categories1 =
         categories.stream().map(c -> new Category(c.getId(),new SimpleStringProperty(c.getName()))).toList();
-        try {
-            setCategoriesScrollPane(categories1);
-            showMoviesToDelete();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        setCategoriesScrollPane(categories1);
+        showMoviesToDelete();
+
     }
 
-    private void showMoviesToDelete() throws SQLException {
-        List<Movie> allMovies = movieModel.getAllMovies();
-        List<Movie> moviesToDelete = allMovies.stream()
+    private void showMoviesToDelete()  {
+        var allMovies = movieModel.getAllMovies();
+        var test = allMovies.stream()
+                .map(m -> {
+                    List<Category> movieCategoriesList = m.getCategories().stream()
+                            .map(c -> new Category(c.getId(), new SimpleStringProperty(c.getName())))
+                            .collect(Collectors.toList());
+                    return new Movie(m.getId(), new SimpleStringProperty(m.getName()), m.getRating(), new SimpleStringProperty(m.getAbsolutePath()), m.getLastview(), movieCategoriesList);
+                }).toList();
+
+        List<Movie> moviesToDelete = test.stream()
                 .filter(m -> m.rating() < 6.0 || (m.lastview() != null && (Instant.now().toEpochMilli() - m.lastview().getTime() > 63113852000L))) // add movie if rating is < 6 or if lastview is not null and Current time - (lastview time is more than time of 2 years in miliseconds)
                 .toList();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -98,7 +103,7 @@ public class BaseController extends RootController implements Initializable {
         String button = btn.isPresent() ? btn.get().getText() : "Cancel";
         if (button.equals("Delete")){
             for (Movie m: moviesToDelete) {
-                movieModel.deleteMovie(m.id());
+                movieModel.deleteMovieById(m.id());
             }
         }
     }
@@ -107,11 +112,11 @@ public class BaseController extends RootController implements Initializable {
      * void method that invokes scroll pane to clean content first
      * and then set it back to all categories
      */
-    protected void refreshScrollPane() throws SQLException {
+    protected void refreshScrollPane() {
         List<Category2> categories = categoryModel.getAllCategories();
         List<Category> categories1 =
                 categories.stream().map(c -> new Category(c.getId(),new SimpleStringProperty(c.getName()))).toList();
-        if(scroll_pane.getContent() != null){
+        if(scroll_pane != null){
             scroll_pane.setContent(null);
             setCategoriesScrollPane(categories1);
         }
@@ -144,13 +149,9 @@ public class BaseController extends RootController implements Initializable {
                     deleteBtn.setOnAction(event -> {
                         int result = tryToDeleteCategory(category.id());
                         if (result > 0) {
-                            try {
-                                refreshScrollPane();
-                            } catch (SQLException e) {
-                                throw new RuntimeException(e);
-                            }
+                            refreshScrollPane();
                         } else {
-                            throw new RuntimeException("Could not delete category with id: " + category.id()); // TODO: Fix to have better handeling
+                            AlertHelper.showDefaultAlert("Could not delete category with id: " + category.id(), Alert.AlertType.ERROR);
                         }
                     });
                     deleteBtn.setPrefWidth(50);
@@ -250,11 +251,7 @@ public class BaseController extends RootController implements Initializable {
         RootController parent = loadNodesView(ViewType.MOVIES);
         switchToView(parent.getView());
         e.consume();
-        try {
             movieModel.getAllMovies();
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
     }
 
     /**
@@ -304,11 +301,7 @@ public class BaseController extends RootController implements Initializable {
         RootController parent = loadNodesView(ViewType.MOVIES);
         switchToView(parent.getView());
         actionEvent.consume();
-        try {
-            movieModel.getAllMovies();
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
+        movieModel.getAllMovies();
     }
 
     @FXML
@@ -320,6 +313,7 @@ public class BaseController extends RootController implements Initializable {
         ratingFilterButton.setText(currentCompare.getSign());
 
         searchMovies();
+        actionEvent.consume();
     }
 
     private void setupSpinner(){
