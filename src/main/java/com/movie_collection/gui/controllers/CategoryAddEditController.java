@@ -6,7 +6,7 @@ import com.movie_collection.be.Category;
 import com.movie_collection.bll.helpers.EventType;
 import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
-import com.movie_collection.gui.controllers.event.CategoryRefreshEvent;
+import com.movie_collection.gui.controllers.event.RefreshEvent;
 import com.movie_collection.gui.models.ICategoryModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -74,7 +74,7 @@ public class CategoryAddEditController extends RootController implements Initial
      * tries to refresh category pane inside baseController
      */
     private void refreshMovieTable() {
-        eventBus.post(new CategoryRefreshEvent(EventType.UPDATE_TABLE));
+        eventBus.post(new RefreshEvent(EventType.UPDATE_TABLE));
     }
 
     /**

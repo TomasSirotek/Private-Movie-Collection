@@ -2,11 +2,11 @@ package com.movie_collection.gui.controllers.event;
 
 import com.movie_collection.bll.helpers.EventType;
 
-public class CategoryRefreshEvent{
+public class RefreshEvent {
 
     private final EventType eventType;
 
-    public CategoryRefreshEvent(EventType eventType) {
+    public RefreshEvent(EventType eventType) {
         this.eventType = eventType;
     }
 

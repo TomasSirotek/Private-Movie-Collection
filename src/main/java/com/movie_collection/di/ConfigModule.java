@@ -26,42 +26,38 @@ import com.movie_collection.gui.models.MovieModel;
 
 public class ConfigModule extends AbstractModule {
     @Override
-    public void configure(){
+    public void configure() {
 
-        /**
-        * Bind the MovieDAO interface to the implementation
+        /*
+         * Bind the MovieDAO interface to the implementation
          */
         bind(IMovieDAO.class).to(MovieDAO.class);
-        /**
+        /*
          * Bind the CategoryDAO interface to the implementation
          */
         bind(ICategoryDAO.class).to(CategoryDAO.class);
-        /**
+        /*
          * Injection of binding
          */
         bind(IControllerFactory.class).to(ControllerFactory.class);
 
-        /**
+        /*
          * Injection of movie service
          */
         bind(IMovieService.class).to(MovieService.class);
 
-        /**
+        /*
          * Injection of movie service
          */
         bind(ICategoryService.class).to(CategoryService.class).in(Singleton.class);
 
-        /**
+        /*
          * Injection of movie service
          */
         bind(ICategoryModel.class).to(CategoryModel.class).in(Singleton.class);
 
-        /**
-         * Injection of base controller
-         */
-
         /*
-         * docs
+         * Injection of movie model
          */
         bind(IMovieModel.class).to(MovieModel.class);
         /*
@@ -69,19 +65,15 @@ public class ConfigModule extends AbstractModule {
          */
         bind(IFilter.class).to(Filter.class);
 
-        /*
-         * Injection of main controller
-         */
-        bind(MovieController.class);
 
-        /**
+        /*
          * Binds api service
          */
 
         bind(IAPIService.class).to(APIService.class);
 
         /*
-        * Bind even bus as in singleton scope
+         * Bind even bus as in singleton scope
          */
         bind(EventBus.class).in(Singleton.class);
 

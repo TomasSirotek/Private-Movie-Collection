@@ -11,7 +11,7 @@ import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
-import com.movie_collection.gui.controllers.event.CategoryRefreshEvent;
+import com.movie_collection.gui.controllers.event.RefreshEvent;
 import com.movie_collection.gui.models.ICategoryModel;
 import com.movie_collection.gui.models.IMovieModel;
 import javafx.collections.FXCollections;
@@ -69,7 +69,7 @@ public class BaseController extends RootController implements Initializable {
         this.categoryModel = categoryModel;
         this.movieModel = movieModel;
         this.eventBus = eventBus;
-        eventBus.register(this);
+
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -77,6 +77,7 @@ public class BaseController extends RootController implements Initializable {
         setupSpinner();
         setCategoriesScrollPane(categoryModel.getAllCategories());
         showMoviesToDelete();
+        eventBus.register(this);
     }
 
     /**
@@ -107,7 +108,7 @@ public class BaseController extends RootController implements Initializable {
      * void method that invokes scroll pane to clean content first
      * and then set it back to all categories
      */
-    protected void refreshScrollPane() {
+    private void refreshScrollPane() {
         if(scroll_pane != null){
             scroll_pane.setContent(null);
             setCategoriesScrollPane(categoryModel.getAllCategories());
@@ -317,7 +318,7 @@ public class BaseController extends RootController implements Initializable {
      * Registering events
      */
     @Subscribe
-    public void handleCategoryEvent(CategoryRefreshEvent event){
+    public void handleCategoryEvent(RefreshEvent event){
         if(event.getEventType() == EventType.UPDATE_TABLE){
             refreshScrollPane();
         }
