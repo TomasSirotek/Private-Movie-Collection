@@ -1,5 +1,6 @@
-package di;
+package com.movie_collection.di;
 
+import com.google.common.eventbus.EventBus;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.movie_collection.bll.services.CategoryService;
@@ -58,7 +59,6 @@ public class ConfigModule extends AbstractModule {
         /**
          * Injection of base controller
          */
-        bind(BaseController.class).in(Singleton.class);
 
         /*
          * docs
@@ -69,15 +69,21 @@ public class ConfigModule extends AbstractModule {
          */
         bind(IFilter.class).to(Filter.class);
 
-        /**
+        /*
          * Injection of main controller
          */
-        bind(MovieController.class).in(Singleton.class);
+        bind(MovieController.class);
 
         /**
          * Binds api service
          */
+
         bind(IAPIService.class).to(APIService.class);
+
+        /*
+        * Bind even bus as in singleton scope
+         */
+        bind(EventBus.class).in(Singleton.class);
 
     }
 }

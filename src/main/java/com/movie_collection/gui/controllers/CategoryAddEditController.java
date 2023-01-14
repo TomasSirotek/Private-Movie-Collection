@@ -1,9 +1,12 @@
 package com.movie_collection.gui.controllers;
 
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
+import com.movie_collection.bll.helpers.EventType;
 import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
+import com.movie_collection.gui.controllers.event.CategoryRefreshEvent;
 import com.movie_collection.gui.models.ICategoryModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,12 +24,13 @@ public class CategoryAddEditController extends RootController implements Initial
     private Button add_category;
     private final ICategoryModel categoryModel;
 
-    private final BaseController baseController;
+    private final EventBus eventBus;
+
 
     @Inject
-    public CategoryAddEditController(ICategoryModel categoryModel,BaseController baseController) {
+    public CategoryAddEditController(ICategoryModel categoryModel, EventBus eventBus) {
         this.categoryModel = categoryModel;
-        this.baseController = baseController;
+        this.eventBus = eventBus;
     }
 
     @Override
@@ -70,7 +74,7 @@ public class CategoryAddEditController extends RootController implements Initial
      * tries to refresh category pane inside baseController
      */
     private void refreshMovieTable() {
-            baseController.refreshScrollPane();
+        eventBus.post(new CategoryRefreshEvent(EventType.UPDATE_TABLE));
     }
 
     /**

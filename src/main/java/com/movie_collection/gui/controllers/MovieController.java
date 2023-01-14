@@ -1,5 +1,6 @@
 package com.movie_collection.gui.controllers;
 
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
@@ -64,18 +65,25 @@ public class MovieController extends RootController implements Initializable {
 
     private boolean isCategoryView = false;
 
+    private final EventBus eventBus;
+
     private int categoryId;
 
     @Inject
-    public MovieController(IMovieModel movieService, IControllerFactory controllerFactory) {
+    public MovieController(Label descrIMDBRating, IMovieModel movieService, IControllerFactory controllerFactory, EventBus eventBus) {
+
+        this.descrIMDBRating = descrIMDBRating;
         this.movieModel = movieService;
         this.controllerFactory = controllerFactory;
+        this.eventBus = eventBus;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         fillTableWithData();
         listenToClickRow();
+
     }
 
 
@@ -179,6 +187,8 @@ public class MovieController extends RootController implements Initializable {
         }
         trySetTableWithMovies();
     }
+
+
 
     protected void setIsCategoryView(int categoryId) {
         this.isCategoryView = true;
