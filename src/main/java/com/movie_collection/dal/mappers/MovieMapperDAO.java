@@ -41,13 +41,13 @@ public interface MovieMapperDAO {
     /**
      * Updates a movie in the database depending on the id of the movie
      *
-     * @param name   of the movie
-     * @param rating rating of the movie
-     * @param path   absolute path for the movie file
-     * @param id     that will be used to be recognized in the database
-     * @return @Identity id of updated movie
+//     * @param name   of the movie
+//     * @param rating rating of the movie
+//     * @param path   absolute path for the movie file
+//     * @param id     that will be used to be recognized in the database
+//     * @return @Identity id of updated movie
      */
-    int updateMovie(@Param("name") String name, @Param("rating") double rating, @Param("path") String path, @Param("id") int id);
+    int updateMovie(Movie movie);
 
     /**
      * retrieves the result of an update movie last vied time

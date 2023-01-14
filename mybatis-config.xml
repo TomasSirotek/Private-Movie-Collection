@@ -10,6 +10,8 @@
     <!-- LOG4J setting -->
     <settings>
         <setting name="logImpl" value="slf4j"/>
+        <setting name="autoMappingBehavior" value="FULL"/>
+<!--        <setting name="autoMappingUnknownColumnBehavior" value="WARNING"/>-->
     </settings>
 
     <!-- table aliases -->

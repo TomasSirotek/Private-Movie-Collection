@@ -267,7 +267,7 @@ public class MovieController extends RootController implements Initializable {
 
     private void actionPlay(TableColumn.CellDataFeatures<Movie, Button> col) {
         try {
-            playVideoDesktop(col.getValue().getId(), col.getValue().getAbsolutePath());
+            playVideoDesktop(col.getValue().getId(), col.getValue().getPath());
         } catch (IOException | InterruptedException ex) {
             throw new RuntimeException(ex);
         }

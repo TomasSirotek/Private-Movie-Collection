@@ -117,7 +117,7 @@ public class CreateMovieController extends RootController implements Initializab
                 Movie movie = new Movie();
                 movie.setName(movieName.getText().trim());
                 movie.setRating(personalRatingSpin.getValue());
-                movie.setAbsolutePath(path.getText().trim());
+                movie.setPath(path.getText().trim());
                 movie.setCategories(collectedCategory);
 
                 int result = tryCreateMovie(movie);
@@ -135,7 +135,7 @@ public class CreateMovieController extends RootController implements Initializab
                 movie.setId(editableMovie.getId());
                 movie.setName(movieName.getText().trim());
                 movie.setRating(personalRatingSpin.getValue());
-                movie.setAbsolutePath(path.getText().trim());
+                movie.setPath(path.getText().trim());
                 movie.setCategories(collectedCategory);
 
                 int result = tryUpdateMovie(movie);
@@ -159,7 +159,7 @@ public class CreateMovieController extends RootController implements Initializab
 
         SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(1.0, 10.0, editableMovie.getRating(),0.5);
         personalRatingSpin.setValueFactory(valueFactory);
-        path.setText(editableMovie.getAbsolutePath());
+        path.setText(editableMovie.getPath());
 
         if(categoryMenuButton.getItems() != null){
             categoryMenuButton.getItems().clear();

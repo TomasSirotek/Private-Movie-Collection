@@ -91,7 +91,7 @@ public class MovieService implements IMovieService {
         Objects.requireNonNull(movie, "Movie cannot be null");
 
         // tries to update movie
-        int resultId = movieDAO.updateMovieById(movie, movie.getId());
+        int resultId = movieDAO.updateMovieById(movie);
 
         // tries to find and remove the category
         if (resultId > 0) {
@@ -114,8 +114,9 @@ public class MovieService implements IMovieService {
         Optional<Movie> fetchedMovie = movieDAO.getMovieById(resultId);
         if (fetchedMovie.isPresent()) {
             resultHere = 1;
-            int resultRemove = movieDAO.removeCategoryFromMovie(fetchedMovie.get().getId());
+            int resultRemove = movieDAO.removeCategoryFromMovie(3);
             if (resultRemove > 0) {
+                resultHere = 0;
                 AlertHelper.showDefaultAlert("Error: Failed to remove category from movie." + fetchedMovie.get().getId(), Alert.AlertType.ERROR);
             }
         }
