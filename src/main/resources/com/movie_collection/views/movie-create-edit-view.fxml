@@ -52,7 +52,7 @@
                         <Insets right="5.0" />
                      </HBox.margin>
                   </TextField>
-                  <Button fx:id="onClickSelectFile" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Select File .. " />
+                  <Button fx:id="onClickSelectFile" mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" text="Select File" />
                </children>
                <VBox.margin>
                   <Insets />
