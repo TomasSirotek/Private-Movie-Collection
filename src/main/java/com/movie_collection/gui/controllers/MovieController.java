@@ -47,9 +47,8 @@ public class MovieController extends RootController implements Initializable {
             desRunTime,
             desCast,
             desDirector,
-            descrIReleased1,
             desImdbRating, desPrRating,
-            descrMovieTitle, descrIMDBRating;
+            descrMovieTitle, desMatRating;
 
     @FXML
     private TableView<Movie> moviesTable;
@@ -74,7 +73,7 @@ public class MovieController extends RootController implements Initializable {
 
     @Inject
     public MovieController(Label descrIMDBRating, IMovieModel movieService, IControllerFactory controllerFactory, EventBus eventBus) {
-        this.descrIMDBRating = descrIMDBRating;
+        this.desImdbRating = descrIMDBRating;
         this.movieModel = movieService;
         this.controllerFactory = controllerFactory;
         this.eventBus = eventBus;
@@ -116,10 +115,11 @@ public class MovieController extends RootController implements Initializable {
         desPlot.setText(movieDTO.Plot);
         desRunTime.setText(movieDTO.Runtime);
         desCast.setText(movieDTO.imdbRating);
-        descrIReleased1.setText(movieDTO.Released);
+        desReleased.setText(movieDTO.Released);
         desImdbRating.setText(movieDTO.imdbRating);
         desDirector.setText(movieDTO.Director);
         desPrRating.setText(String.valueOf(selectedMovie.getRating()));
+        desMatRating.setText(movieDTO.Rated);
     }
 
     /**
@@ -136,7 +136,6 @@ public class MovieController extends RootController implements Initializable {
         });
         // ->
         colMovieTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName())); // set movie title
-
         colMovieRating.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getRating())));
 
         // sets value factory for movie category column data are collected by name and joined by "," -> action,horror

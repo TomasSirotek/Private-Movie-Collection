@@ -8,166 +8,130 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="moviePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="544.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.MovieController">
-    <children>
-        <StackPane prefHeight="530.0" prefWidth="600.0">
-            <children>
-                <VBox prefHeight="200.0" prefWidth="600.0">
-                    <children>
-                        <TableView fx:id="moviesTable" editable="true" prefHeight="320.0" prefWidth="565.0">
-                            <columns>
-                                <TableColumn fx:id="colPlayMovie" prefWidth="48.79998433589935" />
-                                <TableColumn fx:id="colMovieTitle" prefWidth="120.05393600463867" text="Title" />
-                                <TableColumn fx:id="movieYear" prefWidth="78.94606018066406" text="Year" />
-                                <TableColumn fx:id="colMovieRating" prefWidth="81.0" text="Rating" />
-                                <TableColumn fx:id="colMovieCategory" prefWidth="147.80587768554688" text="Category" />
-                                <TableColumn fx:id="colEditMovies" prefWidth="58.19415283203125" />
-                                <TableColumn fx:id="colDeleteMovie" prefWidth="44.0" />
-                            </columns>
-                            <VBox.margin>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                            </VBox.margin>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                        </TableView>
-                        <HBox fx:id="movieDetailBpx" prefHeight="175.0" prefWidth="580.0">
-                            <VBox.margin>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
-                            </VBox.margin>
+
+    <VBox prefHeight="551.0" prefWidth="600.0" stylesheets="@../css/bootstrap3.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.MovieController">
+        <children>
+            <TableView fx:id="moviesTable" editable="true" prefHeight="320.0" prefWidth="565.0">
+                <columns>
+                    <TableColumn fx:id="colPlayMovie" prefWidth="48.79998433589935" />
+                    <TableColumn fx:id="colMovieTitle" prefWidth="120.05393600463867" text="Title" />
+                    <TableColumn fx:id="colMovieRating" prefWidth="81.0" text="Rating" />
+                    <TableColumn fx:id="colMovieCategory" prefWidth="147.80587768554688" text="Category" />
+                    <TableColumn fx:id="colEditMovies" prefWidth="58.19415283203125" />
+                    <TableColumn fx:id="colDeleteMovie" prefWidth="44.0" />
+                </columns>
+                <VBox.margin>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                </VBox.margin>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+            </TableView>
+      <GridPane hgap="10.0" prefHeight="168.0" prefWidth="580.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="286.0" minWidth="10.0" prefWidth="119.82988739013672" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="473.5" minWidth="10.0" prefWidth="460.1701126098633" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <ImageView fx:id="movieImage" fitHeight="164.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/default_image.jpeg" />
+               </image>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+            </ImageView>
+            <ScrollPane prefHeight="236.0" prefWidth="451.0" GridPane.columnIndex="1">
+              <content>
+                  <VBox prefHeight="256.0" prefWidth="423.0">
                      <children>
-                        <GridPane prefHeight="168.0" prefWidth="580.0">
+                        <Label fx:id="descrMovieTitle" prefHeight="44.0" prefWidth="413.0">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+
+                                                            <TextArea fx:id="desPlot" editable="false" prefHeight="143.0" prefWidth="403.0" promptText="No description" wrapText="true" />
+                        <GridPane prefHeight="173.0" prefWidth="414.0">
                           <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="286.0" minWidth="10.0" prefWidth="119.82988739013672" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="473.5" minWidth="10.0" prefWidth="460.1701126098633" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.2000732421875" minWidth="10.0" prefWidth="55.199951171875" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="196.00003967285159" minWidth="10.0" prefWidth="196.00003967285159" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.39990234375" minWidth="10.0" prefWidth="84.5999755859375" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="108.7999267578125" minWidth="10.0" prefWidth="67.80002441406248" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <VBox alignment="CENTER_LEFT" prefHeight="165.0" prefWidth="163.0">
-                                 <children>
-                                    <ImageView fx:id="movieImage" fitHeight="164.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../images/default_image.jpeg" />
-                                       </image>
-                                    </ImageView>
-                                 </children>
-                                 <GridPane.margin>
-                                    <Insets />
-                                 </GridPane.margin>
-                              </VBox>
-                              <ScrollPane prefHeight="165.0" prefWidth="461.0" GridPane.columnIndex="1">
-                                <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="297.0" prefWidth="431.0">
-                                       <children>
-                                          <VBox prefHeight="303.0" prefWidth="433.0">
-                                             <children>
-                                                <HBox prefHeight="47.0" prefWidth="423.0">
-                                                   <children>
-                                                      <Label prefHeight="40.0" prefWidth="51.0" text="Title" />
-                                                      <Label fx:id="descrMovieTitle" prefHeight="53.0" prefWidth="74.0" />
-                                                   </children>
-                                                </HBox>
-
-                                                      <TextArea fx:id="desPlot" disable="true" editable="false" prefHeight="65.0" prefWidth="413.0" promptText="No description" />
-
-                                                <HBox prefHeight="178.0" prefWidth="413.0">
-                                                   <children>
-                                                      <GridPane prefHeight="210.0" prefWidth="200.0">
-                                                        <columnConstraints>
-                                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                        </columnConstraints>
-                                                        <rowConstraints>
-                                                          <RowConstraints maxHeight="117.0" minHeight="0.0" prefHeight="33.03192138671875" vgrow="SOMETIMES" />
-                                                          <RowConstraints maxHeight="106.0" minHeight="0.0" prefHeight="40.9627685546875" vgrow="SOMETIMES" />
-                                                          <RowConstraints maxHeight="92.79248046875" minHeight="10.0" prefHeight="41.95208740234375" vgrow="SOMETIMES" />
-                                                            <RowConstraints maxHeight="116.71267700195312" minHeight="10.0" prefHeight="63.04791259765625" vgrow="SOMETIMES" />
-                                                        </rowConstraints>
-                                                         <children>
-                                                            <Label text="Released" GridPane.rowIndex="2">
-                                                               <font>
-                                                                  <Font name="Arial Black" size="13.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label prefHeight="20.0" prefWidth="66.0" text="Runtime">
-                                                               <font>
-                                                                  <Font name="Arial Black" size="13.0" />
-                                                               </font></Label>
-                                                            <Label text="Cast " GridPane.rowIndex="1">
-                                                               <font>
-                                                                  <Font name="Arial Black" size="13.0" />
-                                                               </font></Label>
-                                                            <Label fx:id="desReleased" prefHeight="41.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                            <Label fx:id="desRunTime" prefHeight="32.0" prefWidth="99.0" GridPane.columnIndex="1" />
-                                                            <Label prefHeight="39.0" prefWidth="104.0" text="Director" GridPane.rowIndex="3">
-                                                               <font>
-                                                                  <Font name="System Bold" size="13.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label fx:id="desCast" prefHeight="32.0" prefWidth="99.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                            <Label fx:id="desDirector" prefHeight="61.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                                         </children>
-                                                      </GridPane>
-                                                      <GridPane prefHeight="210.0" prefWidth="200.0">
-                                                         <columnConstraints>
-                                                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="111.9361572265625" minWidth="10.0" prefWidth="98.06918334960938" />
-                                                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="102.92550659179688" minWidth="10.0" prefWidth="101.93081665039062" />
-                                                         </columnConstraints>
-                                                         <rowConstraints>
-                                                            <RowConstraints maxHeight="117.0" minHeight="0.0" prefHeight="33.03192138671875" vgrow="SOMETIMES" />
-                                                            <RowConstraints maxHeight="106.0" minHeight="0.0" prefHeight="41.0" vgrow="SOMETIMES" />
-                                                            <RowConstraints maxHeight="92.79248046875" minHeight="10.0" prefHeight="56.9361572265625" vgrow="SOMETIMES" />
-                                                            <RowConstraints maxHeight="116.71267700195312" minHeight="10.0" prefHeight="46.0638427734375" vgrow="SOMETIMES" />
-                                                         </rowConstraints>
-                                                         <children>
-                                                            <Label fx:id="descrIReleased1" prefHeight="54.0" prefWidth="99.0" text="Pr Rating" GridPane.rowIndex="2">
-                                                               <font>
-                                                                  <Font name="System Bold" size="13.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label fx:id="descrIRunTime1" prefHeight="20.0" prefWidth="95.0" text="IMDB Rating">
-                                                               <font>
-                                                                  <Font name="Arial Black" size="13.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="Category" GridPane.rowIndex="1">
-                                                               <font>
-                                                                  <Font name="Arial Black" size="13.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label fx:id="desImdbRating" prefHeight="41.0" prefWidth="100.0" GridPane.columnIndex="1" />
-                                                            <Label fx:id="desCategory" prefHeight="49.0" prefWidth="102.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                            <Label fx:id="desPrRating" prefHeight="41.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                                         </children>
-                                                      </GridPane>
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                          </VBox>
-                                       </children></AnchorPane>
-                                </content>
-                              </ScrollPane>
+                              <Label fx:id="desRunTime" prefHeight="32.0" prefWidth="99.0" GridPane.columnIndex="1" />
+                              <Label prefHeight="20.0" prefWidth="66.0" text="Runtime">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label prefHeight="20.0" prefWidth="95.0" text="IMDB Rating" GridPane.columnIndex="2">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="desImdbRating" prefHeight="41.0" prefWidth="100.0" GridPane.columnIndex="3" />
+                              <Label text="Cast " GridPane.rowIndex="1">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Released" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="desReleased" prefHeight="30.0" prefWidth="138.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label fx:id="desCast" prefHeight="32.0" prefWidth="99.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label prefHeight="39.0" prefWidth="104.0" text="Director" GridPane.rowIndex="3">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="desDirector" prefHeight="61.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label text="Category" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label prefHeight="54.0" prefWidth="99.0" text="Pr Rating" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="desCategory" prefHeight="49.0" prefWidth="102.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                              <Label fx:id="desPrRating" prefHeight="41.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                              <Label text="Rated" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                              <Label fx:id="desMatRating" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
                      </children>
-                        </HBox>
-                    </children>
-                </VBox>
-            </children>
-        </StackPane>
-    </children>
-</AnchorPane>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+              </content>
+            </ScrollPane>
+         </children>
+         <VBox.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </VBox.margin>
+      </GridPane>
+        </children>
+    </VBox>

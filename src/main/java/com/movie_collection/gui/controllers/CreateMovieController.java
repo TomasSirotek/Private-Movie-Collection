@@ -71,7 +71,7 @@ public class CreateMovieController extends RootController implements Initializab
 
         File selectedMovieFile = chooseFile.showOpenDialog(new Stage());
         if (selectedMovieFile != null) {
-            path.setText(selectedMovieFile.toURI().toString());
+            path.setText(selectedMovieFile.toURI().toString().substring(6));
             if (movieName.getText().isBlank())
                 movieName.setText(selectedMovieFile.getName());
         }

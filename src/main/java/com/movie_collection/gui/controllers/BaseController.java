@@ -124,13 +124,14 @@ public class BaseController extends RootController implements Initializable {
      * @param allCategories list of all categories
      */
     private void setCategoriesScrollPane(List<Category> allCategories) {
+        int deleteButtonWidth = 40;
         // This code is creating a new Map object that is populated with the key-value pairs of a given Map,
         //  and then returning it.
         LinkedHashMap<Button, Button> scrollPaneContentMap = allCategories
                 .stream()
                 .map(category -> {
                     Button categoryBtn = new Button(category.getName());
-                    Button deleteBtn = new Button("Delete");
+                    Button deleteBtn = new Button("❌");
 
                     // Setting on the action for switching views
                     categoryBtn.setOnAction(event -> {
@@ -138,7 +139,7 @@ public class BaseController extends RootController implements Initializable {
                         parent.setIsCategoryView(category.getId());
                         switchToView(parent.getView()); // switches into chosen view
                     });
-                    categoryBtn.setPrefWidth(140);
+                    categoryBtn.setPrefWidth(183);
 
                     deleteBtn.setOnAction(event -> {
                         int result = tryToDeleteCategory(category.getId());
@@ -148,7 +149,7 @@ public class BaseController extends RootController implements Initializable {
                             AlertHelper.showDefaultAlert("Could not delete category with id: " + category.getId(), Alert.AlertType.ERROR);
                         }
                     });
-                    deleteBtn.setPrefWidth(50);
+                    deleteBtn.setPrefWidth(deleteButtonWidth);
                     return new AbstractMap.SimpleEntry<>(categoryBtn, deleteBtn);
                 })
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
@@ -245,7 +246,7 @@ public class BaseController extends RootController implements Initializable {
         RootController parent = loadNodesView(ViewType.MOVIES);
         switchToView(parent.getView());
         e.consume();
-            movieModel.getAllMovies();
+        movieModel.getAllMovies();
     }
 
     /**
