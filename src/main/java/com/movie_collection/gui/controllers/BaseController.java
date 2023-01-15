@@ -1,13 +1,17 @@
 package com.movie_collection.gui.controllers;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.CompareSigns;
+import com.movie_collection.bll.helpers.EventType;
 import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
+import com.movie_collection.gui.controllers.event.RefreshEvent;
 import com.movie_collection.gui.models.ICategoryModel;
 import com.movie_collection.gui.models.IMovieModel;
 import javafx.collections.FXCollections;
@@ -57,20 +61,23 @@ public class BaseController extends RootController implements Initializable {
 
     private CompareSigns currentCompare = CompareSigns.MORE_THAN_OR_EQUAL;
 
+    private final EventBus eventBus;
+
     @Inject
-    public BaseController(IControllerFactory controllerFactory,ICategoryModel categoryModel,IMovieModel movieModel) {
+    public BaseController(IControllerFactory controllerFactory, ICategoryModel categoryModel, IMovieModel movieModel, EventBus eventBus) {
         this.controllerFactory = controllerFactory;
         this.categoryModel = categoryModel;
         this.movieModel = movieModel;
-    }
+        this.eventBus = eventBus;
 
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         filterBar();
         setupSpinner();
         setCategoriesScrollPane(categoryModel.getAllCategories());
         showMoviesToDelete();
-
+        eventBus.register(this);
     }
 
     /**
@@ -101,7 +108,7 @@ public class BaseController extends RootController implements Initializable {
      * void method that invokes scroll pane to clean content first
      * and then set it back to all categories
      */
-    protected void refreshScrollPane() {
+    private void refreshScrollPane() {
         if(scroll_pane != null){
             scroll_pane.setContent(null);
             setCategoriesScrollPane(categoryModel.getAllCategories());
@@ -306,4 +313,15 @@ public class BaseController extends RootController implements Initializable {
             System.out.println("The table view could not be found");
         }
     }
+
+    /**
+     * Registering events
+     */
+    @Subscribe
+    public void handleCategoryEvent(RefreshEvent event){
+        if(event.getEventType() == EventType.UPDATE_TABLE){
+            refreshScrollPane();
+        }
+    }
+
 }

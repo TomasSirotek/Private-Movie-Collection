@@ -145,5 +145,3 @@ fabric.properties
 /mediaPlayerPath.txt
 /src/main/resources/config.cfg
 /logs/
-/src/main/resources/config.cfg
-/src/main/resources/apiConfig.cfg

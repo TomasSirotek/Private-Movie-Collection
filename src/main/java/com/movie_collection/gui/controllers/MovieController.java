@@ -1,13 +1,17 @@
 package com.movie_collection.gui.controllers;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
+import com.movie_collection.bll.helpers.EventType;
 import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.DTO.MovieDTO;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
+import com.movie_collection.gui.controllers.event.RefreshEvent;
 import com.movie_collection.gui.models.IMovieModel;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -64,18 +68,23 @@ public class MovieController extends RootController implements Initializable {
 
     private boolean isCategoryView = false;
 
+    private final EventBus eventBus;
+
     private int categoryId;
 
     @Inject
-    public MovieController(IMovieModel movieService, IControllerFactory controllerFactory) {
+    public MovieController(Label descrIMDBRating, IMovieModel movieService, IControllerFactory controllerFactory, EventBus eventBus) {
+        this.descrIMDBRating = descrIMDBRating;
         this.movieModel = movieService;
         this.controllerFactory = controllerFactory;
+        this.eventBus = eventBus;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         fillTableWithData();
         listenToClickRow();
+        eventBus.register(this);
     }
 
 
@@ -180,6 +189,8 @@ public class MovieController extends RootController implements Initializable {
         trySetTableWithMovies();
     }
 
+
+
     protected void setIsCategoryView(int categoryId) {
         this.isCategoryView = true;
         this.categoryId = categoryId;
@@ -245,7 +256,7 @@ public class MovieController extends RootController implements Initializable {
      * method that clears table items if they are not null and sets it back to required values
      */
 
-    protected void refreshTable() {
+    private void refreshTable() {
         if(moviesTable != null){
             if(moviesTable.getItems() != null){
                 moviesTable.getItems().clear();
@@ -290,6 +301,15 @@ public class MovieController extends RootController implements Initializable {
             txtContent = Files.readString(fileName);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+    /**
+     * Registering events
+     */
+    @Subscribe
+    public void handleCategoryEvent(RefreshEvent event){
+        if(event.getEventType() == EventType.UPDATE_TABLE_VIEW){
+            refreshTable();
         }
     }
     }

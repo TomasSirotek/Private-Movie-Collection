@@ -1,10 +1,13 @@
 package com.movie_collection.gui.controllers;
 
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
+import com.movie_collection.bll.helpers.EventType;
 import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
+import com.movie_collection.gui.controllers.event.RefreshEvent;
 import com.movie_collection.gui.models.ICategoryModel;
 import com.movie_collection.gui.models.IMovieModel;
 import javafx.event.ActionEvent;
@@ -36,16 +39,17 @@ public class CreateMovieController extends RootController implements Initializab
     private MenuButton categoryMenuButton;
     private final IMovieModel movieModel;
     private final ICategoryModel categoryModel;
-    private final MovieController movieController;
 
     private Movie editableMovie;
     private boolean isEditable = false;
 
+    private final EventBus eventBus;
+
     @Inject
-    public CreateMovieController(IMovieModel movieModel, ICategoryModel categoryModel, MovieController controller) {
+    public CreateMovieController(IMovieModel movieModel, ICategoryModel categoryModel, EventBus eventBus) {
         this.movieModel = movieModel;
         this.categoryModel = categoryModel;
-        this.movieController = controller;
+        this.eventBus = eventBus;
     }
 
     @Override
@@ -227,7 +231,7 @@ public class CreateMovieController extends RootController implements Initializab
      */
     private void closeAndUpdate(int result,int id) {
         if(result > 0){
-            movieController.refreshTable();
+            eventBus.post(new RefreshEvent(EventType.UPDATE_TABLE_VIEW));
             getStage().close();
             AlertHelper.showDefaultAlert("Success with id: "+ id, Alert.AlertType.INFORMATION);
         }else {
