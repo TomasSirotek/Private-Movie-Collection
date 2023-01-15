@@ -132,7 +132,8 @@ public class BaseController extends RootController implements Initializable {
                 .map(category -> {
                     Button categoryBtn = new Button(category.getName());
                     Button deleteBtn = new Button("❌");
-
+                    categoryBtn.getStyleClass().add("custom-button");
+                    deleteBtn.getStyleClass().add("custom-button");
                     // Setting on the action for switching views
                     categoryBtn.setOnAction(event -> {
                         MovieController parent = (MovieController) tryToLoadView();

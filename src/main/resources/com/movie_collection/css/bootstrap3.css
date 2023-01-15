@@ -1,7 +1,7 @@
 /*Credits: https://github.com/dicolar/jbootx*/
 .root {
-    -fx-body-color : #F5F5F5;
-    -fx-outer-border : #cecece;
+    -fx-body-color : #192C35;
+    -fx-outer-border : #1d363f;
 }
 .button:focused,.button:selected, .toggle-button:focused,
 .split-menu-button:focused, .menu-button:focused,
@@ -924,4 +924,31 @@ VBox > .split-menu-button.last > .arrow-button {
 }
 .slider:vertical .track {
     -fx-pref-width: 5;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.custom-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: white;
+}
+
+.custom-button:hover {
+    -fx-background-color: #1f3242;
+}
+
+
+.spinner .text-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: white;
+}
+
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
 }

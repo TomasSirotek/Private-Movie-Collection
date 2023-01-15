@@ -128,7 +128,7 @@ public class MovieController extends RootController implements Initializable {
     private void fillTableWithData() {
         // sets value factory for play column
         colPlayMovie.setCellValueFactory(col -> {
-            Button playButton = new Button("▶️");
+            Button playButton = new Button("▶");
             playButton.setOnAction(e -> {
                 actionPlay(col);
             });
@@ -145,7 +145,7 @@ public class MovieController extends RootController implements Initializable {
         ));
         // sets value factory for edit column
         colEditMovies.setCellValueFactory(col -> {
-            Button editButton = new Button("⚙️");
+            Button editButton = new Button("⚙");
             Movie updateMovie = col.getValue();
             editButton.setOnAction(e -> {
                 CreateMovieController controller = loadSetEditController(updateMovie);
@@ -156,6 +156,7 @@ public class MovieController extends RootController implements Initializable {
         // sets value factory for delete  column
         colDeleteMovie.setCellValueFactory(col -> {
             Button deleteButton = new Button("❌");
+            deleteButton.getStyleClass().add("custom-button");
             deleteButton.setOnAction(e -> {
                 Movie movie = col.getValue(); // get movie object from the current row
                 if (movie != null) {

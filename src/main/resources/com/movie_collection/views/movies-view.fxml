@@ -14,10 +14,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-    <VBox prefHeight="551.0" prefWidth="600.0" stylesheets="@../css/bootstrap3.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.MovieController">
+<VBox prefHeight="551.0" prefWidth="600.0" stylesheets="@../css/bootstrap3.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.MovieController">
         <children>
-            <TableView fx:id="moviesTable" editable="true" prefHeight="320.0" prefWidth="565.0">
+            <TableView fx:id="moviesTable" editable="true" prefHeight="320.0" prefWidth="565.0" style="-fx-background-color: #192C35;">
                 <columns>
                     <TableColumn fx:id="colPlayMovie" prefWidth="48.79998433589935" />
                     <TableColumn fx:id="colMovieTitle" prefWidth="120.05393600463867" text="Title" />
