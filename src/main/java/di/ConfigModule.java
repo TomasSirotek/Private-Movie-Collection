@@ -43,7 +43,7 @@ public class ConfigModule extends AbstractModule {
         /**
          * Injection of movie service
          */
-        bind(IMovieService.class).to(MovieService.class).in(Singleton.class);
+        bind(IMovieService.class).to(MovieService.class);
 
         /**
          * Injection of movie service
@@ -58,12 +58,12 @@ public class ConfigModule extends AbstractModule {
         /**
          * Injection of base controller
          */
-        bind(BaseController.class);
+        bind(BaseController.class).in(Singleton.class);
 
         /*
          * docs
          */
-        bind(IMovieModel.class).to(MovieModel.class).in(Singleton.class);
+        bind(IMovieModel.class).to(MovieModel.class);
         /*
          * Injection of Filter service
          */

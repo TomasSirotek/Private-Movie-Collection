@@ -4,19 +4,13 @@ import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
-import com.movie_collection.gui.models.CategoryModel;
 import com.movie_collection.gui.models.ICategoryModel;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-
 import java.net.URL;
-import java.sql.SQLException;
-import java.util.Objects;
-import java.util.Random;
 import java.util.ResourceBundle;
 
 public class CategoryAddEditController extends RootController implements Initializable {
@@ -45,28 +39,38 @@ public class CategoryAddEditController extends RootController implements Initial
      * @param categoryName that is going to be eventualy created
      */
     private void createCategoryOnAction(String categoryName) {
-        Objects.requireNonNull(categoryName,"Category name cannot be empty");
-        Category newCategory = new Category(0,new SimpleStringProperty(categoryName));
-        var result = tryToCreateCategory(newCategory);
+        if(validateLengthAndFill()){
+            Category newCategory = new Category();
+            newCategory.setName(categoryName);
+            var result = tryToCreateCategory(newCategory);
 
-        if(result > 0){
-            AlertHelper.showOptionalAlertWindow("Successfully created category with name :" + categoryName, Alert.AlertType.INFORMATION);
-            refreshMovieTable();
-            getStage().close();
-        } else {
-            AlertHelper.showOptionalAlertWindow("Could not create category with name :" + categoryName, Alert.AlertType.ERROR);
+            if(result > 0){
+                AlertHelper.showOptionalAlertWindow("Successfully created category with name :" + categoryName,"", Alert.AlertType.INFORMATION);
+                refreshMovieTable();
+                getStage().close();
+            } else {
+                AlertHelper.showOptionalAlertWindow("Could not create category with name :" + categoryName,"", Alert.AlertType.ERROR);
+            }
         }
+    }
+
+    private boolean validateLengthAndFill() {
+        boolean result = false;
+        if (category_name.getText().isEmpty() || category_name.getText().isEmpty()) {
+            AlertHelper.showOptionalAlertWindow("Warning: Category cannot be empty. ", "",Alert.AlertType.INFORMATION);
+        } else if (category_name.getText().trim().length() < 3){
+            AlertHelper.showOptionalAlertWindow("Warning: Please make it at least 3 chars :) ", "",Alert.AlertType.INFORMATION);
+        }else {
+            result = true;
+        }
+        return result;
     }
 
     /**
      * tries to refresh category pane inside baseController
      */
     private void refreshMovieTable() {
-        try {
             baseController.refreshScrollPane();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     /**
@@ -75,11 +79,7 @@ public class CategoryAddEditController extends RootController implements Initial
 
      */
     private int tryToCreateCategory(Category newCategory) {
-        try {
-            return categoryModel.createCategory(newCategory);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return categoryModel.createCategory(newCategory);
     }
 
 }

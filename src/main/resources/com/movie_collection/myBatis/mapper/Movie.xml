@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.movie_collection.dal.mappers.MovieMapperDAO">
+
+    <resultMap id="movieResult" type="Movie">
+        <id property="id" column="movieId"/>
+        <result property="name" column="movieName"/>
+        <result property="rating" column="movieRating"/>
+        <result property="absolutePath" column="moviePath"/>
+        <result property="lastview" column="lastview"/>
+        <collection property="categories" javaType="ArrayList" column="movieId" ofType="Category">
+            <id property="id" column="idCat"/>
+            <result property="name" column="nameCat"/>
+        </collection>
+    </resultMap>
+
+
+    <select id="getAllMovies"
+            resultType="Movie"
+            resultMap="movieResult">
+        SELECT M.id       as movieId,-->
+               M.name     as movieName,-->
+               M.rating   as movieRating,-->
+               M.path     as moviePath,-->
+               M.lastview as lastview,-->
+               C.id       as idCat,-->
+               C.name     as nameCat-->
+        FROM Movie AS M -->
+                 left outer join CatMovie PT on M.id = PT.movieId
+                 left outer join Category C on PT.categoryId = C.id
+    </select>
+
+
+    <select id="getAllMoviesByCategoryId"
+            resultType="Movie"
+            resultMap="movieResult">
+        SELECT M.id       as movieId,-->
+               M.name     as movieName,-->
+               M.rating   as movieRating,-->
+               M.path     as moviePath,-->
+               M.lastview as lastview,-->
+               C.id       as idCat,-->
+               C.name     as nameCat-->
+        FROM Movie AS M -->
+                 left outer join CatMovie PT on M.id = PT.movieId
+                 left outer join Category C on PT.categoryId = C.id
+        WHERE C.id = #{categoryId}
+    </select>
+
+    <select id="getMovieById"
+            resultType="Movie"
+            resultMap="movieResult">
+        SELECT M.id       as movieId,-->
+               M.name     as movieName,-->
+               M.rating   as movieRating,-->
+               M.path     as moviePath,-->
+               M.lastview as lastview,-->
+               C.id       as idCat,-->
+               C.name     as nameCat-->
+        FROM Movie AS M -->
+                 left outer join CatMovie PT on M.id = PT.movieId
+                 left outer join Category C on PT.categoryId = C.id
+        WHERE M.id = #{movieId}
+    </select>
+
+
+    <insert
+            id="createMovieTest"
+            parameterType="Movie"
+            flushCache="true"
+            statementType="PREPARED"
+            keyProperty="id"
+            keyColumn="id"
+            useGeneratedKeys="true"
+            timeout="20">
+        -- insert new movie into table with params still need to make them safer
+        INSERT INTO Movie (name, rating, path) VALUES (#{name},#{rating},#{absolutePath})
+        -- selects the generated key
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            SELECT @@IDENTITY
+        </selectKey>
+
+    </insert>
+
+
+    <insert
+            id="addCategoryToMovie"
+            flushCache="true"
+            statementType="PREPARED"
+            keyProperty=""
+            keyColumn=""
+            useGeneratedKeys="true"
+            timeout="20">
+        --  insert categoryId and movieId to joining table
+        INSERT INTO CatMovie (categoryId, movieId)
+        VALUES (#{categoryId}, #{movieId})
+
+    </insert>
+
+
+    <update
+            id="updateMovie"
+            parameterType="Movie"
+            flushCache="true"
+            keyProperty="id"
+            keyColumn="id"
+            statementType="PREPARED">
+
+        -- updates movie by the id
+        UPDATE Movie SET
+        name = #{name},
+        rating = #{rating},
+        path = #{path}
+        OUTPUT INSERTED.id WHERE id = #{id}
+        -- retrieves back the identity key
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            SELECT @@IDENTITY
+        </selectKey>
+    </update>
+
+
+    <update
+            id="updateTimeStamp"
+            parameterType="Movie"
+            flushCache="true"
+            keyProperty=""
+            keyColumn=""
+            statementType="PREPARED">
+
+        -- updates movie by the id
+        UPDATE Movie SET
+        lastview = #{lastView}
+        OUTPUT INSERTED.id
+        WHERE id = #{movieId}
+    </update>
+
+    <!--  cache should be cleared before the statement is executed  ->  ensure that stale data is not used-->
+    <!--     timeout 20 to prevent any issues with a query taking too long to execute -->
+    <delete id="deleteMovieById"
+            parameterType="Movie"
+            flushCache="true"
+            statementType="PREPARED"
+            timeout="20">
+        --  executes delete query
+        DELETE
+        FROM MOVIE
+        WHERE id = #{movieId}
+    </delete>
+    <!--  cache should be cleared before the statement is executed  ->  ensure that stale data is not used-->
+    <!--     timeout 20 to prevent any issues with a query taking too long to execute -->
+    <delete id="removeCategoryMovie"
+            parameterType="Movie"
+            flushCache="true"
+            statementType="PREPARED"
+            timeout="20">
+        --  executes delete query
+        DELETE
+        FROM CatMovie
+        WHERE movieId = #{movieId}
+    </delete>
+
+</mapper>
+

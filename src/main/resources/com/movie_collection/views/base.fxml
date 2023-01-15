@@ -75,11 +75,6 @@
                               <Insets left="20.0" top="20.0" />
                            </VBox.margin>
                         </Button>
-                                <Button mnemonicParsing="false" onAction="#onActionGoHome" prefHeight="26.0" prefWidth="170.0" text="Home">
-                                    <VBox.margin>
-                                        <Insets left="20.0" top="20.0" />
-                                    </VBox.margin>
-                                </Button>
                                 <Button fx:id="fillAllMovies" mnemonicParsing="false" onAction="#clickMovies" prefHeight="26.0" prefWidth="170.0" text="All Movies">
                                     <VBox.margin>
                                         <Insets left="20.0" top="20.0" />

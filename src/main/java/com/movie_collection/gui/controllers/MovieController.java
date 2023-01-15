@@ -11,7 +11,6 @@ import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory
 import com.movie_collection.gui.models.IMovieModel;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -26,8 +25,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.SQLException;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -55,13 +52,13 @@ public class MovieController extends RootController implements Initializable {
     @FXML
     private TableColumn<Movie, Button> colPlayMovie, colEditMovies, colDeleteMovie;
     @FXML
-    private TableColumn<Movie, String> colMovieTitle, movieYear, colMovieCategory;
+    private TableColumn<Movie, String> colMovieTitle, colMovieCategory;
     @FXML
     private TableColumn<Movie, String> colMovieRating;
 
     private final IMovieModel movieModel;
 
-    private static String txtContent = "";
+    private static String txtContent = ""; // what is this ??
 
     private final IControllerFactory controllerFactory;
 
@@ -90,7 +87,7 @@ public class MovieController extends RootController implements Initializable {
             Movie selectedMovie = moviesTable.getSelectionModel().getSelectedItem();
             if (selectedMovie != null) {
                 // tries to find the movie by name
-                MovieDTO movieDTO = movieModel.findMovieByNameAPI(selectedMovie.name().getValue());
+                MovieDTO movieDTO = movieModel.findMovieByNameAPI(selectedMovie.getName());
                 fillDescriptionWithAPIData(movieDTO,selectedMovie);
             }
         });
@@ -106,15 +103,14 @@ public class MovieController extends RootController implements Initializable {
             movieImage.setImage(new Image(movieDTO.Poster));
         }
 
-        descrMovieTitle.setText(selectedMovie.name().getValue());
+        descrMovieTitle.setText(selectedMovie.getName());
         desPlot.setText(movieDTO.Plot);
         desRunTime.setText(movieDTO.Runtime);
         desCast.setText(movieDTO.imdbRating);
         descrIReleased1.setText(movieDTO.Released);
         desImdbRating.setText(movieDTO.imdbRating);
         desDirector.setText(movieDTO.Director);
-        descrMovieTitle.setText(selectedMovie.name().getValue());
-        desPrRating.setText(String.valueOf(selectedMovie.rating()));
+        desPrRating.setText(String.valueOf(selectedMovie.getRating()));
     }
 
     /**
@@ -130,14 +126,13 @@ public class MovieController extends RootController implements Initializable {
             return new SimpleObjectProperty<>(playButton);
         });
         // ->
-        colMovieTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().name().getValue())); // set movie title
-        movieYear.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().name().getValue())); // does not have anything now from model
-        colMovieRating.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().rating())));
+        colMovieTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName())); // set movie title
+
+        colMovieRating.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getRating())));
 
         // sets value factory for movie category column data are collected by name and joined by "," -> action,horror
-        colMovieCategory.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().categories().stream()
-                .map(Category::name)
-                .map(StringProperty::getValue)
+        colMovieCategory.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategories().stream()
+                .map(Category::getName)
                 .collect(Collectors.joining(","))
         ));
         // sets value factory for edit column
@@ -156,17 +151,15 @@ public class MovieController extends RootController implements Initializable {
             deleteButton.setOnAction(e -> {
                 Movie movie = col.getValue(); // get movie object from the current row
                 if (movie != null) {
-                    var resultNotify = AlertHelper.showOptionalAlertWindow("Are you sure you want delete movie with id: " + movie.id(), Alert.AlertType.CONFIRMATION);
-                    if (resultNotify.get().equals(ButtonType.OK)) {
-                        int result = tryDeleteMovie(movie.id()); // tries to delete movie by id inside the row
-                        refreshTableAndNotify(result, movie.id());
+                    var resultNotify = AlertHelper.showOptionalAlertWindow("Are you sure you want delete movie with id: " + movie.getId(),"", Alert.AlertType.CONFIRMATION);
+                    if (resultNotify.isPresent() && resultNotify.get().equals(ButtonType.OK)) {
+                        int result = tryDeleteMovie(movie.getId()); // tries to delete movie by id inside the row
+                        refreshTableAndNotify(result,movie.getId());
                     }
                 }
             });
             return new SimpleObjectProperty<>(deleteButton);
         });
-
-        // tries to call movie service and set all items
 
         trySetTableWithMovies();
     }
@@ -175,23 +168,16 @@ public class MovieController extends RootController implements Initializable {
         Runtime runTime = Runtime.getRuntime();
         if (!txtContent.isEmpty()) {
             String s[] = new String[]{txtContent, path};
-            try {
-                movieModel.updateTimeStamp(id);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+               int result = movieModel.updateTimeStamp(id);
+               if(result <= 0){
+                   AlertHelper.showDefaultAlert("Error: Could not update time stamp for movie as last viewed. ", Alert.AlertType.ERROR);
+               }
             runTime.exec(s);
         } else {
-            try {
-                showMediaPlayerUnselected();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            showMediaPlayerUnselected();
+
         }
-
-
         trySetTableWithMovies();
-
     }
 
     protected void setIsCategoryView(int categoryId) {
@@ -229,19 +215,6 @@ public class MovieController extends RootController implements Initializable {
         return controller;
     }
 
-    /**
-     * method that tries to delete movie by id
-     * result success if > 0 ... else err display/handel
-     *
-     * @param id of movie that will be deleted
-     */
-    private int tryDeleteMovie(int id) {
-        try {
-            return movieModel.deleteMovie(id);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     /**
      * refreshed the table and notify user about the status of his actions
@@ -260,11 +233,11 @@ public class MovieController extends RootController implements Initializable {
     }
 
 
-    private void showMediaPlayerUnselected() throws SQLException {
+    private void showMediaPlayerUnselected() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Select your Media Player");
         alert.getButtonTypes().setAll(new ButtonType("OK"));
-        Optional<ButtonType> btn = alert.showAndWait();
+        alert.showAndWait();
     }
 
 
@@ -273,32 +246,25 @@ public class MovieController extends RootController implements Initializable {
      */
 
     protected void refreshTable() {
-        if (moviesTable != null) {
-            if (moviesTable.getItems() != null) {
-                try {
-                    movieModel.getAllMovies();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+        if(moviesTable != null){
+            if(moviesTable.getItems() != null){
+                moviesTable.getItems().clear();
+                moviesTable.getItems().setAll( movieModel.getAllMovies());
             }
         }
     }
 
     private void actionPlay(TableColumn.CellDataFeatures<Movie, Button> col) {
         try {
-            playVideoDesktop(col.getValue().id(), col.getValue().absolutePath().getValue());
+            playVideoDesktop(col.getValue().getId(), col.getValue().getAbsolutePath());
         } catch (IOException | InterruptedException ex) {
             throw new RuntimeException(ex);
         }
     }
 
 
-    private void trySetTableByCategory(int categoryId) {
-        try {
-            movieModel.getAllMoviesInTheCategory(categoryId);
-        } catch (SQLException e) {
-            throw new RuntimeException(e); //TODO: Lets look at this later to fix it                no result rows
-        }
+    private void trySetTableByCategory(int categoryId){
+        moviesTable.setItems(movieModel.getAllMoviesInTheCategory(categoryId));
     }
 
     /**
@@ -306,7 +272,16 @@ public class MovieController extends RootController implements Initializable {
      */
 
     private void trySetTableWithMovies() {
-        moviesTable.setItems(movieModel.getFilteredMovies());
+        moviesTable.setItems(movieModel.getAllMovies());
+    }
+
+    /**
+     * method that tries to delete movie by id
+     * result success if > 0 ... else err display/handel
+     * @param id of movie that will be deleted
+     */
+    private int tryDeleteMovie(int id) {
+        return movieModel.deleteMovieById(id);
     }
 
     protected void setPath(Path fileName, String mediaPlayerPath) {
@@ -317,5 +292,4 @@ public class MovieController extends RootController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-
-}
+    }

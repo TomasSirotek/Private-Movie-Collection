@@ -7,18 +7,16 @@ import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.models.ICategoryModel;
 import com.movie_collection.gui.models.IMovieModel;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.media.Media;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -31,7 +29,7 @@ public class CreateMovieController extends RootController implements Initializab
     @FXML
     private Spinner<Double> personalRatingSpin;
     @FXML
-    private TextField movieName,path,durationField;
+    private TextField movieName,path;
     @FXML
     public Button onClickSelectFile,confirm_action,cancelOnAction;
     @FXML
@@ -70,9 +68,6 @@ public class CreateMovieController extends RootController implements Initializab
         File selectedMovieFile = chooseFile.showOpenDialog(new Stage());
         if (selectedMovieFile != null) {
             path.setText(selectedMovieFile.toURI().toString());
-            var media = new Media(selectedMovieFile.toURI().toString().replace("\\", "/"));
-            var duration = (int) media.getDuration().toSeconds();
-            durationField.setText(duration / 60 + ":" + duration % 60);
             if (movieName.getText().isBlank())
                 movieName.setText(selectedMovieFile.getName());
         }
@@ -96,7 +91,7 @@ public class CreateMovieController extends RootController implements Initializab
             categoryList.stream()
                     .map(category -> {
                         CheckMenuItem menuItem = new CheckMenuItem();
-                        menuItem.setText(category.name().getValue());
+                        menuItem.setText(category.getName());
 
                         return menuItem;
                     })
@@ -114,36 +109,34 @@ public class CreateMovieController extends RootController implements Initializab
         if(!isEditable){
             if(isValidatedInput()){
                 var collectedCategory = mapSelectedCategories();
-                Movie movie = new Movie(
-                        0,
-                        new SimpleStringProperty(movieName.getText().trim()),
-                        personalRatingSpin.getValue(),
-                        new SimpleStringProperty(path.getText().trim()),
-                        collectedCategory,
-                        null);
+
+                Movie movie = new Movie();
+                movie.setName(movieName.getText().trim());
+                movie.setRating(personalRatingSpin.getValue());
+                movie.setAbsolutePath(path.getText().trim());
+                movie.setCategories(collectedCategory);
 
                 int result = tryCreateMovie(movie);
-                closeAndUpdate(result,movie.id());
+                closeAndUpdate(result, movie.getId());
                 e.consume();
-                try {
-                    movieModel.getAllMovies();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
+
+                movieModel.getAllMovies();
+
             }
         }else {
             if(isValidatedInput()){
                 var collectedCategory = mapSelectedCategories();
-                Movie movie = new Movie(
-                        editableMovie.id(),
-                        new SimpleStringProperty(movieName.getText().trim()),
-                        personalRatingSpin.getValue(),
-                        new SimpleStringProperty(path.getText().trim()),
-                        collectedCategory,
-                        editableMovie.lastview());
+
+                Movie movie = new Movie();
+                movie.setId(editableMovie.getId());
+                movie.setName(movieName.getText().trim());
+                movie.setRating(personalRatingSpin.getValue());
+                movie.setAbsolutePath(path.getText().trim());
+                movie.setCategories(collectedCategory);
 
                 int result = tryUpdateMovie(movie);
-                closeAndUpdate(result,movie.id());
+                closeAndUpdate(result, movie.getId());
+
                 e.consume();
             }
 
@@ -158,11 +151,11 @@ public class CreateMovieController extends RootController implements Initializab
         isEditable = true;
         editableMovie = movie;
 
-        movieName.setText(editableMovie.name().getValue());
+        movieName.setText(editableMovie.getName());
 
-        SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(1.0, 10.0, editableMovie.rating(),0.5);
+        SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(1.0, 10.0, editableMovie.getRating(),0.5);
         personalRatingSpin.setValueFactory(valueFactory);
-        path.setText(editableMovie.absolutePath().getValue());
+        path.setText(editableMovie.getAbsolutePath());
 
         if(categoryMenuButton.getItems() != null){
             categoryMenuButton.getItems().clear();
@@ -178,14 +171,14 @@ public class CreateMovieController extends RootController implements Initializab
      */
     private void setEditableCategories() {
         List<Category> categoryList = tryToGetCategory();
-        Set<String> categorySet = editableMovie.categories().stream().map(category -> category.name().getValue()).collect(Collectors.toSet());
+        Set<String> categorySet = editableMovie.getCategories().stream().map(Category::getName).collect(Collectors.toSet());
 
         categoryList.stream()
                 .map(category -> {
                     CheckMenuItem menuItem = new CheckMenuItem();
-                    menuItem.setText(category.name().getValue());
+                    menuItem.setText(category.getName());
 
-                    if(categorySet.contains(category.name().getValue())){
+                    if(categorySet.contains(category.getName())){
                         menuItem.setSelected(true);
                     }
 
@@ -213,12 +206,18 @@ public class CreateMovieController extends RootController implements Initializab
      * @return list of Categories
      */
     private List<Category> mapSelectedCategories() {
-        return categoryMenuButton.getItems().stream()
+
+        List<Category> categories = new ArrayList<>();
+        categoryMenuButton.getItems().stream()
                 .filter(item -> item instanceof CheckMenuItem)
                 .map(CheckMenuItem.class::cast)
                 .filter(CheckMenuItem::isSelected)
-                .map(button -> new Category(0,new SimpleStringProperty(button.getText())))
-                .toList();
+                .forEach(button -> {
+                    Category category = new Category();
+                    category.setName(button.getText());
+                    categories.add(category);
+                });
+        return categories;
     }
 
     /**
@@ -243,11 +242,7 @@ public class CreateMovieController extends RootController implements Initializab
      * @return 0 or 1 where 0 is fail and 1 is success
      */
     private int tryCreateMovie(Movie movie) {
-        try {
-            return movieModel.createMovie(movie);
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
+        return movieModel.createMovie(movie);
     }
 
     /**
@@ -257,11 +252,7 @@ public class CreateMovieController extends RootController implements Initializab
      */
 
     private int tryUpdateMovie(Movie movie) {
-        try {
             return movieModel.updateMovie(movie);
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
     }
 
     /**
@@ -269,10 +260,7 @@ public class CreateMovieController extends RootController implements Initializab
      * @return list of Categories with id,name
      */
     private List<Category> tryToGetCategory() {
-        try {
-            return categoryModel.getAllCategories();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return categoryModel.getAllCategories();
+
     }
 }

@@ -1,22 +1,27 @@
 package com.movie_collection.bll.services;
 
 import com.google.inject.Inject;
-import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.CompareSigns;
+import com.movie_collection.bll.helpers.DateFormat;
 import com.movie_collection.bll.services.interfaces.IAPIService;
 import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.bll.services.interfaces.IMovieService;
 import com.movie_collection.bll.util.IFilter;
+import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.dal.interfaces.IMovieDAO;
 import com.movie_collection.gui.DTO.MovieDTO;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.Alert;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 public class MovieService implements IMovieService {
+
     private final IMovieDAO movieDAO;
     private final ICategoryService categoryService;
 
@@ -25,63 +30,116 @@ public class MovieService implements IMovieService {
     private final IAPIService apiService;
 
     @Inject
-    public MovieService(IMovieDAO movieDAO, ICategoryService categoryService, IFilter filter, IAPIService apiService) {
+    public MovieService(IMovieDAO movieDAO, ICategoryService categoryService, IAPIService apiService, IFilter filterUtil) {
         this.movieDAO = movieDAO;
         this.categoryService = categoryService;
-        this.filterUtil = filter;
+        this.filterUtil = filterUtil;
         this.apiService = apiService;
     }
 
     @Override
-    public List<Movie> getAllMovies() throws SQLException {
+    public List<Movie> getAllMovies() {
         return movieDAO.getAllMovies();
     }
 
     @Override
-    public int createMovie(Movie movie) throws SQLException {
-        return movieDAO.createMovie(linkingCategoriesToId(movie));
+    public Optional<Movie> getMovieById(int id) {
+        return Optional.of(movieDAO.getMovieById(id).get());
     }
 
     @Override
-    public int updateMovie(Movie movie) throws SQLException {
-        return movieDAO.updateMovie(linkingCategoriesToId(movie));
+    public Optional<List<Movie>> getAllMoviesInTheCategory(int categoryId) {
+        return Optional.of(movieDAO.getAllMoviesInTheCategoryById(categoryId).get());
     }
 
     @Override
-    public int deleteMovie(int id) throws SQLException {
-        return movieDAO.deleteMovie(id);
-    }
-
-    @Override
-    public int updateTimeStamp(int id) throws SQLException {
-        return movieDAO.updateTimeStamp(id);
-    }
-
-    @Override
-
-    public List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException {
-        return movieDAO.getAllMoviesInTheCategory(categoryId);
-    }
-
-
-    private Movie linkingCategoriesToId(Movie movie) throws SQLException {
-        ArrayList<Category> allCategories = new ArrayList<>(categoryService.getAllCategories());
-        List<Category> categories = new ArrayList<>(movie.categories());
-        for (int i = 0; i < categories.size(); i++) {
-            String catName = categories.get(i).name().get();
-            Category category = allCategories.stream().filter(c -> c.name().get().equals(catName)).findFirst().orElse(new Category(0, new SimpleStringProperty("Does not exist")));
-            categories.set(i, category);
+    public int createMovie(Movie movie) {
+        int result = movieDAO.createMovieTest(movie);
+        if (result != 0) {
+            movie.setId(result);
+            getCatAndAdd(movie);
         }
-        return new Movie(movie.id(), movie.name(), movie.rating(), movie.absolutePath(), categories, movie.lastview());
+        return result;
     }
 
     @Override
-    public List<Movie> searchMovie(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue){
-        return filterUtil.filteringMovies(listToSearch, query, buttonValue, spinnerValue);
+    public int updateTimeStamp(int id) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DateFormat.DAY_MONTH_YEAR.getDateFormat()); // made it more type safe :) @bearded redemption
+        Timestamp ts = Timestamp.from(Instant.now());
+        String date = dateFormat.format(ts);
+
+        return movieDAO.updateTimeStamp(date,id);
     }
+
+    @Override
+    public List<Movie> searchMovie(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue) {
+        return filterUtil.filteringMovies(listToSearch,query,buttonValue,spinnerValue);
+    }
+
+//    @Override
+//    public List<Movie> searchMovie(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue) {
+//        return filterUtil.filteringMovies(listToSearch, query, buttonValue, spinnerValue);
+//    }
 
     @Override
     public MovieDTO getMovieByNameAPI(String title) {
         return apiService.getMovieByTitle(title);
+    }
+
+    public int updateMovie(Movie movie) {
+        int finalResult = 0; // there is plenty of ways of logic with update categories this one worked for us atm
+        Objects.requireNonNull(movie, "Movie cannot be null");
+
+        // tries to update movie
+        int resultId = movieDAO.updateMovieById(movie, movie.getId());
+
+        // tries to find and remove the category
+        if (resultId > 0) {
+            finalResult = getCatNameAndRemove(resultId);
+        }
+        //  tries to assign the new categories again
+        if (finalResult > 0) {
+            getCatAndAdd(movie);
+        }
+        return finalResult;
+    }
+
+    @Override
+    public int deleteMovie(int id) {
+        return movieDAO.deleteMovieById(id);
+    }
+
+    private int getCatNameAndRemove(int resultId) {
+        int resultHere = 0;
+        Optional<Movie> fetchedMovie = movieDAO.getMovieById(resultId);
+        if (fetchedMovie.isPresent()) {
+            resultHere = 1;
+            int resultRemove = movieDAO.removeCategoryFromMovie(fetchedMovie.get().getId());
+            if (resultRemove > 0) {
+                AlertHelper.showDefaultAlert("Error: Failed to remove category from movie." + fetchedMovie.get().getId(), Alert.AlertType.ERROR);
+            }
+        }
+        return resultHere;
+    }
+
+    /**
+     * handles mapping the categories by name and trying to add them to each movie
+     * it might be quite slow lets see what up with redis
+     *
+     * @param movie that will be assigned list of categories
+     */
+    private void getCatAndAdd(Movie movie) {
+        Objects.requireNonNull(movie.getCategories(), "Error: Categories cannot be empty for movie with id: " + movie.getId());
+
+        movie.getCategories().stream()
+                .map(category -> categoryService.getCategoryByName(category.getName()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .forEach(category -> {
+                    int addResult = movieDAO.addCategoryToMovie(category, movie);
+                    if (addResult <= 0) {
+                        AlertHelper.showDefaultAlert("Error: Failed to add category to movie." + category.getId(), Alert.AlertType.ERROR);
+                    }
+                });
     }
 }
