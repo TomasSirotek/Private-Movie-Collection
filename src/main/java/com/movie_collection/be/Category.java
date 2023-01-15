@@ -1,6 +1,36 @@
 package com.movie_collection.be;
 
-import javafx.beans.property.StringProperty;
+public class Category {
+    private int id;
 
-public record Category(int id, StringProperty name) {
+    private String name;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+//    public Category2(int id, String name) {
+//        this.id = id;
+//        this.name = name;
+//    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Category2{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

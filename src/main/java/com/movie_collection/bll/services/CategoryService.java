@@ -5,8 +5,8 @@ import com.movie_collection.be.Category;
 import com.movie_collection.bll.services.interfaces.ICategoryService;
 import com.movie_collection.dal.interfaces.ICategoryDAO;
 
-import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class CategoryService implements ICategoryService {
 
@@ -18,22 +18,23 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public List<Category> getAllCategories() throws SQLException {
+    public List<Category> getAllCategories() {
         return categoryDAO.getAllCategories();
     }
 
+
     @Override
-    public int createCategory(Category category) throws SQLException {
-        return categoryDAO.addCategory(category);
+    public int createCategory(Category category){
+        return categoryDAO.createCategory(category);
     }
 
     @Override
-    public int deleteCategory(int id) throws SQLException {
+    public Optional<Category> getCategoryByName(String categoryName) {
+        return categoryDAO.getCategoryByName(categoryName);
+    }
+
+    @Override
+    public int deleteCategory(int id) {
         return categoryDAO.deleteCategory(id);
-    }
-
-    @Override
-    public Category getCategoryByName(String name) throws SQLException {
-        return categoryDAO.getCategoryByName(name);
     }
 }

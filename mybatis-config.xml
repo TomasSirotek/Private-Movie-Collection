@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!-- config path -->
+    <properties resource="config.cfg"/>
+
+    <!-- LOG4J setting -->
+    <settings>
+        <setting name="logImpl" value="slf4j"/>
+    </settings>
+
+    <!-- table aliases -->
+    <typeAliases>
+        <typeAlias alias="Movie" type="com.movie_collection.be.Movie"/>
+        <typeAlias alias="Category" type="com.movie_collection.be.Category"/>
+    </typeAliases>
+
+    <!-- main environment -->
+    <!-- POOLED uses connection pool to manage connections
+     - cnn can be reused rather than creating a new one each time
+    -->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${DRIVER}"/>
+                <property name="url"
+                          value="${SERVER_TYPE}://${SERVER}:${PORT};databaseName=${DATABASE};trustServerCertificate=${TRUST_CERTIFICATE};"/>
+                <property name="username" value="${USER}"/>
+                <property name="password" value="${PASSWORD}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!-- mappers used to map required tables-->
+    <mappers>
+        <mapper resource="com/movie_collection/mybatis/mapper/Movie.xml"/>
+        <mapper resource="com/movie_collection/mybatis/mapper/Category.xml"/>
+    </mappers>
+</configuration>

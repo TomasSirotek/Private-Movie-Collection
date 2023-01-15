@@ -6,40 +6,50 @@ import com.movie_collection.gui.DTO.MovieDTO;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public interface IMovieService {
     /**
-     * method tyo get list of all movies
+     * Retrieves all Movies from the database and store into a list
      *
-     * @return List<Movie> to be created
+     * @return list of Movies
      */
-    List<Movie> getAllMovies() throws SQLException;
+    List<Movie> getAllMovies();
 
     /**
-     * method to create a movie
+     * Retrieves all Movies from the database by categoryId and store into a list
      *
-     * @param movie to be created
-     * @return number of rows affected
-     * @throws SQLException if the connection to the database fails
+     * @param categoryId that could have all movies
+     * @return Optional list of Movies - not all movies can be found in that category
      */
-    int createMovie(Movie movie) throws SQLException;
+    Optional<List<Movie>> getAllMoviesInTheCategory(int categoryId);
 
     /**
-     * method to update a movie
-     * @param movie to be updated with new parameters
-     * @return number of rows affected
-     * @throws SQLException if the connection to the database fails
+     * Creates a new movie in the database with given properties
+     *
+     * @param movie
+     * @return @Identity -> id of the movie
      */
-    int updateMovie(Movie movie) throws SQLException;
+    int createMovie(Movie movie);
 
     /**
-     * method to delete a movie
+     * Retrieves optional Movie by its id
      *
-     * @param id of the movie to be deleted
-     * @return number of rows affected
-     * @throws SQLException if the connection to the database fails
+     * @param id of movie that will be retrieved
+     * @return Optional Movie by its id that might not be there
      */
-    int deleteMovie(int id) throws SQLException;
+    Optional<Movie> getMovieById(int id);
+
+    int updateMovie(Movie movie);
+
+
+    /**
+     * Removes a movie from the database based on the id
+     *
+     * @param id id of movie to be deleted
+     * @return number of rows affected
+     */
+    int deleteMovie(int id);
 
     /**
      * Update timeStamp when a movie is played based on the id
@@ -48,16 +58,7 @@ public interface IMovieService {
      * @return number of rows affected
      * @throws SQLException if the connection to the database fails
      */
-    int updateTimeStamp(int id) throws SQLException;
-
-    /**
-     * method to get all movies in a category
-     *
-     * @param categoryId of the category
-     * @return List of movies in the category
-     * @throws SQLException if the connection to the database fails
-     */
-    List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException;
+    int updateTimeStamp(int id);
 
     /**
      * docs

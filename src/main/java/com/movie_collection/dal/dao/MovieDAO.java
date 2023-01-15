@@ -2,204 +2,141 @@ package com.movie_collection.dal.dao;
 
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
-import com.movie_collection.dal.ConnectionManager;
 import com.movie_collection.dal.interfaces.IMovieDAO;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
+import com.movie_collection.dal.mappers.MovieMapperDAO;
+import myBatis.MyBatisConnectionFactory;
+import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class MovieDAO implements IMovieDAO {
-    private static final ConnectionManager cm = new ConnectionManager();
 
-    public List<Movie> getAllMovies() throws SQLException {
-        List<Movie> movies = new ArrayList<>();
-        long starttime;
-        try (Connection con = cm.getConnection()){
-            starttime = System.currentTimeMillis();
-            String sql = "SELECT M.id, M.name, M.rating, M.path, M.lastview, CM.categoryId, CM.movieId, C.id as C_id, C.name as C_name FROM Movie M " +
-                    "LEFT JOIN CatMovie CM on M.id = CM.movieId " +
-                    "LEFT JOIN Category C on C.id = CM.categoryId " +
-                    "ORDER BY M.id ASC;";
-            PreparedStatement pstmt = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            ResultSet rs = pstmt.executeQuery();
+    Logger logger = LoggerFactory.getLogger(MovieDAO.class);
 
-            // used for adding categories to movie
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                // check for empty table
-                // since we are sorting by movies if the first one is 0 the rest will also be zero
-                if (id == 0){
-                    return movies;
-                }
-                StringProperty name = new SimpleStringProperty(rs.getString("name"));
-                double rating = rs.getDouble("rating");
-                StringProperty path = new SimpleStringProperty(rs.getString("path"));
-                Date lastview = rs.getDate("lastview");
-
-                Movie lastMovie;
-                List<Category> categories;
-                // check for empty list
-                if (movies.isEmpty()) {
-                    // add first element
-                    String catName = rs.getString("C_name");
-                    categories = catName != null ? List.of(new Category(rs.getInt("C_id"), new SimpleStringProperty(catName))) : new ArrayList<>();
-                    movies.add(new Movie(id, name, rating, path, categories, lastview));
-                } else {
-                    // the last added movie
-                    lastMovie = movies.get(movies.size() - 1);
-                    // if it is the same as movie in this row
-                    if (lastMovie.id() == id) {
-                        // add the extra category
-                        categories = new ArrayList<>(lastMovie.categories());
-                        categories.add(new Category(rs.getInt("C_id"), new SimpleStringProperty(rs.getString("C_name"))));
-                        // remove the old movie
-                        movies.remove(lastMovie);
-                    } else {
-                        String catName = rs.getString("C_name");
-                        categories = catName != null ? List.of(new Category(rs.getInt("C_id"), new SimpleStringProperty(catName))) : new ArrayList<>();
-                    }
-                    movies.add(new Movie(id, name, rating, path, new ArrayList<>(categories), lastview));
-
-                }
-            }
+    @Override
+    public List<Movie> getAllMovies() {
+        List<Movie> allMovies = new ArrayList<>();
+        try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+            MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
+            allMovies = mapper.getAllMovies();
+        } catch (Exception ex) {
+            logger.error("An error occurred mapping tables", ex);
         }
-        System.out.println("Time to get all the movies: " + (System.currentTimeMillis() - starttime));
-        return (movies);
+        return allMovies;
     }
 
-    public List<Movie> getAllMoviesInTheCategory(int categoryId) throws SQLException {
-        ArrayList<Movie> movies = new ArrayList<>();
-        try (Connection con= cm.getConnection()) {
-            String sql = "SELECT M.id, CM.categoryId, CM.movieId, C.id as C_id, C.name as C_name FROM Category C  " +
-                    "LEFT JOIN CatMovie CM on C.id = CM.categoryId " +
-                    "LEFT JOIN Movie M on M.id = CM.movieId WHERE C.id = ? " +
-                    "ORDER BY M.id ASC;";
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setInt(1, categoryId);
-            ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                if (id == 0) {
-                    return movies;
-                } else {
-                    Optional<Movie> movie = getMovieById(id);
-                    movie.ifPresent(movies::add);
-                }
-            }
+    @Override
+    public Optional<Movie> getMovieById(int id) {
+        Movie movie = new Movie();
+        try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+            MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
+            movie = mapper.getMovieById(id);
+        } catch (Exception ex) {
+            logger.error("An error occurred mapping tables", ex);
         }
-        return movies;
+        return Optional.ofNullable(movie);
     }
 
-    public Optional<Movie> getMovieById(int id) throws SQLException {
-        try (Connection con = cm.getConnection()) {
-            String sql = "SELECT M.id, M.name, M.rating, M.path, M.lastview, CM.categoryId, CM.movieId, C.id as C_id, C.name as C_name FROM Movie M  " +
-                    "LEFT JOIN CatMovie CM on M.id = CM.movieId " +
-                    "LEFT JOIN Category C on C.id = CM.categoryId WHERE M.id = ? " +
-                    "ORDER BY M.id ASC, C.id ASC;";
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-            if (!rs.next()){
-                return Optional.empty();
-            }
-            StringProperty name = new SimpleStringProperty(rs.getString("name"));
-            double rating = rs.getDouble("rating");
-            StringProperty path = new SimpleStringProperty(rs.getString("path"));
-            Date lastview = rs.getDate("lastview");
-            String catName = rs.getString("C_name");
-
-            ArrayList<Category> allCategories = new ArrayList<>(catName != null ? List.of(new Category(rs.getInt("C_id"), new SimpleStringProperty(catName))) : new ArrayList<>());
-            while (rs.next()) {
-                allCategories.add(new Category(rs.getInt("C_id"), new SimpleStringProperty(rs.getString("C_name"))));
-            }
-            return Optional.of(new Movie(id, name, rating, path, allCategories, lastview));
+    @Override
+    public Optional<List<Movie>> getAllMoviesInTheCategoryById(int categoryId) {
+        List<Movie> fetchedMovieInRole = new ArrayList<>();
+        try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+            MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
+            fetchedMovieInRole = mapper.getAllMoviesByCategoryId(categoryId);
+        } catch (Exception ex) {
+            logger.error("An error occurred mapping tables", ex);
         }
+        return Optional.ofNullable(fetchedMovieInRole);
     }
 
-    public int createMovie(Movie movie) throws SQLException {
-        int rowsAffected = 0;
-        try (Connection con = cm.getConnection()) {
-            String sql;
-            PreparedStatement pstmt;
-            sql = "INSERT INTO Movie (name, rating, path, lastview) VALUES (?, ?, ?, ?); SELECT SCOPE_IDENTITY() as id";
-            pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, movie.name().get());
-            pstmt.setDouble(2, movie.rating());
-            pstmt.setString(3, movie.absolutePath().get());
-            pstmt.setDate(4, movie.lastview());
-            ResultSet rs = pstmt.executeQuery();
-            rs.next();
-            int id = rs.getInt("id");
-
-            rowsAffected = linkMovieCategories(movie, rowsAffected, con, id);
+    @Override
+    public int createMovieTest(Movie movie) {
+        int returnedId = 0;
+        try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+            MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
+            int affectedRows = mapper.createMovieTest(movie);
+            session.commit();//  after commit if rows > 0 returns the generated key
+            returnedId = affectedRows > 0 ? movie.getId() : 0;
+        } catch (Exception ex) {
+            logger.error("An error occurred mapping tables", ex);
         }
-        return rowsAffected + 1;
+        return returnedId;
     }
 
-    public int updateMovie(Movie movie) throws SQLException {
-        int rowsAffected = 1;
-        try (Connection con = cm.getConnection()) {
-            System.out.println(movie);
-            String sql = "UPDATE Movie SET name = ?, rating = ?, path = ? WHERE id = (?) ;";
-            PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, movie.name().get());
-            pstmt.setDouble(2, movie.rating());
-            pstmt.setString(3, movie.absolutePath().get());
-            pstmt.setInt(4, movie.id());
-            ResultSet rs = pstmt.executeQuery();
-            rs.next();
-
-            rowsAffected = linkMovieCategories(movie, rowsAffected, con, movie.id());
+    @Override
+    public int updateMovieById(Movie movie, int id) {
+        int resultId = 0;
+        try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+            MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
+            int affectedRows = mapper.updateMovie(movie.getName(), movie.getRating(), movie.getAbsolutePath(), movie.getId());
+            session.commit();//  after commit if rows > 0 returns the key
+            resultId = affectedRows == -1 ? movie.getId() : 0;
+        } catch (Exception ex) {
+            logger.error("An error occurred mapping tables", ex);
         }
-        return rowsAffected;
+        return resultId;
     }
 
-    public int deleteMovie(int id) throws SQLException {
-        try (Connection con = cm.getConnection()) {
-            String sql = "DELETE FROM Movie WHERE id = ?";
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, id);
-            return pstmt.executeUpdate();
+    @Override
+    public int addCategoryToMovie(Category category, Movie movie) {
+        int finalAffectedRows = 0;
+        try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+            MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
+            int affectedRows = mapper.addCategoryToMovie(category.getId(), movie.getId());
+            session.commit();
+            return affectedRows;
+        } catch (Exception ex) {
+            logger.error("An error occurred mapping tables", ex);
         }
+        return finalAffectedRows;
     }
 
-    private int linkMovieCategories(Movie movie, int rowsAffected, Connection con, int id) throws SQLException {
-        String sql;
-        PreparedStatement pstmt;
-
-        sql = "DELETE FROM CatMovie WHERE movieId = ?;";
-        pstmt = con.prepareStatement(sql);
-        pstmt.setInt(1, movie.id());
-        pstmt.executeUpdate();
-
-        sql = "INSERT INTO CatMovie (categoryId, movieId) VALUES (?, ?);";
-        pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        for (Category c : movie.categories()) {
-            pstmt.setInt(1, c.id());
-            pstmt.setInt(2, id);
-            pstmt.addBatch();
-            rowsAffected++;
+    @Override
+    public int removeCategoryFromMovie(int id) {
+        int finalAffectedRows = 0;
+        try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+            MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
+            int affectedRows = mapper.removeCategoryMovie(id);
+            session.commit();
+            return affectedRows;
+        } catch (Exception ex) {
+            logger.error("An error occurred mapping tables", ex);
         }
-        pstmt.executeBatch();
-        return rowsAffected;
+        return finalAffectedRows;
     }
 
-
-
-    public int updateTimeStamp(int id) throws SQLException{
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
-        Timestamp ts = Timestamp.from(Instant.now());
-        String date = dateFormat.format(ts);
-        try(Connection con = cm.getConnection()){
-            String sql = "UPDATE Movie SET lastview = '"+ date +"'" + "WHERE id='"+id+"'";
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
-            return preparedStatement.executeUpdate();
+    @Override
+    public int deleteMovieById(int id) {
+        int finalAffectedRows = 0;
+        try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+            MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
+            int affectedRows = mapper.deleteMovieById(id);
+            session.commit(); // end a unit of work -> if u want to do more open new session -> ensure no leftovers
+            return affectedRows;
+        } catch (Exception ex) {
+            logger.error("An error occurred mapping tables", ex);
         }
+        return finalAffectedRows;
     }
+
+    @Override
+    // this needs to be updated and fixed
+    public int updateTimeStamp(String date,int id) {
+        int finalAffectedRows = 0;
+        try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+            MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
+             int affectedRows = mapper.updateTimeStamp(date,id);
+            session.commit(); // end a unit of work -> if u want to do more open new session -> ensure no leftovers
+            return affectedRows;
+        } catch (Exception ex) {
+            logger.error("An error occurred mapping tables", ex);
+        }
+        return finalAffectedRows;
+    }
+
 
 }

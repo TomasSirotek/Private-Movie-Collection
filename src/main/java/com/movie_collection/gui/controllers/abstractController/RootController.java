@@ -26,4 +26,5 @@ public abstract class RootController implements IRootController {
     public Stage getStage(){
         return (Stage) root.getScene().getWindow();
     }
+
 }

@@ -2,8 +2,8 @@ package com.movie_collection.dal.interfaces;
 
 import com.movie_collection.be.Category;
 
-import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public interface ICategoryDAO {
 
@@ -11,24 +11,26 @@ public interface ICategoryDAO {
      * Retrieves all Categories from the database and store into a list
      * @return a list of all the Categories from database
      */
-    List<Category> getAllCategories() throws SQLException;
+    List<Category> getAllCategories();
 
     /**
-     * Saves the new information about a new Caterogy into the database
+     *  Retrieves Category by name from the database
+     *  @param categoryName that will be get Category by name
+     *  @return Optional Category that might not be found
+     */
+    Optional<Category> getCategoryByName(String categoryName);
+
+    /**
+     * Saves the new information about a new Category into the database
      * @param category the Category to be added
      */
-    int addCategory(Category category) throws SQLException;
+    int createCategory(Category category);
 
     /**
      * Deletes the desired Category from the Category database
-     * @param Category the Category to be deleted
+     * @param id which by the category will be deleted from database
+     * @return 0 if no rows affected otherwise return 1 as success
      */
-    /**
-     * NEED TO DISCUSS WITH TEAM
-     *
-     * @return
-     */
-    int deleteCategory(int id) throws SQLException;
+    int deleteCategory(int id);
 
-    Category getCategoryByName(String name) throws SQLException;
 }

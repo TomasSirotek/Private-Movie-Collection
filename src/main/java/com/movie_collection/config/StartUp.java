@@ -2,7 +2,7 @@ package com.movie_collection.config;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import di.ConfigModule;
+import com.movie_collection.di.ConfigModule;
 
 public class StartUp {
 

@@ -1,65 +1,56 @@
 package com.movie_collection.gui.models;
 
 import com.google.inject.Inject;
-import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.CompareSigns;
+import com.movie_collection.be.Movie;
 import com.movie_collection.bll.services.interfaces.IMovieService;
 import com.movie_collection.gui.DTO.MovieDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.SQLException;
+import java.util.Collections;
+import java.util.List;
 
-public class MovieModel implements  IMovieModel{
+
+public class MovieModel implements IMovieModel{
 
     private final IMovieService movieService;
 
-    private final ObservableList<Movie> allMovies;
-    private final ObservableList<Movie> filteredMovies;
+    private ObservableList<Movie> allMovies;
 
     @Inject
-    public MovieModel(IMovieService movieService) throws SQLException {
+    public MovieModel(IMovieService movieService){
         this.movieService = movieService;
-        this.filteredMovies = FXCollections.observableArrayList();
-        this.allMovies = FXCollections.observableArrayList();
-        getAllMovies();
-        filteredMovies.setAll(allMovies);
-
+        this.allMovies = getAllMovies();
     }
 
     @Override
-    public ObservableList<Movie> getAllMovies() throws SQLException {
-        allMovies.setAll(FXCollections.observableArrayList(movieService.getAllMovies()));
-        filteredMovies.setAll(allMovies);
+    public ObservableList<Movie> getAllMovies() {
+        allMovies = FXCollections.observableArrayList(movieService.getAllMovies());
         return allMovies;
     }
 
     @Override
-    public ObservableList<Movie> getFilteredMovies() {
-        return filteredMovies;
+    public ObservableList<Movie> getAllMoviesInTheCategory(int categoryId) {
+        return movieService.getAllMoviesInTheCategory(categoryId)
+                .map(FXCollections::observableArrayList).orElse(FXCollections.observableArrayList(Collections.emptyList()));
     }
 
     @Override
-    public void getAllMoviesInTheCategory(int categoryId) throws SQLException{
-        allMovies.setAll(FXCollections.observableArrayList(movieService.getAllMoviesInTheCategory(categoryId)));
-        filteredMovies.setAll(allMovies);
-    }
-
-    @Override
-    public int createMovie(Movie movie) throws SQLException {
+    public int createMovie(Movie movie) {
         return movieService.createMovie(movie);
     }
     @Override
-    public int updateMovie(Movie movie) throws SQLException {
+    public int updateMovie(Movie movie) {
         return movieService.updateMovie(movie);
     }
     @Override
-    public int deleteMovie(int id) throws SQLException {
+    public int deleteMovieById(int id) {
         return movieService.deleteMovie(id);
     }
 
     @Override
-    public int updateTimeStamp(int id) throws SQLException {
+    public int updateTimeStamp(int id) {
         return movieService.updateTimeStamp(id);
     }
 
@@ -69,7 +60,7 @@ public class MovieModel implements  IMovieModel{
     }
 
     @Override
-    public void searchMovies(String query, CompareSigns buttonValue, double spinnerValue) {
-        filteredMovies.setAll(movieService.searchMovie(allMovies, query, buttonValue, spinnerValue));
+    public List<Movie> searchMovies(String query, CompareSigns buttonValue, double spinnerValue) {
+       return movieService.searchMovie(allMovies,query, buttonValue, spinnerValue);
     }
 }

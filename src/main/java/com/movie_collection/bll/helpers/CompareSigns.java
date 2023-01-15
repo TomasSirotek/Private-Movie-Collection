@@ -1,6 +1,7 @@
 package com.movie_collection.bll.helpers;
 
 public enum CompareSigns {
+
     LESS_THAN_OR_EQUAL("≤"),
     MORE_THAN_OR_EQUAL("≥"),
     EQUAL("=");
@@ -14,4 +15,5 @@ public enum CompareSigns {
     public String getSign() {
         return sign;
     }
+
 }

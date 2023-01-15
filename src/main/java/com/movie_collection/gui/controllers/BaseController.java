@@ -1,14 +1,20 @@
 package com.movie_collection.gui.controllers;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.CompareSigns;
+import com.movie_collection.bll.helpers.EventType;
 import com.movie_collection.bll.helpers.ViewType;
+import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
+import com.movie_collection.gui.controllers.event.RefreshEvent;
 import com.movie_collection.gui.models.ICategoryModel;
 import com.movie_collection.gui.models.IMovieModel;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,8 +29,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,7 +41,7 @@ import java.util.stream.Collectors;
  */
 public class BaseController extends RootController implements Initializable {
 
-    private CompareSigns currentCompare = CompareSigns.MORE_THAN_OR_EQUAL;
+
     @FXML
     private Spinner<Double> ratingFilterSpinner;
     @FXML
@@ -44,57 +50,56 @@ public class BaseController extends RootController implements Initializable {
     private ScrollPane scroll_pane;
     @FXML
     private StackPane app_content;
-
-    @Inject
-    private IControllerFactory controllerFactory;
     @FXML
     private TextField searchMovies;
+    private final IControllerFactory controllerFactory;
 
-    @Inject
-    private IMovieModel movieModel;
+    private final IMovieModel movieModel;
 
     @Inject
     private ICategoryModel categoryModel;
 
+    private CompareSigns currentCompare = CompareSigns.MORE_THAN_OR_EQUAL;
+
+    private final EventBus eventBus;
+
     @Inject
-    public BaseController(IControllerFactory controllerFactory,ICategoryModel categoryModel,IMovieModel movieModel) {
+    public BaseController(IControllerFactory controllerFactory, ICategoryModel categoryModel, IMovieModel movieModel, EventBus eventBus) {
         this.controllerFactory = controllerFactory;
         this.categoryModel = categoryModel;
         this.movieModel = movieModel;
+        this.eventBus = eventBus;
+
     }
-
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         filterBar();
         setupSpinner();
-        try {
-            setCategoriesScrollPane(categoryModel.getAllCategories());
-            showMoviesToDelete();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        setCategoriesScrollPane(categoryModel.getAllCategories());
+        showMoviesToDelete();
+        eventBus.register(this);
     }
 
-    private void showMoviesToDelete() throws SQLException {
-        List<Movie> allMovies = movieModel.getAllMovies();
-        List<Movie> moviesToDelete = allMovies.stream()
-                .filter(m -> m.rating() < 6.0 || (m.lastview() != null && (Instant.now().toEpochMilli() - m.lastview().getTime() > 63113852000L))) // add movie if rating is < 6 or if lastview is not null and Current time - (lastview time is more than time of 2 years in miliseconds)
-                .toList();
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Do you want to delete these movies ?");
+    /**
+     * needs docs @patrik
+     */
+    private void showMoviesToDelete()  {
+        var test = movieModel.getAllMovies();
+        List<Movie> moviesToDelete = movieModel.getAllMovies().stream()
+                .filter(m -> m.getRating() < 6.0 || (m.getLastview() != null && (Instant.now().toEpochMilli() - m.getLastview().toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()> 63113852000L)))
+                .collect(Collectors.toList());
+
         String str = "";
-        for (Movie m:moviesToDelete) {
-            str += m.name().get() + "\n";
-        }
-        alert.setContentText(str);
-        alert.getButtonTypes().setAll(new ButtonType("Delete"), new ButtonType("Cancel"));
-        Optional<ButtonType> btn= alert.showAndWait();
-        String button = btn.isPresent() ? btn.get().getText() : "Cancel";
-        if (button.equals("Delete")){
-            for (Movie m: moviesToDelete) {
-                movieModel.deleteMovie(m.id());
+        if(!moviesToDelete.isEmpty()){
+            for (Movie m:moviesToDelete) {
+                str += m.getName() + "\n";
+            }
+            var alert = AlertHelper.showOptionalAlertWindow("Do you want to delete these movies ? " , str, Alert.AlertType.CONFIRMATION);
+
+            if(alert.isPresent() && alert.get().equals(ButtonType.OK)){
+                for (Movie m: moviesToDelete) {
+                    movieModel.deleteMovieById(m.getId());
+                }
             }
         }
     }
@@ -103,8 +108,8 @@ public class BaseController extends RootController implements Initializable {
      * void method that invokes scroll pane to clean content first
      * and then set it back to all categories
      */
-    protected void refreshScrollPane() throws SQLException {
-        if(scroll_pane.getContent() != null){
+    private void refreshScrollPane() {
+        if(scroll_pane != null){
             scroll_pane.setContent(null);
             setCategoriesScrollPane(categoryModel.getAllCategories());
         }
@@ -122,42 +127,39 @@ public class BaseController extends RootController implements Initializable {
         int deleteButtonWidth = 40;
         // This code is creating a new Map object that is populated with the key-value pairs of a given Map,
         //  and then returning it.
-        LinkedHashMap<Button, Button> scrollPaneContentMap = allCategories.stream()
+        LinkedHashMap<Button, Button> scrollPaneContentMap = allCategories
+                .stream()
                 .map(category -> {
-                    Button categoryBtn = new Button(category.name().getValue());
+                    Button categoryBtn = new Button(category.getName());
                     Button deleteBtn = new Button("❌");
 
                     // Setting on the action for switching views
                     categoryBtn.setOnAction(event -> {
                         MovieController parent = (MovieController) tryToLoadView();
-                        parent.setIsCategoryView(category.id());
+                        parent.setIsCategoryView(category.getId());
                         switchToView(parent.getView()); // switches into chosen view
                     });
                     categoryBtn.setPrefWidth(183);
 
                     deleteBtn.setOnAction(event -> {
-                        int result = tryToDeleteCategory(category.id());
+                        int result = tryToDeleteCategory(category.getId());
                         if (result > 0) {
-                            try {
-                                refreshScrollPane();
-                            } catch (SQLException e) {
-                                throw new RuntimeException(e);
-                            }
+                            refreshScrollPane();
                         } else {
-                            throw new RuntimeException("Could not delete category with id: " + category.id()); // TODO: Fix to have better handeling
+                            AlertHelper.showDefaultAlert("Could not delete category with id: " + category.getId(), Alert.AlertType.ERROR);
                         }
                     });
                     deleteBtn.setPrefWidth(deleteButtonWidth);
                     return new AbstractMap.SimpleEntry<>(categoryBtn, deleteBtn);
                 })
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
                 // (oldValue, newValue) -> oldValue - a "merge function" that is used to resolve
                 // conflicts when two keys are mapped to the same value. In this case, if there is a conflict,
                 // the old value is kept and the new value is discarded.
 
                 // LinkedHashmap::new  is a function that creates a new, empty Map object. In this case, a LinkedHashMap is created.
                 // collect method is called in order to finish up what we opened at the begging stream
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 
         if (scrollPaneContentMap.isEmpty()) {
             scroll_pane.setContent(new Label("Empty")); // sets content if no buttons are filled
@@ -170,7 +172,6 @@ public class BaseController extends RootController implements Initializable {
                 vBox.getChildren().add(hBox); // sets the vbox to hold HBox
             }
             scroll_pane.setContent(vBox); // finally sets the content into the scroll pane
-            scroll_pane.setPannable(false);
         }
     }
 
@@ -180,11 +181,7 @@ public class BaseController extends RootController implements Initializable {
      * @return for now int that must be > 0 in order to successfully delete it
      */
     private int tryToDeleteCategory(int id) {
-        try {
             return categoryModel.deleteCategory(id);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     /**
@@ -249,11 +246,7 @@ public class BaseController extends RootController implements Initializable {
         RootController parent = loadNodesView(ViewType.MOVIES);
         switchToView(parent.getView());
         e.consume();
-        try {
-            movieModel.getAllMovies();
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
+        movieModel.getAllMovies();
     }
 
     /**
@@ -292,24 +285,6 @@ public class BaseController extends RootController implements Initializable {
     }
 
 
-    /** TODO:
-     * This method does nothing for now it is just prepared for later extension
-     * depens on what ever we going to use it for it can be deleted or it
-     * @param actionEvent
-     * @throws IOException
-     */
-    @FXML
-    private void onActionGoHome(ActionEvent actionEvent) throws IOException {
-        RootController parent = loadNodesView(ViewType.MOVIES);
-        switchToView(parent.getView());
-        actionEvent.consume();
-        try {
-            movieModel.getAllMovies();
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
     @FXML
     private void ratingFilterButtonAction(ActionEvent actionEvent) {
         List<CompareSigns> buttonValues = new ArrayList<>(List.of(CompareSigns.MORE_THAN_OR_EQUAL, CompareSigns.LESS_THAN_OR_EQUAL, CompareSigns.EQUAL));
@@ -319,6 +294,7 @@ public class BaseController extends RootController implements Initializable {
         ratingFilterButton.setText(currentCompare.getSign());
 
         searchMovies();
+        actionEvent.consume();
     }
 
     private void setupSpinner(){
@@ -331,10 +307,22 @@ public class BaseController extends RootController implements Initializable {
     private void searchMovies() {
         TableView tableView = (TableView) getStage().getScene().lookup("#moviesTable");
         if (tableView != null) {
-            movieModel.searchMovies(searchMovies.getText(), currentCompare, ratingFilterSpinner.getValue());
-            tableView.refresh();
+            List<Movie> list = movieModel.searchMovies(searchMovies.getText(), currentCompare, ratingFilterSpinner.getValue());
+            tableView.getItems().clear();
+            tableView.setItems(FXCollections.observableArrayList(list));
         } else {
             System.out.println("The table view could not be found");
         }
     }
+
+    /**
+     * Registering events
+     */
+    @Subscribe
+    public void handleCategoryEvent(RefreshEvent event){
+        if(event.getEventType() == EventType.UPDATE_TABLE){
+            refreshScrollPane();
+        }
+    }
+
 }

@@ -1,26 +1,25 @@
 package com.movie_collection.gui.models;
 
-import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.gui.DTO.MovieDTO;
-import javafx.beans.property.StringProperty;
+import com.movie_collection.be.Movie;
 import javafx.collections.ObservableList;
 
-import java.sql.SQLException;
+import java.util.List;
 
 public interface IMovieModel {
     
-    ObservableList<Movie> getAllMovies() throws SQLException;
-    void getAllMoviesInTheCategory(int categoryId) throws SQLException;
-    ObservableList<Movie> getFilteredMovies();
+    ObservableList<Movie> getAllMovies();
+    ObservableList<Movie> getAllMoviesInTheCategory(int categoryId);
 
-    int createMovie(Movie movie) throws SQLException;
+    int createMovie(Movie movie) ;
 
-    int deleteMovie(int id) throws SQLException;
-    int updateMovie(Movie movie) throws SQLException;
+    int updateMovie(Movie movie);
 
-    void searchMovies(String query, CompareSigns buttonValue, double spinnerValue);
-	int updateTimeStamp(int id) throws SQLException;
+    int deleteMovieById(int id);
+
+    List<Movie> searchMovies(String query, CompareSigns buttonValue, double spinnerValue);
+	int updateTimeStamp(int id);
 
     MovieDTO findMovieByNameAPI(String title);
 }

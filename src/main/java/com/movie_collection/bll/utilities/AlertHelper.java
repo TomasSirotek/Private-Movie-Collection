@@ -11,15 +11,16 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class AlertHelper {
+    private static Alert alert;
     /**
      * Show custom alert box with needed description and its alert type
      * @param content that will be displayed inside the show alert as main message
      * @param type java fx scene control Alert enum type
      * @return alert that will be shown and will be waiting for user action
      */
-    public static Optional<ButtonType> showOptionalAlertWindow(String content, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setHeaderText(null);
+    public static Optional<ButtonType> showOptionalAlertWindow(String title,String content, Alert.AlertType type) {
+        alert = new Alert(type);
+        alert.setHeaderText(title);
         alert.setContentText(content);
         alert.getDialogPane().getChildren()
                 .stream()
@@ -35,8 +36,9 @@ public class AlertHelper {
     }
 
     public static void showDefaultAlert(String content, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setHeaderText(null);
+        alert = new Alert(type);
+        alert.setAlertType(type);
+        alert.setHeaderText(null); // maybe redundant
         alert.setContentText(content);
         alert.getDialogPane().getChildren()
                 .stream()
