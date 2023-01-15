@@ -73,7 +73,7 @@ public class MovieController extends RootController implements Initializable {
 
     @Inject
     public MovieController(Label descrIMDBRating, IMovieModel movieService, IControllerFactory controllerFactory, EventBus eventBus) {
-        this.desIMDBRating = descrIMDBRating;
+        this.desImdbRating = descrIMDBRating;
         this.movieModel = movieService;
         this.controllerFactory = controllerFactory;
         this.eventBus = eventBus;
@@ -135,8 +135,8 @@ public class MovieController extends RootController implements Initializable {
             return new SimpleObjectProperty<>(playButton);
         });
         // ->
-        colMovieTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().name().getValue())); // set movie title
-        colMovieRating.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().rating())));
+        colMovieTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName())); // set movie title
+        colMovieRating.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getRating())));
 
         // sets value factory for movie category column data are collected by name and joined by "," -> action,horror
         colMovieCategory.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategories().stream()
