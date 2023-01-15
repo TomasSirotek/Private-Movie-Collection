@@ -6,6 +6,8 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -16,76 +18,112 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="597.0" prefWidth="875.0" style="-fx-background-color: #192C35;" stylesheets="@../css/bootstrap3.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.BaseController">
+<BorderPane prefHeight="569.0" prefWidth="875.0" stylesheets="@../css/base.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.BaseController">
       <top>
-          <GridPane prefHeight="70.0" BorderPane.alignment="CENTER">
+          <GridPane prefHeight="54.0" prefWidth="875.0" styleClass="nav-bar" BorderPane.alignment="CENTER">
               <columnConstraints>
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="279.4013671875" minWidth="10.0" prefWidth="195.3276824951172" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="279.4013671875" minWidth="10.0" prefWidth="209.64089965820312" />
+                  <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="528.0" minWidth="10.0" prefWidth="458.3591003417969" />
+            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="207.0" minWidth="10.0" prefWidth="207.0" />
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints maxHeight="69.6" minHeight="10.0" prefHeight="43.999994659423834" vgrow="SOMETIMES" />
               </rowConstraints>
-              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="42.0" prefWidth="248.0" text="Private Movie Collection" textFill="WHITE">
+              <Label alignment="BASELINE_LEFT" contentDisplay="CENTER" prefHeight="46.0" prefWidth="224.0" text=" Movie Collection" textFill="#f84b4b">
                   <font>
-                      <Font name="System Bold" size="17.0" />
+                      <Font name="Graphique W01 Regular" size="31.0" />
                   </font>
+            <padding>
+               <Insets left="5.0" />
+            </padding>
               </Label>
-              <HBox alignment="CENTER" prefHeight="44.0" prefWidth="488.0" spacing="20.0" GridPane.columnIndex="1">
+              <HBox alignment="CENTER_LEFT" prefHeight="44.0" prefWidth="488.0" spacing="20.0" GridPane.columnIndex="1">
                   <GridPane.margin>
                       <Insets left="10.0" right="10.0" />
                   </GridPane.margin>
-                  <TextField fx:id="searchMovies" maxWidth="311.0" prefHeight="26.0" prefWidth="311.0">
+                  <TextField fx:id="searchMovies" maxWidth="311.0" prefHeight="23.0" prefWidth="239.0" promptText="Search movies" styleClass="nav-bar-search">
                       <HBox.margin>
                           <Insets />
                       </HBox.margin>
                   </TextField>
-                  <HBox alignment="CENTER" prefHeight="55.0" prefWidth="174.0">
-                      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Rating is" wrappingWidth="50.93676280975342">
-                            </Text>
-                      <Button fx:id="ratingFilterButton" mnemonicParsing="false" onAction="#ratingFilterButtonAction" prefHeight="26.0" prefWidth="25.0" styleClass="custom-button" text="≥" />
-                      <Spinner fx:id="ratingFilterSpinner" prefHeight="26.0" prefWidth="81.0" style="-fx-background-color: #192C35;" />
-                  </HBox>
               </HBox>
+               <HBox alignment="CENTER_LEFT" prefHeight="55.0" prefWidth="182.0" GridPane.columnIndex="2">
+                   <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Rating is" wrappingWidth="50.93676280975342">
+                            </Text>
+                   <Button fx:id="ratingFilterButton" mnemonicParsing="false" onAction="#ratingFilterButtonAction" prefHeight="26.0" prefWidth="25.0" styleClass="decrement-arrow" text="≥" />
+                   <Spinner fx:id="ratingFilterSpinner" prefHeight="26.0" prefWidth="81.0" style="-fx-background-color: transparent;" />
+               </HBox>
+         <effect>
+            <DropShadow height="50.65" radius="17.4125" />
+         </effect>
           </GridPane>
       </top>
       <left>
-          <VBox alignment="TOP_CENTER" prefHeight="530.0" prefWidth="250.0" spacing="20.0" BorderPane.alignment="CENTER">
+          <VBox alignment="TOP_CENTER" prefHeight="515.0" prefWidth="209.0" spacing="20.0" styleClass="drawer" BorderPane.alignment="CENTER">
               <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
               </padding>
-              <Button fx:id="fillAllMovies" mnemonicParsing="false" onAction="#clickMovies" prefHeight="26.0" prefWidth="170.0" styleClass="custom-button" text="All Movies">
-                  <VBox.margin>
-                      <Insets />
-                  </VBox.margin>
-              </Button>
-              <Button mnemonicParsing="false" onAction="#onActionAddMovie" prefHeight="26.0" prefWidth="170.0" styleClass="info" text="Add Movie">
-                  <VBox.margin>
-                      <Insets />
-                  </VBox.margin>
-              </Button>
-              <VBox alignment="CENTER" prefHeight="344.0" prefWidth="230.0" spacing="10.0">
-                  <VBox.margin>
-                      <Insets />
-                  </VBox.margin>
-                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Categories" textAlignment="CENTER">
-                      <VBox.margin>
-                          <Insets />
-                      </VBox.margin>
-               <font>
-                  <Font size="16.0" />
-               </font>
-                  </Text>
-                  <ScrollPane fx:id="scroll_pane" prefHeight="230.0" prefWidth="230.0" style="-fx-background-color: transparent;" />
-              </VBox>
-              <Button mnemonicParsing="false" onAction="#onActionAddCategory" prefHeight="26.0" prefWidth="170.0" styleClass="info" text="Add Category">
-                  <VBox.margin>
-                      <Insets />
-                  </VBox.margin>
-              </Button>
-              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-                  <Button mnemonicParsing="false" onAction="#onActionSelectMedia" prefHeight="26.0" prefWidth="170.0" styleClass="info" text="Select Media Player">
+         <AnchorPane prefHeight="200.0" prefWidth="195.0">
+            <children>
+                    <VBox alignment="CENTER_LEFT" layoutX="-1.0" prefHeight="382.0" prefWidth="194.0" spacing="10.0" styleClass="pane">
+                  <GridPane alignment="CENTER_LEFT" prefHeight="78.0" prefWidth="235.0" styleClass="menu-bar-top">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                             <Button fx:id="fillAllMovies" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#clickMovies" prefHeight="40.0" prefWidth="231.0" styleClass="menu-bar-top-buttons" text="All Movies" />
+                              <Button alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#onActionSelectMedia" prefHeight="40.0" prefWidth="231.0" styleClass="menu-bar-top-buttons" text="Select Media Player" GridPane.rowIndex="1">
                         </Button>
+                     </children>
+                     <effect>
+                        <DropShadow />
+                     </effect>
+                  </GridPane>
+                  <HBox prefHeight="298.0" prefWidth="194.0" styleClass="menu-bar-middle-container">
+                     <children>
+                        <GridPane prefHeight="296.0" prefWidth="194.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints maxHeight="124.0" minHeight="10.0" prefHeight="35.97248840332031" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="268.29075622558594" minHeight="10.0" prefHeight="260.0275115966797" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label prefHeight="46.0" prefWidth="230.0" styleClass="menu-bar-middle-title" text="Categories" textFill="WHITE">
+                                 <padding>
+                                    <Insets left="10.0" />
+                                 </padding>
+                              </Label>
+                                    <ScrollPane fx:id="scroll_pane" prefHeight="253.0" prefWidth="194.0" styleClass="menu-bar-scroll-pane" GridPane.rowIndex="1" />
+                           </children>
+                        </GridPane>
+                     </children>
+                     <effect>
+                        <DropShadow />
+                     </effect>
+                  </HBox>
+                    </VBox>
+            </children>
+         </AnchorPane>
+              <VBox alignment="CENTER" prefHeight="86.0" prefWidth="229.0">
+            <GridPane prefHeight="92.0" prefWidth="229.0">
+              <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                       <Button mnemonicParsing="false" onAction="#onActionAddCategory" prefHeight="37.0" prefWidth="177.0" styleClass="action-button" text="Add Category" GridPane.rowIndex="1" />
+                       <Button mnemonicParsing="false" onAction="#onActionAddMovie" prefHeight="36.0" prefWidth="177.0" styleClass="action-button" text="Add Movie" />
+               </children>
+            </GridPane>
               </VBox>
           </VBox>
       </left>

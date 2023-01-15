@@ -1,2 +1,113 @@
 @import "bootstrap3.css";
 
+/*fill with right colors*/
+
+/*@font-face {font-family: "Graphique W01 Regular";*/
+/*    src: url("ab83b275830b2d585ea027c47e3b237a.eot"); !* IE9*!*/
+/*    src: url("ab83b275830b2d585ea027c47e3b237a.eot?#iefix") format("embedded-opentype"), !* IE6-IE8 *!*/
+/*    url("ab83b275830b2d585ea027c47e3b237a.woff2") format("woff2"), !* chrome、firefox *!*/
+/*    url("ab83b275830b2d585ea027c47e3b237a.woff") format("woff"), !* chrome、firefox *!*/
+/*    url("ab83b275830b2d585ea027c47e3b237a.ttf") format("truetype"), !* chrome、firefox、opera、Safari, Android, iOS 4.2+*!*/
+/*    url("ab83b275830b2d585ea027c47e3b237a.svg#Graphique W01 Regular") format("svg"); !* iOS 4.1- *!*/
+/*}*/
+
+* {
+    -fx-nord0: #192C35;
+    -fx-nord1: #3B4252;
+    -fx-nord2: #434C5E;
+    -fx-nord3: #4C566A;
+    -fx-nord4: #D8DEE9;
+    -fx-nord5: #E5E9F0;
+    -fx-nord6: #ECEFF4;
+    -fx-nord7: #8FBCBB;
+    -fx-nord8: #88C0D0;
+    -fx-nord9: #81A1C1;
+    -fx-nord10:#5E81AC;
+}
+
+/* NAVBAR */
+.nav-bar{
+    -fx-background-color: -fx-nord0;
+    -fx-border-color: black;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-style: solid;
+}
+
+.nav-bar-search{
+    -fx-background-radius:15px;
+    -fx-border-radius: 15px;
+}
+
+/* DRAWER  */
+.drawer{
+    -fx-background-color: -fx-nord0;
+}
+
+.menu-bar-top-buttons{
+    -fx-border-width: 0px 0px 0px 0px;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-text-fill: white;
+    -fx-background-color: -fx-nord0;
+    -fx-min-height: 40;
+    -fx-graphic: url('../icons/Folder.png');
+    -fx-graphic-text-gap: 5; /* gap between icon and button text */
+    -fx-content-display: left; /* position of the icon */
+}
+
+.menu-bar-top-buttons:hover{
+    -fx-background-color:#040404;
+    -fx-text-fill:white;
+    -fx-border-width: 0px 0px 0px 0px;
+    -fx-border-color:#1b0e3c;
+}
+
+
+.menu-bar-middle-container{
+    -fx-text-fill: white;
+    -fx-background-color: -fx-nord0;
+    -fx-content-display: left;
+}
+.menu-bar-middle-title{
+    -fx-background-color: #040404;
+    -fx-opacity: 25%;
+}
+
+.menu-bar-scroll-pane{
+    -fx-background-color: transparent;
+    -fx-border-width: 0px 0px 0px 0px;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-text-fill: white;
+    -fx-graphic-text-gap: 5; /* gap between icon and button text */
+    -fx-content-display: left; /* position of the icon */
+}
+
+
+/* ACTION BUTTONS */
+
+.action-button{
+    -fx-border-color: black;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-style: solid;
+    -fx-background-color: #4FC4F4;
+    -fx-border-radius: 49.6894px;
+    -fx-text-fill: white;
+    -fx-background-radius: 49.6894px;
+}
+
+
+.action-button:hover{
+    -fx-background-color: #4FC4F4;
+    -fx-text-fill: black;
+}
+
+.custom-button{
+    -fx-max-width: 150px;
+    -fx-alignment: BOTTOM_LEFT;
+
+
+}
+
+
+
