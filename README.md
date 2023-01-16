@@ -123,7 +123,8 @@ Our application was re-design by us in Figma
 ## Database design
 
 MSSQL Database diagram
-![Screenshot 2021-11-15 at 19 39 17](https://user-images.githubusercontent.com/72190589/212736234-6d6ecaf1-86fc-4bd7-aa7d-083af42b87f0.png)
+
+![EASV](https://user-images.githubusercontent.com/72190589/212736702-0c5d451b-d7f7-4166-8b80-0dc58529f3db.png)
 
 ## UML diagram
 
