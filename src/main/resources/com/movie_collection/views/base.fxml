@@ -23,8 +23,8 @@
           <GridPane prefHeight="54.0" prefWidth="875.0" styleClass="nav-bar" BorderPane.alignment="CENTER">
               <columnConstraints>
                   <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="279.4013671875" minWidth="10.0" prefWidth="213.52818298339844" />
-                  <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="528.0" minWidth="10.0" prefWidth="447.387939453125" />
-            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="528.0" minWidth="10.0" prefWidth="217.612060546875" />
+                  <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="528.0" minWidth="10.0" prefWidth="453.3507080078125" />
+            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="528.0" minWidth="10.0" prefWidth="210.1492919921875" />
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints maxHeight="69.6" minHeight="10.0" prefHeight="43.999994659423834" vgrow="SOMETIMES" />
@@ -46,18 +46,27 @@
                           <Insets />
                       </HBox.margin>
                   </TextField>
-                  <HBox alignment="CENTER_LEFT" prefHeight="55.0" prefWidth="182.0">
-                      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Rating is" wrappingWidth="50.93676280975342">
-                            </Text>
-                      <Button fx:id="ratingFilterButton" minWidth="26.0" mnemonicParsing="false" onAction="#ratingFilterButtonAction" prefHeight="23.0" prefWidth="17.0" style="-fx-background-color: #4FC4F4#4FC4F4;" text="≥">
+                  <HBox alignment="CENTER_LEFT" prefHeight="55.0" prefWidth="174.0">
+               <Label prefHeight="45.0" prefWidth="63.0" text="Rating is " textFill="WHITE">
+                  <font>
+                     <Font name="Arial Rounded MT Bold" size="14.0" />
+                  </font>
+                  <HBox.margin>
+                     <Insets right="5.0" />
+                  </HBox.margin>
+               </Label>
+                      <Button fx:id="ratingFilterButton" minWidth="26.0" mnemonicParsing="false" onAction="#ratingFilterButtonAction" prefHeight="23.0" prefWidth="17.0" styleClass="nav-bar-spinner-button" text="≥">
                   <HBox.margin>
                      <Insets right="5.0" />
                   </HBox.margin>
                </Button>
-                      <Spinner fx:id="ratingFilterSpinner" prefHeight="26.0" prefWidth="81.0" style="-fx-background-color: transparent;" styleClass="nav-bar-spinner" />
+                      <Spinner fx:id="ratingFilterSpinner" prefHeight="32.0" prefWidth="71.0" style="-fx-background-color: transparent;" styleClass="nav-bar-spinner" />
                   </HBox>
               </HBox>
-         <Label alignment="CENTER" prefHeight="50.0" prefWidth="217.0" text="The Binary Aces" textFill="WHITE" GridPane.columnIndex="2" />
+         <Label alignment="CENTER" prefHeight="50.0" prefWidth="217.0" text="The Binary Aces" textFill="WHITE" GridPane.columnIndex="2">
+            <font>
+               <Font name="Arial Rounded MT Bold" size="16.0" />
+            </font></Label>
          <effect>
             <DropShadow height="50.65" radius="17.4125" />
          </effect>
@@ -104,7 +113,7 @@
                                     <Insets left="10.0" />
                                  </padding>
                               </Label>
-                                    <ScrollPane fx:id="scroll_pane" prefHeight="253.0" prefWidth="194.0" styleClass="menu-bar-scroll-pane" GridPane.rowIndex="1" />
+                                    <ScrollPane fx:id="scroll_pane" hbarPolicy="NEVER" prefHeight="253.0" prefWidth="194.0" styleClass="menu-bar-scroll-pane" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
                      </children>
@@ -126,7 +135,10 @@
               </rowConstraints>
                <children>
                        <Button mnemonicParsing="false" onAction="#onActionAddCategory" prefHeight="37.0" prefWidth="177.0" styleClass="action-button" text="Add Category" GridPane.rowIndex="1" />
-                       <Button mnemonicParsing="false" onAction="#onActionAddMovie" prefHeight="36.0" prefWidth="177.0" styleClass="action-button" text="Add Movie" />
+                       <Button mnemonicParsing="false" onAction="#onActionAddMovie" prefHeight="36.0" prefWidth="177.0" styleClass="action-button" text="Add Movie">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="20.0" />
+                     </font></Button>
                </children>
             </GridPane>
               </VBox>

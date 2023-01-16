@@ -13,7 +13,7 @@
 
 * {
     -fx-nord0: #192C35;
-    -fx-nord1: #3B4252;
+    -fx-nord1: #4FC4F4;
     -fx-nord2: #434C5E;
     -fx-nord3: #4C566A;
     -fx-nord4: #D8DEE9;
@@ -44,12 +44,31 @@
     -fx-border-style: solid;
 }
 
+.nav-bar-spinner-button{
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-border-color: -fx-nord1;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-style: solid;
+}
+
+.nav-bar-spinner-button:hover{
+    -fx-background-color: -fx-nord1;
+    -fx-text-fill: black;
+    -fx-border-color: -fx-nord1;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-style: solid;
+    -fx-cursor: hand;
+}
+
 /* DRAWER  */
 .drawer{
     -fx-background-color: -fx-nord0;
 }
 
 .menu-bar-top-buttons{
+    -fx-cursor: hand;
     -fx-border-width: 0px 0px 0px 0px;
     -fx-border-radius: 0px;
     -fx-background-radius: 0px;
@@ -62,7 +81,7 @@
 }
 
 .menu-bar-top-buttons:hover{
-    -fx-background-color:#040404;
+    -fx-background-color: rgba(4, 4, 4, 0.17);
     -fx-text-fill:white;
     -fx-border-width: 0px 0px 0px 0px;
     -fx-border-color:#1b0e3c;
@@ -93,10 +112,13 @@
 /* ACTION BUTTONS */
 
 .action-button{
+    -fx-font-family: Arial Rounded MT Bold;
+    -fx-font-weight: 700;
+    -fx-cursor: hand;
     -fx-border-color: black;
     -fx-border-width: 1 1 1 1;
     -fx-border-style: solid;
-    -fx-background-color: #4FC4F4;
+    -fx-background-color: -fx-nord1;
     -fx-border-radius: 49.6894px;
     -fx-text-fill: white;
     -fx-background-radius: 49.6894px;
@@ -106,9 +128,13 @@
 .action-button:hover{
     -fx-background-color: #4FC4F4;
     -fx-text-fill: black;
+    -fx-border-color: -fx-nord1;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-style: solid;
 }
 
 .custom-button{
+    -fx-cursor: hand;
     -fx-max-width: 150px;
     -fx-alignment: BOTTOM_LEFT;
 }
