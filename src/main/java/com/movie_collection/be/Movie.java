@@ -10,7 +10,7 @@ public class Movie {
     private String name;
     private double rating;
 
-    private String absolutePath;
+    private String path;
 
     private Date lastview;
 
@@ -41,12 +41,12 @@ public class Movie {
     }
 
 
-    public String getAbsolutePath() {
-        return absolutePath;
+    public String getPath() {
+        return path;
     }
 
-    public void setAbsolutePath(String absolutePath) {
-        this.absolutePath = absolutePath;
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public Date getLastview() {
@@ -71,7 +71,7 @@ public class Movie {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", rating=" + rating +
-                ", absolutePath='" + absolutePath + '\'' +
+                ", absolutePath='" + path + '\'' +
                 ", lastview=" + lastview +
                 ", categories=" + categories +
                 '}';

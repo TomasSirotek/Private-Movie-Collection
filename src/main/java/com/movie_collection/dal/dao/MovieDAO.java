@@ -6,6 +6,7 @@ import com.movie_collection.dal.interfaces.IMovieDAO;
 import com.movie_collection.dal.mappers.MovieMapperDAO;
 import myBatis.MyBatisConnectionFactory;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +25,8 @@ public class MovieDAO implements IMovieDAO {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
             allMovies = mapper.getAllMovies();
         } catch (Exception ex) {
-            logger.error("An error occurred mapping tables", ex);
+            //throw new SqlSessionException("An error occurred mapping tables",ex);
+             logger.error("An error occurred mapping tables", ex);
         }
         return allMovies;
     }
@@ -36,6 +38,7 @@ public class MovieDAO implements IMovieDAO {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
             movie = mapper.getMovieById(id);
         } catch (Exception ex) {
+          //  throw new SqlSessionException("An error occurred mapping tables",ex);
             logger.error("An error occurred mapping tables", ex);
         }
         return Optional.ofNullable(movie);
@@ -68,11 +71,11 @@ public class MovieDAO implements IMovieDAO {
     }
 
     @Override
-    public int updateMovieById(Movie movie, int id) {
+    public int updateMovieById(Movie movie) {
         int resultId = 0;
         try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
-            int affectedRows = mapper.updateMovie(movie.getName(), movie.getRating(), movie.getAbsolutePath(), movie.getId());
+            int affectedRows = mapper.updateMovie(movie);
             session.commit();//  after commit if rows > 0 returns the key
             resultId = affectedRows == -1 ? movie.getId() : 0;
         } catch (Exception ex) {
