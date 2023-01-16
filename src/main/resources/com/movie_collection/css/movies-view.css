@@ -1,1 +1,39 @@
 @import "bootstrap3.css";
+
+* {
+    -fx-nord0: #192C35;
+    -fx-nord1: #3B4252;
+    -fx-nord2: #434C5E;
+    -fx-nord3: #4C566A;
+    -fx-nord4: #D8DEE9;
+    -fx-nord5: #E5E9F0;
+    -fx-nord6: #ECEFF4;
+    -fx-nord7: #8FBCBB;
+    -fx-nord8: #88C0D0;
+    -fx-nord9: #81A1C1;
+    -fx-nord10:#5E81AC;
+}
+
+.menu-config, .menu-play, .menu-delete{
+ -fx-alignment: center;
+}
+.menu-config:hover, .menu-play:hover{
+    -fx-background-color: -fx-nord0;
+    -fx-text-background-color: -fx-nord0;
+}
+
+.bg-main{
+    -fx-background-color: -fx-nord0;
+}
+
+.scrollView{
+    -fx-background-color: -fx-nord0;
+}
+
+.titleMovie{
+    -fx-text-fill: #FAF2AC;
+}
+
+.runTime, .Director, .runTimeVal, .imdbTag, .imdbTagVal, .CastVal, .ReleasedVal, .desReleasedVal, .desCastVal, .desDirectorVal, .CategoryVal, .prRatingVal, .desCategoryVal, .desPrRatingVal, .Rated, .desMatRating{
+    -fx-text-fill: #FAF2AC;
+}
