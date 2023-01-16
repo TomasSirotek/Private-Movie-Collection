@@ -196,8 +196,6 @@ public class MovieController extends RootController implements Initializable {
         } else {
             AlertHelper.showDefaultAlert("Please use VLC media player", Alert.AlertType.ERROR);
         }
-
-        trySetTableWithMovies();
     }
 
 
