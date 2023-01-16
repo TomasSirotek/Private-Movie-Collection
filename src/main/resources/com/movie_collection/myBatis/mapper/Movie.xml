@@ -77,7 +77,7 @@
             useGeneratedKeys="true"
             timeout="20">
         -- insert new movie into table with params still need to make them safer
-        INSERT INTO Movie (name, rating, path) VALUES (#{name},#{rating},#{absolutePath})
+        INSERT INTO Movie (name, rating, path) VALUES (#{name},#{rating},#{path})
         -- selects the generated key
         <selectKey keyProperty="id" resultType="int" order="AFTER">
             SELECT @@IDENTITY
