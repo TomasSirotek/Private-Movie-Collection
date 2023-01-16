@@ -57,7 +57,7 @@ public class MovieController extends RootController implements Initializable {
     @FXML
     private TableColumn<Movie, String> colMovieTitle, colMovieCategory;
     @FXML
-    private TableColumn<Movie, String> colMovieRating;
+    private TableColumn<Movie, Double> colMovieRating;
 
     private final IMovieModel movieModel;
 
@@ -136,7 +136,7 @@ public class MovieController extends RootController implements Initializable {
         });
         // ->
         colMovieTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName())); // set movie title
-        colMovieRating.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getRating())));
+        colMovieRating.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getRating()));
 
         // sets value factory for movie category column data are collected by name and joined by "," -> action,horror
         colMovieCategory.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategories().stream()
