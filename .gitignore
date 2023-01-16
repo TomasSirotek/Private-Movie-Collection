@@ -144,4 +144,9 @@ fabric.properties
 #txt file Media Player
 /mediaPlayerPath.txt
 /src/main/resources/config.cfg
-/logs/
+
+# exclude everything
+/logs/*
+
+# exception to the rule
+!/logs/.gitkeep
