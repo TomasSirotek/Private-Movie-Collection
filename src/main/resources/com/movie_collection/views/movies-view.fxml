@@ -5,7 +5,6 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -27,14 +26,14 @@
                           <TableColumn fx:id="colMovieTitle" editable="false" prefWidth="90.65765762329102" resizable="false" text="Title" />
                           <TableColumn fx:id="colMovieRating" editable="false" prefWidth="45.87428283691406" resizable="false" text="Rating" />
                           <TableColumn fx:id="colMovieCategory" editable="false" prefWidth="205.997314453125" resizable="false" text="Category" />
-                  <TableColumn fx:id="colMovieCategory1" editable="false" prefWidth="83.0426025390625" resizable="false" text="Watched on" />
+                  <TableColumn fx:id="colLastViewed" editable="false" prefWidth="83.0426025390625" resizable="false" text="Watched on" />
                           <TableColumn fx:id="colEditMovies" editable="false" prefWidth="43.21600341796875" resizable="false" />
                           <TableColumn fx:id="colDeleteMovie" editable="false" maxWidth="74.78399658203125" prefWidth="69.9119873046875" resizable="false" />
                       </columns>
                   </TableView>
          </children>
          <VBox.margin>
-            <Insets bottom="8.0" />
+            <Insets bottom="10.0" />
          </VBox.margin>
       </AnchorPane>
       <AnchorPane prefHeight="244.0" prefWidth="643.0">
@@ -65,25 +64,37 @@
                            <children>
                               <HBox prefHeight="27.0" prefWidth="403.0">
                                  <children>
-                                    <Label prefHeight="17.0" prefWidth="52.0" styleClass="description-label" text="Title" />
-                                    <Label fx:id="descrMovieTitle" prefHeight="17.0" prefWidth="120.0" textFill="WHITE">
+                                    <Label prefHeight="23.0" prefWidth="52.0" styleClass="description-label" text="Title">
+                                       <HBox.margin>
+                                          <Insets right="20.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Label fx:id="descrMovieTitle" prefHeight="20.0" prefWidth="331.0" styleClass="description-data-title" textFill="WHITE">
                                        <font>
                                           <Font name="Arial Rounded MT Bold" size="13.0" />
                                        </font>
                                     </Label>
                                  </children>
                                  <VBox.margin>
-                                    <Insets bottom="5.0" />
+                                    <Insets bottom="10.0" />
                                  </VBox.margin>
                               </HBox>
-      
-                                                                                    <TextArea fx:id="desPlot" editable="false" prefHeight="143.0" prefWidth="403.0" promptText="No description" wrapText="true" />
+                              <HBox prefHeight="33.0" prefWidth="403.0">
+                                 <children>
+                                    <Label prefHeight="31.0" prefWidth="71.0" styleClass="description-label" text="Description">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Label fx:id="desPlot" prefHeight="33.0" prefWidth="320.0" styleClass="description-data-elements" textFill="WHITE" />
+                                 </children>
+                              </HBox>
                               <GridPane prefHeight="173.0" prefWidth="414.0">
                                 <columnConstraints>
                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.2000732421875" minWidth="10.0" prefWidth="72.19145202636719" />
                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="196.00003967285159" minWidth="10.0" prefWidth="178.8085479736328" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.39990234375" minWidth="10.0" prefWidth="84.5999755859375" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="108.7999267578125" minWidth="10.0" prefWidth="67.80002441406248" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.39990234375" minWidth="10.0" prefWidth="94.04534912109375" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="108.7999267578125" minWidth="10.0" prefWidth="58.95465087890625" />
                                 </columnConstraints>
                                 <rowConstraints>
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -92,18 +103,18 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <Label fx:id="desRunTime" prefHeight="32.0" prefWidth="99.0" textFill="WHITE" GridPane.columnIndex="1" />
+                                    <Label fx:id="desRunTime" opacity="0.64" prefHeight="32.0" prefWidth="99.0" styleClass="description-data-elements" textFill="WHITE" GridPane.columnIndex="1" />
                                     <Label prefHeight="20.0" prefWidth="66.0" styleClass="description-label" text="Runtime">
                                        <font>
                                           <Font size="13.0" />
                                        </font>
                                     </Label>
-                                    <Label prefHeight="20.0" prefWidth="95.0" styleClass="description-label" text="IMDB Rating" GridPane.columnIndex="2">
+                                    <Label prefHeight="20.0" prefWidth="94.0" styleClass="description-label" text="IMDB Rating" GridPane.columnIndex="2">
                                        <font>
                                           <Font size="13.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="desImdbRating" prefHeight="41.0" prefWidth="100.0" textFill="WHITE" GridPane.columnIndex="3" />
+                                    <Label fx:id="desImdbRating" prefHeight="41.0" prefWidth="100.0" styleClass="description-data-elements" textFill="WHITE" GridPane.columnIndex="3" />
                                     <Label styleClass="description-label" text="Cast " GridPane.rowIndex="1">
                                        <font>
                                           <Font size="13.0" />
@@ -114,28 +125,28 @@
                                           <Font size="13.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="desReleased" prefHeight="30.0" prefWidth="138.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                    <Label fx:id="desCast" prefHeight="32.0" prefWidth="99.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Label fx:id="desReleased" prefHeight="39.0" prefWidth="181.0" styleClass="description-data-elements" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <Label fx:id="desCast" prefHeight="32.0" prefWidth="179.0" styleClass="description-data-elements" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     <Label prefHeight="39.0" prefWidth="104.0" styleClass="description-label" text="Director" GridPane.rowIndex="3">
                                        <font>
                                           <Font size="13.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="desDirector" prefHeight="61.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <Label fx:id="desDirector" prefHeight="42.0" prefWidth="178.0" styleClass="description-data-elements" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                     <Label styleClass="description-label" text="Category" GridPane.columnIndex="2" GridPane.rowIndex="3">
                                        <font>
                                           <Font size="13.0" />
                                        </font>
                                     </Label>
-                                    <Label prefHeight="54.0" prefWidth="99.0" styleClass="description-label" text="Pr Rating" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                    <Label prefHeight="54.0" prefWidth="99.0" styleClass="description-label" text="Rating" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                        <font>
                                           <Font size="13.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="desCategory" prefHeight="49.0" prefWidth="102.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                                    <Label fx:id="desPrRating" prefHeight="41.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                    <Label fx:id="desCategory" prefHeight="49.0" prefWidth="102.0" styleClass="description-data-elements" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                    <Label fx:id="desPrRating" prefHeight="41.0" prefWidth="100.0" styleClass="description-data-elements" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                     <Label styleClass="description-label" text="Rated" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                    <Label fx:id="desMatRating" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                    <Label fx:id="desMatRating" prefHeight="43.0" prefWidth="59.0" styleClass="description-data-elements" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                                  </children>
                               </GridPane>
                            </children>
@@ -148,6 +159,9 @@
                </children>
             </GridPane>
          </children>
+         <VBox.margin>
+            <Insets top="5.0" />
+         </VBox.margin>
       </AnchorPane>
         </children>
     </VBox>

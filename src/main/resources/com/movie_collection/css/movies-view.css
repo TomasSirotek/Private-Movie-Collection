@@ -35,9 +35,16 @@
     -fx-border-style: solid;
 }
 
-.text-area{
-    -fx-background-color: transparent;
+.description-data-title{
+    -fx-text-fill: #FAF2AC;
+    -fx-font-weight: bold;
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-font-size: 16px;
+}
 
+.description-data-elements{
+    -fx-opacity: 0.64;
+    -fx-font-family: "Arial Rounded MT Bold";
 }
 
 
@@ -56,76 +63,19 @@
 /*    -fx-text-fill: -fx-nord0;*/
 /*}*/
 
-/*.table-row-cell{*/
-/*    -fx-background-color: -fx-nord5;*/
-/*    -fx-table-cell-border-color: transparent;*/
-/*    -fx-padding: 0.0em; !* 0 *!*/
-/*}*/
+.table-row-cell{
+    -fx-cursor: hand;
+}
 
 /*.table-row-cell:odd{*/
 /*    -fx-background-color: -fx-nord5;*/
 /*    -fx-padding: 0.0em; !* 0 *!*/
 /*}*/
 
-/*.table-row-cell:selected {*/
-/*    -fx-background-color: -fx-nord4;*/
-/*    -fx-background-insets: 0;*/
-/*    -fx-background-radius: 1;*/
-/*}*/
-
-/*.table-view > .virtual-flow > .scroll-bar:horizontal,*/
-/*.table-view > .virtual-flow > .scroll-bar:horizontal > .track,*/
-/*.table-view > .virtual-flow > .scroll-bar:horizontal > .track-background {*/
-/*    -fx-background-color: transparent;*/
-/*}*/
-
-/*.table-view *.scroll-bar:horizontal *.increment-button,*/
-/*.table-view *.scroll-bar:horizontal *.decrement-button {*/
-/*    -fx-background-color: null;*/
-/*    -fx-background-radius: 0;*/
-/*    -fx-background-insets: 0;*/
-/*    -fx-padding: 0;*/
-/*}*/
-
-/*.table-view *.scroll-bar:horizontal *.increment-arrow,*/
-/*.table-view *.scroll-bar:horizontal *.decrement-arrow {*/
-/*    -fx-background-color: null;*/
-/*    -fx-background-radius: 0;*/
-/*    -fx-background-insets: 0;*/
-/*    -fx-padding: 0;*/
-/*    -fx-shape: null;*/
-/*}*/
-
-/*.scroll-bar:vertical .track{*/
-/*    -fx-background-color :-fx-nord5;*/
-/*    -fx-border-color :transparent;*/
-/*    -fx-background-radius : 0.0em;*/
-/*    -fx-border-radius :1.0em;*/
-/*}*/
+.table-row-cell:selected {
+    -fx-background-color: rgba(4, 4, 4, 0.17);
+    -fx-text-fill:white;
+}
 
 
-/*.scroll-bar:vertical .increment-button ,*/
-/*.scroll-bar:vertical .decrement-button {*/
-/*    -fx-background-color :transparent;*/
-/*    -fx-background-radius : 0.0em;*/
-/*    -fx-padding :0.0 5.0 0.0 0.0;*/
 
-/*}*/
-
-/*.scroll-bar:vertical .increment-arrow,*/
-/*.scroll-bar:vertical .decrement-arrow{*/
-/*    -fx-shape : " ";*/
-/*    -fx-padding :0.0 0.15em;*/
-/*}*/
-
-/*.scroll-bar:vertical .thumb {*/
-/*    -fx-background-color :derive(black,90.0%);*/
-/*    -fx-background-insets : 1.0, 0.0, 0.0;*/
-/*    -fx-background-radius : 1.0em;*/
-/*}*/
-
-/*.scroll-bar:vertical .thumb:hover {*/
-/*    -fx-background-color :derive(#4D4C4F,10.0%);*/
-/*    -fx-background-insets : 1.0, 0.0, 0.0;*/
-/*    -fx-background-radius : 1.0em;*/
-/*}*/

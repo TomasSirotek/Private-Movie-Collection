@@ -42,14 +42,12 @@ public class MovieController extends RootController implements Initializable {
     @FXML
     private ImageView movieImage;
     @FXML
-    private TextArea desPlot;
-    @FXML
     private Label desReleased,
             desRunTime,
             desCast,
             desDirector,
             desImdbRating, desPrRating,
-            descrMovieTitle, desMatRating;
+            descrMovieTitle, desMatRating,desPlot;
 
     @FXML
     private TableView<Movie> moviesTable;
@@ -59,6 +57,9 @@ public class MovieController extends RootController implements Initializable {
     private TableColumn<Movie, String> colMovieTitle, colMovieCategory;
     @FXML
     private TableColumn<Movie, String> colMovieRating;
+
+    @FXML
+    private TableColumn<Movie,String> colLastViewed;
 
     private final IMovieModel movieModel;
 
@@ -134,6 +135,7 @@ public class MovieController extends RootController implements Initializable {
         // sets value factory for play column
         colPlayMovie.setCellValueFactory(col -> {
             Button playButton = new Button("▶");
+            playButton.getStyleClass().add("success");
             playButton.setOnAction(e -> {
                 actionPlay(col);
             });
@@ -142,7 +144,7 @@ public class MovieController extends RootController implements Initializable {
         // ->
         colMovieTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName())); // set movie title
         colMovieRating.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getRating())));
-
+        colLastViewed.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getLastview()))); // set movie title
         // sets value factory for movie category column data are collected by name and joined by "," -> action,horror
         colMovieCategory.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategories().stream()
                 .map(Category::getName)
@@ -153,6 +155,7 @@ public class MovieController extends RootController implements Initializable {
             Button editButton = new Button("⚙");
             Movie updateMovie = col.getValue();
             editButton.maxWidth(10);
+            editButton.getStyleClass().add("warning");
             editButton.setOnAction(e -> {
                 CreateMovieController controller = loadSetEditController(updateMovie);
                 showUpdateWindow(controller.getView());
@@ -162,7 +165,7 @@ public class MovieController extends RootController implements Initializable {
         // sets value factory for delete  column
         colDeleteMovie.setCellValueFactory(col -> {
             Button deleteButton = new Button("Delete");
-           // deleteButton.getStyleClass().add("custom-button");
+            deleteButton.getStyleClass().add("danger");
             deleteButton.maxWidth(10);
             deleteButton.setOnAction(e -> {
                 Movie movie = col.getValue(); // get movie object from the current row
