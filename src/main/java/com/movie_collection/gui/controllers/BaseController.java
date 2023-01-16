@@ -84,7 +84,6 @@ public class BaseController extends RootController implements Initializable {
      * needs docs @patrik
      */
     private void showMoviesToDelete()  {
-        var test = movieModel.getAllMovies();
         List<Movie> moviesToDelete = movieModel.getAllMovies().stream()
                 .filter(m -> m.getRating() < 6.0 || (m.getLastview() != null && (Instant.now().toEpochMilli() - m.getLastview().toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()> 63113852000L)))
                 .collect(Collectors.toList());
@@ -95,7 +94,6 @@ public class BaseController extends RootController implements Initializable {
                 str += m.getName() + "\n";
             }
             var alert = AlertHelper.showOptionalAlertWindow("Do you want to delete these movies ? " , str, Alert.AlertType.CONFIRMATION);
-
             if(alert.isPresent() && alert.get().equals(ButtonType.OK)){
                 for (Movie m: moviesToDelete) {
                     movieModel.deleteMovieById(m.getId());

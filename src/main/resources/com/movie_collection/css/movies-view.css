@@ -37,3 +37,7 @@
 .runTime, .Director, .runTimeVal, .imdbTag, .imdbTagVal, .CastVal, .ReleasedVal, .desReleasedVal, .desCastVal, .desDirectorVal, .CategoryVal, .prRatingVal, .desCategoryVal, .desPrRatingVal, .Rated, .desMatRating{
     -fx-text-fill: #FAF2AC;
 }
+.TextDesign, .tableDesign{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
+
