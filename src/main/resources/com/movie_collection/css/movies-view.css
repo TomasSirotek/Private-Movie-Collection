@@ -1,1 +1,131 @@
 @import "bootstrap3.css";
+@import "base.css";
+
+
+.table-view{
+    -fx-background-color: -fx-nord0;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: -fx-nord5;
+}
+
+/*.table-view:focused{*/
+/*    -fx-background-color: transparent;*/
+/*}*/
+
+.description-container {
+    -fx-border-color: black;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-style: solid;
+    -fx-background-color: -fx-nord0;
+    -fx-text-fill: white;
+}
+
+.description-label{
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+}
+
+.description-image{
+    -fx-border-color: black;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-style: solid;
+}
+
+.text-area{
+    -fx-background-color: transparent;
+
+}
+
+
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-nord0;
+    -fx-font-weight: 700;
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+/*.table-view .table-cell{*/
+/*    -fx-text-fill: -fx-nord0;*/
+/*}*/
+
+/*.table-row-cell{*/
+/*    -fx-background-color: -fx-nord5;*/
+/*    -fx-table-cell-border-color: transparent;*/
+/*    -fx-padding: 0.0em; !* 0 *!*/
+/*}*/
+
+/*.table-row-cell:odd{*/
+/*    -fx-background-color: -fx-nord5;*/
+/*    -fx-padding: 0.0em; !* 0 *!*/
+/*}*/
+
+/*.table-row-cell:selected {*/
+/*    -fx-background-color: -fx-nord4;*/
+/*    -fx-background-insets: 0;*/
+/*    -fx-background-radius: 1;*/
+/*}*/
+
+/*.table-view > .virtual-flow > .scroll-bar:horizontal,*/
+/*.table-view > .virtual-flow > .scroll-bar:horizontal > .track,*/
+/*.table-view > .virtual-flow > .scroll-bar:horizontal > .track-background {*/
+/*    -fx-background-color: transparent;*/
+/*}*/
+
+/*.table-view *.scroll-bar:horizontal *.increment-button,*/
+/*.table-view *.scroll-bar:horizontal *.decrement-button {*/
+/*    -fx-background-color: null;*/
+/*    -fx-background-radius: 0;*/
+/*    -fx-background-insets: 0;*/
+/*    -fx-padding: 0;*/
+/*}*/
+
+/*.table-view *.scroll-bar:horizontal *.increment-arrow,*/
+/*.table-view *.scroll-bar:horizontal *.decrement-arrow {*/
+/*    -fx-background-color: null;*/
+/*    -fx-background-radius: 0;*/
+/*    -fx-background-insets: 0;*/
+/*    -fx-padding: 0;*/
+/*    -fx-shape: null;*/
+/*}*/
+
+/*.scroll-bar:vertical .track{*/
+/*    -fx-background-color :-fx-nord5;*/
+/*    -fx-border-color :transparent;*/
+/*    -fx-background-radius : 0.0em;*/
+/*    -fx-border-radius :1.0em;*/
+/*}*/
+
+
+/*.scroll-bar:vertical .increment-button ,*/
+/*.scroll-bar:vertical .decrement-button {*/
+/*    -fx-background-color :transparent;*/
+/*    -fx-background-radius : 0.0em;*/
+/*    -fx-padding :0.0 5.0 0.0 0.0;*/
+
+/*}*/
+
+/*.scroll-bar:vertical .increment-arrow,*/
+/*.scroll-bar:vertical .decrement-arrow{*/
+/*    -fx-shape : " ";*/
+/*    -fx-padding :0.0 0.15em;*/
+/*}*/
+
+/*.scroll-bar:vertical .thumb {*/
+/*    -fx-background-color :derive(black,90.0%);*/
+/*    -fx-background-insets : 1.0, 0.0, 0.0;*/
+/*    -fx-background-radius : 1.0em;*/
+/*}*/
+
+/*.scroll-bar:vertical .thumb:hover {*/
+/*    -fx-background-color :derive(#4D4C4F,10.0%);*/
+/*    -fx-background-insets : 1.0, 0.0, 0.0;*/
+/*    -fx-background-radius : 1.0em;*/
+/*}*/

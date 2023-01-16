@@ -152,6 +152,7 @@ public class MovieController extends RootController implements Initializable {
         colEditMovies.setCellValueFactory(col -> {
             Button editButton = new Button("⚙");
             Movie updateMovie = col.getValue();
+            editButton.maxWidth(10);
             editButton.setOnAction(e -> {
                 CreateMovieController controller = loadSetEditController(updateMovie);
                 showUpdateWindow(controller.getView());
@@ -160,8 +161,9 @@ public class MovieController extends RootController implements Initializable {
         });
         // sets value factory for delete  column
         colDeleteMovie.setCellValueFactory(col -> {
-            Button deleteButton = new Button("❌");
-            deleteButton.getStyleClass().add("custom-button");
+            Button deleteButton = new Button("Delete");
+           // deleteButton.getStyleClass().add("custom-button");
+            deleteButton.maxWidth(10);
             deleteButton.setOnAction(e -> {
                 Movie movie = col.getValue(); // get movie object from the current row
                 if (movie != null) {
