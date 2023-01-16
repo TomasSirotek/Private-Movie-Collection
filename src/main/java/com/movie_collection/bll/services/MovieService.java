@@ -64,10 +64,9 @@ public class MovieService implements IMovieService {
 
     @Override
     public int updateTimeStamp(int id) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DateFormat.DAY_MONTH_YEAR.getDateFormat()); // made it more type safe :) @bearded redemption
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DateFormat.YEAR_MONTH_DAY.getDateFormat()); // made it more type safe :) @bearded redemption
         Timestamp ts = Timestamp.from(Instant.now());
         String date = dateFormat.format(ts);
-
         return movieDAO.updateTimeStamp(date,id);
     }
 
