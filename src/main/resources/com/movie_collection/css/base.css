@@ -38,6 +38,12 @@
     -fx-border-radius: 15px;
 }
 
+.nav-bar-spinner{
+    -fx-border-color: black;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-style: solid;
+}
+
 /* DRAWER  */
 .drawer{
     -fx-background-color: -fx-nord0;
@@ -105,8 +111,6 @@
 .custom-button{
     -fx-max-width: 150px;
     -fx-alignment: BOTTOM_LEFT;
-
-
 }
 
 
