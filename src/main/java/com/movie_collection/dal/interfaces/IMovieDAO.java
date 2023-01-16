@@ -53,10 +53,10 @@ public interface IMovieDAO {
      * Updates a movie in the database depending on the id of the movie
      *
      * @param movie that will be updated
-     * @param id    by its will be deleted -> this could be done better but works for now
+//     * @param id    by its will be deleted -> this could be done better but works for now
      * @return @Identity id of updated movie
      */
-    int updateMovieById(Movie movie, int id);
+    int updateMovieById(Movie movie);
 
     /**
      * Update timeStamp when a movie is played based on the id of the movie and date of opening

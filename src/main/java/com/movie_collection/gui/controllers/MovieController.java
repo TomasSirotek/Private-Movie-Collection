@@ -25,6 +25,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -107,8 +108,12 @@ public class MovieController extends RootController implements Initializable {
      * @param selectedMovie
      */
     private void fillDescriptionWithAPIData(MovieDTO movieDTO, Movie selectedMovie) {
-        if(movieDTO.Poster != null){
+
+        if(movieDTO.Poster != null) {
             movieImage.setImage(new Image(movieDTO.Poster));
+        }
+        else{
+            movieImage.setImage(new Image("file:src/main/resources/com/movie_collection/images/default_image.jpeg"));
         }
 
         descrMovieTitle.setText(selectedMovie.getName());
@@ -267,7 +272,7 @@ public class MovieController extends RootController implements Initializable {
 
     private void actionPlay(TableColumn.CellDataFeatures<Movie, Button> col) {
         try {
-            playVideoDesktop(col.getValue().getId(), col.getValue().getAbsolutePath());
+            playVideoDesktop(col.getValue().getId(), col.getValue().getPath());
         } catch (IOException | InterruptedException ex) {
             throw new RuntimeException(ex);
         }

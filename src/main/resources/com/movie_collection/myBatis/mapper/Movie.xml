@@ -9,7 +9,7 @@
         <id property="id" column="movieId"/>
         <result property="name" column="movieName"/>
         <result property="rating" column="movieRating"/>
-        <result property="absolutePath" column="moviePath"/>
+        <result property="path" column="moviePath"/>
         <result property="lastview" column="lastview"/>
         <collection property="categories" javaType="ArrayList" column="movieId" ofType="Category">
             <id property="id" column="idCat"/>
@@ -77,7 +77,7 @@
             useGeneratedKeys="true"
             timeout="20">
         -- insert new movie into table with params still need to make them safer
-        INSERT INTO Movie (name, rating, path) VALUES (#{name},#{rating},#{absolutePath})
+        INSERT INTO Movie (name, rating, path) VALUES (#{name},#{rating},#{path})
         -- selects the generated key
         <selectKey keyProperty="id" resultType="int" order="AFTER">
             SELECT @@IDENTITY
@@ -88,12 +88,11 @@
 
     <insert
             id="addCategoryToMovie"
-            flushCache="true"
             statementType="PREPARED"
             keyProperty=""
             keyColumn=""
             useGeneratedKeys="true"
-            timeout="20">
+            >
         --  insert categoryId and movieId to joining table
         INSERT INTO CatMovie (categoryId, movieId)
         VALUES (#{categoryId}, #{movieId})
@@ -108,17 +107,14 @@
             keyProperty="id"
             keyColumn="id"
             statementType="PREPARED">
-
         -- updates movie by the id
         UPDATE Movie SET
         name = #{name},
         rating = #{rating},
         path = #{path}
-        OUTPUT INSERTED.id WHERE id = #{id}
+        -- no need for retrieving just and id this is fine since the select key
         -- retrieves back the identity key
-        <selectKey keyProperty="id" resultType="int" order="AFTER">
-            SELECT @@IDENTITY
-        </selectKey>
+        OUTPUT INSERTED.id WHERE id = #{id}
     </update>
 
 
@@ -154,8 +150,7 @@
     <delete id="removeCategoryMovie"
             parameterType="Movie"
             flushCache="true"
-            statementType="PREPARED"
-            timeout="20">
+            statementType="PREPARED">
         --  executes delete query
         DELETE
         FROM CatMovie
