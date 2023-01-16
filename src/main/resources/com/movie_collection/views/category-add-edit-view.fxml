@@ -9,16 +9,16 @@
 <?import javafx.scene.text.Text?>
 
 
-<VBox stylesheets="@../css/bootstrap3.css" alignment="CENTER" prefHeight="261.0" prefWidth="365.0" spacing="20.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.CategoryAddEditController">
+<VBox stylesheets="@../css/bootstrap3.css" alignment="CENTER" prefHeight="261.0" prefWidth="365.0" spacing="20.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.CategoryAddEditController" styleClass="addCategory">
    <children>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add category">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add category" styleClass="titleAddCategory">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Text>
       <HBox alignment="CENTER" prefHeight="80.0" prefWidth="305.0" spacing="10.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name: " />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name: " styleClass="nameAddCategory"/>
             <TextField fx:id="category_name" promptText="Category Name" />
          </children>
       </HBox>

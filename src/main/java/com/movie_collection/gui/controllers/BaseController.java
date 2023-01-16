@@ -3,6 +3,7 @@ package com.movie_collection.gui.controllers;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
+import com.movie_collection.Main;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.CompareSigns;
@@ -202,6 +203,7 @@ public class BaseController extends RootController implements Initializable {
     @FXML
     private void onActionAddMovie(ActionEvent actionEvent) throws IOException {
         RootController parent = loadNodesView(ViewType.CREATE_EDIT);
+
         show(parent.getView(),"Add new Movie");
         actionEvent.consume();
     }

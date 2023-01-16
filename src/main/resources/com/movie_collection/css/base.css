@@ -113,6 +113,10 @@
     -fx-alignment: BOTTOM_LEFT;
 }
 
+.dialog{
+    -fx-border-color: red;
+}
+
 
 
 

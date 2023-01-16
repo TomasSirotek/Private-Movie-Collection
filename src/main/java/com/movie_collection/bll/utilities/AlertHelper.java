@@ -3,6 +3,7 @@ package com.movie_collection.bll.utilities;
 import com.movie_collection.Main;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.stage.StageStyle;

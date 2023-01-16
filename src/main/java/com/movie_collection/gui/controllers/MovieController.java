@@ -3,6 +3,7 @@ package com.movie_collection.gui.controllers;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
+import com.movie_collection.Main;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.EventType;
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -246,7 +248,9 @@ public class MovieController extends RootController implements Initializable {
 
     private void showMediaPlayerUnselected() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Set Media Player");
         alert.setHeaderText("Select your Media Player");
+        alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("css/bootstrap3.css")).toExternalForm());
         alert.getButtonTypes().setAll(new ButtonType("OK"));
         alert.showAndWait();
     }

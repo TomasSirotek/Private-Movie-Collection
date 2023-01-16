@@ -9,11 +9,11 @@
 <?import javafx.scene.text.Font?>
 
 
-<VBox fx:id="action_content" prefHeight="291.0" prefWidth="326.0" stylesheets="@../css/bootstrap3.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.MediaPlayerSelectionController">
+<VBox fx:id="action_content" prefHeight="291.0" prefWidth="326.0" stylesheets="@../css/bootstrap3.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.MediaPlayerSelectionController" styleClass="mediaPlayerSelect">
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="277.0">
          <children>
-            <Label fx:id="labelUserAction" text="Media Player Selection">
+            <Label fx:id="labelUserAction" text="Media Player Selection" styleClass="mediaPlayerSelectLabel">
                <font>
                   <Font size="21.0" />
                </font>

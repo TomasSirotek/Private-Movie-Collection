@@ -952,3 +952,100 @@ VBox > .split-menu-button.last > .arrow-button {
     -fx-background-color: transparent;
     -fx-background-radius: 0;
 }
+
+
+.dialog-pane{
+    -fx-background-color: linear-gradient(to bottom, #1F347E, black);
+}
+.dialog-pane:header *.header-panel{
+    -fx-background-color: #192C35;
+}
+
+.dialog-pane *.button{
+    -fx-text-fill: white;
+    -fx-background-color: #88C0D0;
+    -fx-border-radius: 49.6894px;
+    -fx-background-radius: 49.6894px;
+}
+.dialog-pane *.button:hover{
+    -fx-background-color: #4FC4F4;
+    -fx-text-fill: black;
+}
+.dialog-pane > *.label.content{
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.dialog-pane:header *.header-panel *.label{
+    -fx-font-size: 18px;
+    -fx-font-style: italic;
+    -fx-text-fill: white;
+    -fx-fill: #292929;
+}
+
+.addMovie, .addCategory{
+    -fx-background-color: linear-gradient(to bottom, #1F347E, black);
+}
+.addMovie:header *.header-panel{
+    -fx-background-color: #192C35;
+}
+
+.addMovie *.button{
+    -fx-text-fill: white;
+    -fx-background-color: #88C0D0;
+    -fx-border-radius: 49.6894px;
+    -fx-background-radius: 49.6894px;
+}
+.addCategory *.button{
+    -fx-text-fill: white;
+    -fx-background-color: #88C0D0;
+    -fx-border-radius: 49.6894px;
+    -fx-background-radius: 49.6894px;
+}
+.addMovie *.button:hover{
+    -fx-background-color: #4FC4F4;
+    -fx-text-fill: black;
+}
+.addCategory *.button:hover{
+    -fx-background-color: #4FC4F4;
+    -fx-text-fill: black;
+}
+.titleAddCategory, .nameAddCategory{
+    -fx-fill: white;
+}
+.addMovie > *.label.content{
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+.titleAddMovie{
+    -fx-text-fill: white;
+}
+
+.mediaPlayerSelect{
+    -fx-background-color: linear-gradient(to bottom, #1F347E, black);
+}
+.mediaPlayerSelect:header *.header-panel{
+    -fx-background-color: #192C35;
+}
+
+.mediaPlayerSelect *.button{
+    -fx-text-fill: white;
+    -fx-background-color: #88C0D0;
+    -fx-border-radius: 49.6894px;
+    -fx-background-radius: 49.6894px;
+}
+.mediaPlayerSelect *.button:hover{
+    -fx-background-color: #4FC4F4;
+    -fx-text-fill: black;
+}
+.mediaPlayerSelectLabel{
+    -fx-text-fill: white;
+}
+.selectMediaPlayer{
+    -fx-border-color: red;
+}
+
+
+
