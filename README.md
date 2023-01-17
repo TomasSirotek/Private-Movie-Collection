@@ -25,6 +25,10 @@
     <br />
   </p>
 
+# The brief
+
+A movie aficionado is buying and collecting movies in the mp4 format on an external 2 TB hard-drive. So far he has tried to use a system where he puts them in different folders, depending on their rating and the category of the movie. As the collection has grown the categories is becoming an increasing problem. Here we come with a solution !
+
 <!-- TABLE OF CONTENTS -->
 <details open="open">
   <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
@@ -62,10 +66,6 @@
 
 
 <!-- ABOUT THE PROJECT -->
-## OOP & CRUD
-
-A movie aficionado is buying and collecting movies in the mp4 format on an external 2 TB hard-drive. So far he has tried to use a system where he puts them in different folders, depending on their IMDB rating and the category of the movie. As the collection has grown the categories is becoming an increasing problem. Here we come with a solution !
-
 ## Features and requirements
 - [x] MSSQL Database
   - [x] T-SQL dialect
