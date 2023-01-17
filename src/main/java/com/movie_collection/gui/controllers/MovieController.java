@@ -26,11 +26,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Date;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -145,7 +145,10 @@ public class MovieController extends RootController implements Initializable {
         // ->
         colMovieTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName())); // set movie title
         colMovieRating.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getRating())));
-        colLastViewed.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getLastview()))); // set movie title
+        colLastViewed.setCellValueFactory(cellData -> {
+            Date date = cellData.getValue().getLastview();
+            return new SimpleStringProperty(date == null ? "" : date.toString());
+        }); // set movie title
         // sets value factory for movie category column data are collected by name and joined by "," -> action,horror
         colMovieCategory.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategories().stream()
                 .map(Category::getName)
