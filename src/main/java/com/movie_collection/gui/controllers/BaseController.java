@@ -26,6 +26,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
@@ -231,6 +232,7 @@ public class BaseController extends RootController implements Initializable {
         stage.initOwner(getStage());
         stage.initModality(Modality.WINDOW_MODAL);
         stage.setTitle(title);
+        stage.initStyle(StageStyle.UNDECORATED);
 
         stage.setResizable(false);
         stage.setScene(scene);

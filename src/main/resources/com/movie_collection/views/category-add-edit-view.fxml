@@ -2,29 +2,76 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 
-<VBox stylesheets="@../css/bootstrap3.css" alignment="CENTER" prefHeight="261.0" prefWidth="365.0" spacing="20.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.CategoryAddEditController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="263.0" prefWidth="251.0" stylesheets="@../css/category-add-edit.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.CategoryAddEditController">
    <children>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add category">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-      </Text>
-      <HBox alignment="CENTER" prefHeight="80.0" prefWidth="305.0" spacing="10.0">
+      <VBox prefHeight="266.0" prefWidth="253.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name: " />
-            <TextField fx:id="category_name" promptText="Category Name" />
+            <HBox prefHeight="77.0" prefWidth="324.0">
+               <children>
+                  <Label prefHeight="77.0" prefWidth="255.0" styleClass="category-top-container" text="Add Category">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="18.0" />
+                     </font>
+                     <padding>
+                        <Insets left="20.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="105.0" prefWidth="267.0" styleClass="category-mid-container">
+               <children>
+                  <VBox prefHeight="105.0" prefWidth="250.0">
+                     <children>
+                        <Label text="Name">
+                           <font>
+                              <Font name="Arial Rounded MT Bold" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="category_name" maxWidth="209.0" prefWidth="209.0" promptText="action,horror...." styleClass="cat-input-field">
+                           <font>
+                              <Font name="Arial Rounded MT Bold" size="12.0" />
+                           </font>
+                        </TextField>
+                        <Text fill="#726f6f" strokeType="OUTSIDE" strokeWidth="0.0" text="Must be at least 3 char..." wrappingWidth="205.82179260253906">
+                           <font>
+                              <Font name="Arial Rounded MT Bold" size="10.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </Text>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="82.0" prefWidth="200.0" styleClass="category-bot-container">
+               <children>
+                  <Button fx:id="add_category" mnemonicParsing="false" prefHeight="26.0" prefWidth="209.0" styleClass="category-cta" text="Save Changes" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </HBox>
          </children>
-      </HBox>
-      <Button fx:id="add_category" mnemonicParsing="false" prefHeight="25.0" prefWidth="77.0" text="Add " />
+      </VBox>
    </children>
-   <padding>
-      <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-   </padding>
-</VBox>
+</AnchorPane>
