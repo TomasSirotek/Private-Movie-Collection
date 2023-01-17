@@ -10,11 +10,11 @@
 :school_satchel: Final Exam | 1st Semester | SDE & SCO
 
 ## Contributors
-
 <a href="https://github.com/TomassSimko/Private-Movie-Collection/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=TomassSimko/Private-Movie-Collection" />
 </a>
 
+---
 
 <!-- PROJECT LOGO -->
 <br />
