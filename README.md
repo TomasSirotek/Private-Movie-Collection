@@ -44,8 +44,12 @@ A movie aficionado is buying and collecting movies in the mp4 format on an exter
         <li><a href="#style">Style</a></li>
       </ul>
     </li>
-    <li><a href="#features">Features</a></li>
-    <li><a href="#details">Details</a></li>
+    <li><a href="#features-and-requirements">Features</a></li>
+    <li><a href="#application-design">Application design</a></li>
+    <li><a href="#database-design">Database design</a></li>
+    <li><a href="#uml-diagram">UML diagram</a></li>
+    <li><a href="#application-design-patterns">Application design patterns</a></li>
+    <li><a href="#application-interface">Application interface</a></li>
     <li><a href="#licence">License</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
@@ -119,7 +123,7 @@ A movie aficionado is buying and collecting movies in the mp4 format on an exter
   - [x] User will get the informational option to delete movie that are less than 6 rating and have not been seen for 2 years at the start
 
 
-## Application design:
+## Application design
 Our application was re-design by us in Figma
 
 ![Screenshot 2022-12-14 at 10 23 40](https://user-images.githubusercontent.com/72190589/212730849-76b34eb5-e006-4ce4-ad65-974c64932bfb.png)
@@ -135,7 +139,7 @@ MSSQL Database diagram
 ![UML](https://user-images.githubusecontent.com/721989/207556029-147be047-55bd-4140-9b0b-8ac60b41ad57.png)
 
 
-## Application design patterns:
+## Application design patterns
 
 - [x] Singleton pattern
 - [x] Dependency injection pattern
@@ -252,6 +256,7 @@ TTT :black_nib:
 ## Contact
 
 Tomas Simko - [@twitter](https://twitter.com/TomasSimko_) - simko.t@email.cz - [@linkedIn](https://www.linkedin.com/in/tomas-simko/)  
+Patrik Valentíny [@linkedIn](https://www.linkedin.com/in/patrikvalentiny/)
 
 Project Link: [https://github.com/TomassSimko/Private-Movie-Collection]()
 
