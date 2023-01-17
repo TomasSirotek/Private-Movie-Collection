@@ -9,7 +9,11 @@
 # Private-Movie-Collection
 :school_satchel: Final Exam | 1st Semester | SDE & SCO
 
-[![Contributors][contributors-shield]][contributors-url]
+## Contributors
+
+<a href="https://github.com/TomassSimko/Private-Movie-Collection/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=TomassSimko/Private-Movie-Collection" />
+</a>
 
 
 <!-- PROJECT LOGO -->
@@ -254,6 +258,6 @@ Project Link: [https://github.com/TomassSimko/Private-Movie-Collection]()
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/Private-Movie-Collection/private.svg?style=for-the-badge
+[contributors-shield]: https://contrib.rocks/image?repo=TomassSimko/Private-Movie-Collection
 [contributors-url]: https://github.com/TomassSimko/Private-Movie-Collection/graphs/contributors
 
