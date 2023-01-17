@@ -30,9 +30,9 @@
               <rowConstraints>
                   <RowConstraints maxHeight="69.6" minHeight="10.0" prefHeight="43.999994659423834" vgrow="SOMETIMES" />
               </rowConstraints>
-              <Label alignment="BASELINE_LEFT" contentDisplay="CENTER" prefHeight="46.0" prefWidth="224.0" text=" Movie Collection" textFill="#f84b4b">
+              <Label alignment="BASELINE_LEFT" contentDisplay="CENTER" prefHeight="46.0" prefWidth="224.0" text=" Movie Collection" textFill="#f84b4b" styleClass="fontDesign">
                   <font>
-                      <Font name="Graphique W01 Regular" size="31.0" />
+                      <Font name="Graphique W01 Regular" size="31.0"/>
                   </font>
             <padding>
                <Insets left="5.0" />
