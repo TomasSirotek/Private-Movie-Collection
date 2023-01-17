@@ -11,6 +11,7 @@ import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.DTO.MovieDTO;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
+import com.movie_collection.gui.controllers.event.PlayEvent;
 import com.movie_collection.gui.controllers.event.RefreshEvent;
 import com.movie_collection.gui.models.IMovieModel;
 import javafx.beans.property.SimpleObjectProperty;
@@ -325,6 +326,17 @@ public class MovieController extends RootController implements Initializable {
     public void handleCategoryEvent(RefreshEvent event){
         if(event.getEventType() == EventType.UPDATE_TABLE_VIEW){
             refreshTable();
+        }
+    }
+
+    @Subscribe
+    public void handleExternalPlay(PlayEvent event) {
+        if(event.getEventType() == EventType.PLAY_MOVIE){
+            try {
+                playVideoDesktop(event.getPayload().getId(),event.getPayload().getPath());
+            } catch (IOException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
     }

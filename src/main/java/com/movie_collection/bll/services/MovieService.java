@@ -76,14 +76,20 @@ public class MovieService implements IMovieService {
         return filterUtil.filteringMovies(listToSearch,query,buttonValue,spinnerValue);
     }
 
-//    @Override
-//    public List<Movie> searchMovie(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue) {
-//        return filterUtil.filteringMovies(listToSearch, query, buttonValue, spinnerValue);
-//    }
-
     @Override
     public MovieDTO getMovieByNameAPI(String title) {
         return apiService.getMovieByTitle(title);
+    }
+
+    @Override
+    public List<Movie> getWatchMovies() {
+        List<Movie> watchedMovies = movieDAO.getWatchedMovies();
+        for (Movie m : watchedMovies
+             ) {
+            MovieDTO movieDTO = apiService.getMovieByTitle(m.getName());
+            m.setPath(movieDTO.Poster); // this is just quick fix in rush it does not make sense tho
+        }
+        return watchedMovies;
     }
 
     public int updateMovie(Movie movie) {

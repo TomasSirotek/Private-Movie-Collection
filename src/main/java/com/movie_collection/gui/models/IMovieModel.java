@@ -22,4 +22,6 @@ public interface IMovieModel {
 	int updateTimeStamp(int id);
 
     MovieDTO findMovieByNameAPI(String title);
+
+    List<Movie> getWatchedMovies();
 }

@@ -180,5 +180,15 @@
     -fx-background-color: #1f3242;
 }
 
+/* Base recomendation drawing*/
+
+.watch-label-base{
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+}
+
+
+
 
 

@@ -78,4 +78,6 @@ public interface IMovieService {
      * @return
      */
     MovieDTO getMovieByNameAPI(String title);
+
+    List<Movie> getWatchMovies();
 }
