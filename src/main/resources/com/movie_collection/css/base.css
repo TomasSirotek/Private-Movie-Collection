@@ -139,5 +139,38 @@
     -fx-alignment: BOTTOM_LEFT;
 }
 
+/* DIALOG */
+
+.dialog-style .label{
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-font-size: 14px;
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+
+.dialog-style .header-panel{
+    -fx-background-color: -fx-nord0;
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-font-size: 14px;
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-effect: dropshadow(three-pass-box,rgba(0,0,0,0.8),10,0,0,0);
+}
+
+.dialog-style .button .CANCEL{
+    -fx-background-color: warning;
+}
+
+.dialog-style .ok-button {
+    -fx-background-color: green;
+    -fx-text-fill: white;
+}
+
+.dialog-style-default .label{
+    -fx-background-color: -fx-nord0;
+    -fx-text-fill: black;
+}
+
+
 
 

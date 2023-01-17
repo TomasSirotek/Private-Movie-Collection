@@ -2,15 +2,35 @@
 @import "base.css";
 
 
-.category-top-container{
+.movie-top-cont-1{
     -fx-background-color: -fx-nord0;
     -fx-text-fill: white;
 }
 
-.category-mid-container{
-    -fx-background-color: rgba(255, 255, 255, 0.37);
+.movie-close-btn{
+    -fx-background-color: -fx-nord0;
+    -fx-text-fill: white;
+    -fx-border-radius: 0;
+    -fx-cursor: hand;
 }
-.category-cta{
+
+.movie-close-btn:hover{
+    -fx-background-color: transparent;
+    -fx-text-fill: red;
+    -fx-border-radius: 0;
+    -fx-cursor: hand;
+}
+
+.movie-top-cont-2{
+    /*-fx-background-color: #e1dede;*/
+
+}
+
+.movie-spinner{
+
+}
+
+.movie-cta-add {
     -fx-cursor: hand;
     -fx-background-color: -fx-nord0;
     -fx-font-family: Arial Rounded MT Bold;
@@ -21,22 +41,7 @@
     -fx-text-fill: white;
 }
 
-.category-close-btn{
-    -fx-background-color: -fx-nord0;
-    -fx-text-fill: white;
-    -fx-border-radius: 0;
-    -fx-cursor: hand;
-}
-
-
-.category-close-btn:hover{
-    -fx-background-color: transparent;
-    -fx-text-fill: red;
-    -fx-border-radius: 0;
-    -fx-cursor: hand;
-}
-
-.category-cta:hover{
+.movie-cta-add:hover{
     -fx-background-color: #4FC4F4;
     -fx-text-fill: black;
     -fx-border-color: -fx-nord1;

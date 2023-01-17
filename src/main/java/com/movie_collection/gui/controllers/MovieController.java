@@ -24,6 +24,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
@@ -219,6 +220,7 @@ public class MovieController extends RootController implements Initializable {
         stage.initOwner(getStage());
         stage.initModality(Modality.WINDOW_MODAL);
         stage.setTitle("Update Movie");
+        stage.initStyle(StageStyle.UNDECORATED);
 
         stage.setResizable(false);
         stage.setScene(scene);
