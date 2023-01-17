@@ -47,18 +47,18 @@
 ## Tech stack
 * [Java](https://www.java.com/en/)
 * [Liberica 19](https://bell-sw.com/libericajdk/)
-* [JavaFX](https://www.java.com/en/)
-* [Guava](https://www.java.com/en/)
-* [Guice](https://www.java.com/en/)
-* [SLF4J](https://www.java.com/en/)
-* [MyBatis](https://www.java.com/en/)
-* [Feign](https://www.java.com/en/)
-* [Logback-classic](https://www.java.com/en/)
-* [SQLServer](https://www.java.com/en/)
+* [JavaFX](https://openjfx.io/)
+* [Guava](https://github.com/google/guava)
+* [Guice](https://github.com/google/guice)
+* [SLF4J](https://www.slf4j.org/)
+* [MyBatis](https://mybatis.org/mybatis-3/)
+* [Feign](https://github.com/OpenFeign/feign)
+* [Logback-classic](https://logback.qos.ch/)
+* [SQLServer](https://www.microsoft.com/en-us/sql-server/)
 
 ## Style
 * [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference)
-* [Bootstrap](https://www.java.com/en/)
+* [Bootstrap](https://github.com/dicolar/jbootx)
 
 
 <!-- ABOUT THE PROJECT -->
