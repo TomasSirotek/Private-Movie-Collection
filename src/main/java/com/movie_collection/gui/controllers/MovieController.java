@@ -61,7 +61,7 @@ public class MovieController extends RootController implements Initializable {
 
     private final IMovieModel movieModel;
 
-    private static String playerPath; // what is this ??
+    private static String playerPath;
 
     private final IControllerFactory controllerFactory;
 
