@@ -67,4 +67,9 @@ public class MediaPlayerSelectionController extends RootController implements In
             movieController.setPath(fileName, mediaPlayerPath);
         }
     }
+
+    public void close_stage(ActionEvent actionEvent) {
+        getStage().close();
+        actionEvent.consume();
+    }
 }

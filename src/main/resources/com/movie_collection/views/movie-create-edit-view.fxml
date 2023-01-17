@@ -98,7 +98,7 @@
                   <Insets right="5.0" />
                </HBox.margin>
             </VBox>
-            <Button fx:id="onClickSelectFile" mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" text="Select File">
+            <Button fx:id="onClickSelectFile" mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" styleClass="info" text="Select File">
                <HBox.margin>
                   <Insets top="10.0" />
                </HBox.margin></Button>
