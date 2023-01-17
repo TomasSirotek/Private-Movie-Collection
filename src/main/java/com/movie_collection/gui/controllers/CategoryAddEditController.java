@@ -8,6 +8,7 @@ import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.event.RefreshEvent;
 import com.movie_collection.gui.models.ICategoryModel;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -86,4 +87,8 @@ public class CategoryAddEditController extends RootController implements Initial
         return categoryModel.createCategory(newCategory);
     }
 
+    public void close_stage(ActionEvent actionEvent) {
+        getStage().close();
+        actionEvent.consume();
+    }
 }

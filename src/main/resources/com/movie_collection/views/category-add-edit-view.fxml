@@ -10,14 +10,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="263.0" prefWidth="251.0" stylesheets="@../css/category-add-edit.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.movie_collection.gui.controllers.CategoryAddEditController">
    <children>
       <VBox prefHeight="266.0" prefWidth="253.0">
          <children>
-            <HBox prefHeight="77.0" prefWidth="324.0">
+            <HBox prefHeight="77.0" prefWidth="324.0" styleClass="category-top-container">
                <children>
-                  <Label prefHeight="77.0" prefWidth="255.0" styleClass="category-top-container" text="Add Category">
+                  <Label prefHeight="77.0" prefWidth="222.0" text="Add Category" textFill="WHITE">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="18.0" />
                      </font>
@@ -25,6 +24,11 @@
                         <Insets left="20.0" />
                      </padding>
                   </Label>
+                  <Button mnemonicParsing="false" onAction="#close_stage" prefHeight="94.0" prefWidth="36.0" styleClass="category-close-btn" text="X">
+                     <HBox.margin>
+                        <Insets right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="105.0" prefWidth="267.0" styleClass="category-mid-container">
