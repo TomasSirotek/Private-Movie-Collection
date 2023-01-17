@@ -166,11 +166,19 @@
     -fx-text-fill: white;
 }
 
-.dialog-style-default .label{
-    -fx-background-color: -fx-nord0;
-    -fx-text-fill: black;
+.ok-button{
+    -fx-background-color: red;
 }
 
+.custom-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: white;
+}
+
+.custom-button:hover {
+    -fx-background-color: #1f3242;
+}
 
 
 

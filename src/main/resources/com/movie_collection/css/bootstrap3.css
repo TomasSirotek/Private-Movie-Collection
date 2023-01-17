@@ -930,25 +930,4 @@ VBox > .split-menu-button.last > .arrow-button {
     -fx-background-color: transparent;
 }
 
-.custom-button {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-text-fill: white;
-}
 
-.custom-button:hover {
-    -fx-background-color: #1f3242;
-}
-
-
-.spinner .text-field {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-text-fill: white;
-}
-
-.spinner .increment-arrow-button,
-.spinner .decrement-arrow-button {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0;
-}

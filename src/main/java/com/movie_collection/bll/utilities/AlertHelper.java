@@ -1,9 +1,7 @@
 package com.movie_collection.bll.utilities;
 
 import com.movie_collection.Main;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 import javafx.stage.StageStyle;
 
@@ -33,6 +31,15 @@ public class AlertHelper {
 
         alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("css/base.css")).toExternalForm());
         alert.getDialogPane().getStyleClass().add("dialog-style");
+
+        DialogPane dialogPane = alert.getDialogPane();
+        for (ButtonType buttonType : dialogPane.getButtonTypes()) {
+            Button button = (Button) dialogPane.lookupButton(buttonType);
+            if (buttonType == ButtonType.OK) {
+                button.getStyleClass().add("ok-button");
+            }
+        }
+
         return alert.showAndWait();
     }
 
