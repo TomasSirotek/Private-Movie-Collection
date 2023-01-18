@@ -8,6 +8,7 @@ import com.movie_collection.gui.DTO.MovieDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -62,5 +63,9 @@ public class MovieModel implements IMovieModel{
     @Override
     public List<Movie> searchMovies(String query, CompareSigns buttonValue, double spinnerValue) {
        return movieService.searchMovie(allMovies,query, buttonValue, spinnerValue);
+    }
+
+    public boolean playVideoDesktop(int id, String path) throws IOException, InterruptedException {
+        return movieService.playVideoDesktop(id, path);
     }
 }
