@@ -23,15 +23,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.sql.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -47,7 +47,7 @@ public class MovieController extends RootController implements Initializable {
     @FXML
     private Label desReleased,
             desRunTime,
-            desCast,
+            desCategory,
             desDirector,
             desImdbRating, desPrRating,
             descrMovieTitle, desMatRating,desPlot;
@@ -120,12 +120,19 @@ public class MovieController extends RootController implements Initializable {
         descrMovieTitle.setText(selectedMovie.getName());
         desPlot.setText(movieDTO.Plot);
         desRunTime.setText(movieDTO.Runtime);
-        desCast.setText(movieDTO.imdbRating);
         desReleased.setText(movieDTO.Released);
         desImdbRating.setText(movieDTO.imdbRating);
         desDirector.setText(movieDTO.Director);
         desPrRating.setText(String.valueOf(selectedMovie.getRating()));
         desMatRating.setText(movieDTO.Rated);
+
+        List<Category> categories = selectedMovie.getCategories();
+        StringBuilder sb = new StringBuilder();
+        for (Category c: categories) {
+            sb.append(c.getName()).append('\n');
+        }
+        desCategory.setText(sb.toString());
+        desCategory.setMinHeight(Region.USE_PREF_SIZE);
     }
 
     /**
@@ -307,4 +314,4 @@ public class MovieController extends RootController implements Initializable {
             refreshTable();
         }
     }
-    }
+}
