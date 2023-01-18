@@ -23,7 +23,7 @@
 <br />
 <p align="center">
   <a href="https://user-images.githubusercontent.com/72190589/207565741-1867a0a5-7bd6-46c8-a985-6e0ac64e4cac.png">
-    <img src="https://user-images.githubusercontent.com/72190589/212730015-931a5e47-d9c2-40e7-a77f-0d559aebef49.png" alt="Logo" width="550">
+    <img src="https://user-images.githubusercontent.com/72190589/213211081-dff1dad6-42da-4d98-b2e8-7d87eb05fa31.png" alt="Logo" width="500">
   </a>
   <p align="center">
     Private Movie Collection
@@ -145,7 +145,7 @@ MSSQL Database diagram
 
 ## UML diagram
 
-![UML](https://user-images.githubusecontent.com/721989/207556029-147be047-55bd-4140-9b0b-8ac60b41ad57.png)
+![UML](https://user-images.githubusercontent.com/72190589/213211702-c030b57b-9790-4158-9994-3d502db128da.png)
 
 ## Application design patterns
 
@@ -246,7 +246,19 @@ public abstract class RootController implements IRootController {
 
 ## Application interface
 
-![Screenshot 2022-12-14 at 10 41 16]()
+#### Dashboard page
+
+![Screenshot 2022-12-14 at 10 41 16](https://user-images.githubusercontent.com/92812102/213208069-805cde74-70f9-47bf-be89-47bd8d17a085.png)
+
+
+#### Movie page
+
+![Screenshot 2022-12-14 at 10 41 16](https://user-images.githubusercontent.com/92812102/213209377-13c4abd7-4b93-4845-982c-1284927885bf.png)
+
+
+#### Create movie window
+
+![image2](https://user-images.githubusercontent.com/72190589/213213344-1f62cc28-2e65-4dbc-ba32-d874987a7c3b.png)
 
 ## Licence
 
@@ -263,7 +275,6 @@ TTT :black_nib:
 Tomas Simko - [@twitter](https://twitter.com/TomasSimko_) -
 simko.t@email.cz - [@linkedIn](https://www.linkedin.com/in/tomas-simko/)  
 Patrik Valentíny [@linkedIn](https://www.linkedin.com/in/patrikvalentiny/)
-Nicola Martinez Clemente [@linkedIn](https://www.linkedin.com/in/nicola-martinez-clemente-96b035176/)
 
 Project Link: [https://github.com/TomassSimko/Private-Movie-Collection]()
 
