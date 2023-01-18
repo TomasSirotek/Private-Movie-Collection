@@ -119,6 +119,7 @@ public class MovieController extends RootController implements Initializable {
 
         descrMovieTitle.setText(selectedMovie.getName());
         desPlot.setText(movieDTO.Plot);
+        desPlot.setMinHeight(Region.USE_PREF_SIZE);
         desRunTime.setText(movieDTO.Runtime);
         desReleased.setText(movieDTO.Released);
         desImdbRating.setText(movieDTO.imdbRating);
@@ -275,7 +276,9 @@ public class MovieController extends RootController implements Initializable {
 
     private void actionPlay(TableColumn.CellDataFeatures<Movie, Button> col) {
         try {
-            if (!movieModel.playVideoDesktop(col.getValue().getId(), col.getValue().getPath())){
+            if (movieModel.playVideoDesktop(col.getValue().getId(), col.getValue().getPath())){
+                refreshTable();
+            } else {
                 showMediaPlayerUnselected();
             }
         } catch (IOException | InterruptedException ex) {
