@@ -105,7 +105,7 @@ A movie aficionado is buying and collecting movies in the mp4 format on an exter
   - [x] Custom validation
 - [x] API Contract
   - [x] Open source RESTful web service
-  - [x] Library Guava for smooth API calls 
+  - [x] OpenFeign for smooth API calls 
   - [x] Implemented feature to fetch possible movie title from open source api
 - [x] Dependency injection
   - [x] Implemented DI with Guice in order to write efficient/reliable code
@@ -181,7 +181,7 @@ public MovieService(IMovieDAO movieDAO) {
 }
 ```
 
-### GUAVA /w API
+### OpenFeign /w API
 
 RESTful web service to obtain movie information
 - http://www.omdbapi.com 
