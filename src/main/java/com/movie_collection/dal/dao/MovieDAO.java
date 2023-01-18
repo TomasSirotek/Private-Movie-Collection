@@ -25,7 +25,6 @@ public class MovieDAO implements IMovieDAO {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
             allMovies = mapper.getAllMovies();
         } catch (Exception ex) {
-            //throw new SqlSessionException("An error occurred mapping tables",ex);
              logger.error("An error occurred mapping tables", ex);
         }
         return allMovies;
@@ -38,7 +37,6 @@ public class MovieDAO implements IMovieDAO {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
             movie = mapper.getMovieById(id);
         } catch (Exception ex) {
-          //  throw new SqlSessionException("An error occurred mapping tables",ex);
             logger.error("An error occurred mapping tables", ex);
         }
         return Optional.ofNullable(movie);
