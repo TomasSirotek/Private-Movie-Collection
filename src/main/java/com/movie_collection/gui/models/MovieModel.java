@@ -61,6 +61,11 @@ public class MovieModel implements IMovieModel{
     }
 
     @Override
+    public List<Movie> getWatchedMovies() {
+        return movieService.getWatchMovies();
+    }
+
+    @Override
     public List<Movie> searchMovies(String query, CompareSigns buttonValue, double spinnerValue) {
        return movieService.searchMovie(allMovies,query, buttonValue, spinnerValue);
     }

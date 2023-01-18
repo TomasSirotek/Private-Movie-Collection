@@ -79,5 +79,17 @@ public interface IMovieService {
      * @return
      */
     MovieDTO getMovieByNameAPI(String title);
+
+    /**
+     * method to get all watched movies 
+     * @return list of movies there has lastView as not null
+     */
+    List<Movie> getWatchMovies();
+    
+    /**
+     * method to play required files
+     * @param id of the movie
+     * @param path absolute to the file location
+     */ 
     boolean playVideoDesktop(int id, String path) throws IOException;
 }

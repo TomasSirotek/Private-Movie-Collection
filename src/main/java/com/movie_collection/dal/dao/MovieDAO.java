@@ -6,7 +6,6 @@ import com.movie_collection.dal.interfaces.IMovieDAO;
 import com.movie_collection.dal.mappers.MovieMapperDAO;
 import myBatis.MyBatisConnectionFactory;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +25,18 @@ public class MovieDAO implements IMovieDAO {
             allMovies = mapper.getAllMovies();
         } catch (Exception ex) {
              logger.error("An error occurred mapping tables", ex);
+        }
+        return allMovies;
+    }
+
+    @Override
+    public List<Movie> getWatchedMovies() {
+        List<Movie> allMovies = new ArrayList<>();
+        try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+            MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
+            allMovies = mapper.getWatchedMovies();
+        } catch (Exception ex) {
+            logger.error("An error occurred mapping tables", ex);
         }
         return allMovies;
     }
@@ -109,6 +120,8 @@ public class MovieDAO implements IMovieDAO {
         }
         return finalAffectedRows;
     }
+
+
 
     @Override
     public int deleteMovieById(int id) {

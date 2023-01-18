@@ -24,5 +24,8 @@ public interface IMovieModel {
 
     MovieDTO findMovieByNameAPI(String title);
 
+    List<Movie> getWatchedMovies();
+
     boolean playVideoDesktop(int id, String path) throws IOException, InterruptedException;
+
 }

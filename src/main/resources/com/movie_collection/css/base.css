@@ -74,7 +74,7 @@
     -fx-content-display: left; /* position of the icon */
 }
 
-.allMoviesButton:hover, mediaPlayerButton:hover{
+.allMoviesButton:hover, .mediaPlayerButton:hover{
     -fx-background-color: rgba(4, 4, 4, 0.17);
     -fx-text-fill:white;
     -fx-border-width: 0px 0px 0px 0px;
@@ -193,6 +193,15 @@
     -fx-background-color: #1f3242;
 }
 
+
+/* Base recomendation drawing*/
+
+.watch-label-base{
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+}
+
 .dialog-style-default .label{
     -fx-text-fill: white;
     -fx-font-weight: 700;
@@ -220,5 +229,4 @@
 .dialog-style-default{
     -fx-background-color: -fx-nord2;
 }
-
 

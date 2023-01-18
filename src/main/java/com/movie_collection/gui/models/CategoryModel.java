@@ -3,15 +3,16 @@ package com.movie_collection.gui.models;
 import com.google.inject.Inject;
 import com.movie_collection.be.Category;
 import com.movie_collection.bll.services.interfaces.ICategoryService;
+import com.movie_collection.gui.DTO.MovieDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.util.List;
 
 
 public class CategoryModel implements ICategoryModel {
 
     private final ICategoryService categoryService;
-
-    // private ObservableList<Category> categories;
 
     @Inject
     public CategoryModel(ICategoryService categoryService) {
@@ -33,4 +34,6 @@ public class CategoryModel implements ICategoryModel {
     public int deleteCategory(int id) {
         return categoryService.deleteCategory(id);
     }
+
+
 }

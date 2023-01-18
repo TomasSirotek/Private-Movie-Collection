@@ -81,4 +81,6 @@ public interface IMovieDAO {
      * @return number of rows affected
      */
     int removeCategoryFromMovie(int id);
+
+    List<Movie> getWatchedMovies();
 }

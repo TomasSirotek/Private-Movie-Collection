@@ -15,8 +15,6 @@ public class RefreshEvent {
     }
 
 
-//    public T getPayload() {
-//        return payload;
-//    }
+
 
 }

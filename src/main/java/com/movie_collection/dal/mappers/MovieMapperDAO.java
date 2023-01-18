@@ -21,6 +21,13 @@ public interface MovieMapperDAO {
      */
     Movie getMovieById(@Param("movieId") int id);
 
+
+    /**
+     * Retrieves all watch movies currently
+     * @return list of all watched movies limited to 4
+     */
+    List<Movie> getWatchedMovies();
+
     /**
      * Retrieves all Movies from the database by categoryId and store into a list
      *

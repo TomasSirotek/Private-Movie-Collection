@@ -1,7 +1,10 @@
 package com.movie_collection.gui.models;
 
 import com.movie_collection.be.Category;
+import com.movie_collection.gui.DTO.MovieDTO;
 import javafx.collections.ObservableList;
+
+import java.util.List;
 
 public interface ICategoryModel {
     /*
@@ -19,4 +22,5 @@ public interface ICategoryModel {
     int createCategory(Category category);
 
     int deleteCategory(int id);
+
 }

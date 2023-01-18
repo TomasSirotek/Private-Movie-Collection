@@ -67,6 +67,24 @@
     </select>
 
 
+    <select id="getWatchedMovies"
+            resultType="Movie"
+            resultMap="movieResult">
+        SELECT DISTINCT
+            M.id       as movieId,
+            M.name     as movieName,
+            M.rating   as movieRating,
+            M.path     as moviePath,
+            M.lastview as lastview,
+            C.id       as idCat,
+            C.name     as nameCat
+        FROM Movie AS M
+                 left outer join CatMovie PT on M.id = PT.movieId
+                 left outer join Category C on PT.categoryId = C.id
+        WHERE M.lastview IS NOT NULL
+        ORDER BY M.lastview DESC
+    </select>
+
     <insert
             id="createMovieTest"
             parameterType="Movie"
@@ -92,7 +110,7 @@
             keyProperty=""
             keyColumn=""
             useGeneratedKeys="true"
-            >
+    >
         --  insert categoryId and movieId to joining table
         INSERT INTO CatMovie (categoryId, movieId)
         VALUES (#{categoryId}, #{movieId})
@@ -108,13 +126,14 @@
             keyColumn=""
             statementType="PREPARED">
         -- updates movie by the id
-        UPDATE Movie SET
-        name = #{name},
-        rating = #{rating},
-        path = #{path}
-        -- no need for retrieving just and id this is fine since the select key
-        -- retrieves back the identity key
-        OUTPUT INSERTED.id WHERE id = #{id}
+        UPDATE Movie
+        SET name   = #{name},
+            rating = #{rating},
+            path   = #{path}
+            -- no need for retrieving just and id this is fine since the select key
+            -- retrieves back the identity key
+        OUTPUT INSERTED.id
+        WHERE id = #{id}
     </update>
 
 
@@ -127,12 +146,12 @@
             statementType="PREPARED">
 
         -- updates movie by the id
-        UPDATE Movie SET
-        lastview = #{lastView}
-        WHERE id = #{movieId};
+        UPDATE Movie
+        SET lastview = #{lastView}
+        WHERE id = #{movieId}
     </update>
 
-    <!--  cache should be cleared before the statement is executed  ->  ensure that stale data is not used-->
+    <!--  cache should be cleared before the statement is executed -> ensure that stale data is not used-->
     <!--     timeout 20 to prevent any issues with a query taking too long to execute -->
     <delete id="deleteMovieById"
             parameterType="Movie"

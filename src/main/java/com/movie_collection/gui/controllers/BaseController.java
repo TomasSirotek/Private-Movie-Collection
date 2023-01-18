@@ -9,6 +9,7 @@ import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.bll.helpers.EventType;
 import com.movie_collection.bll.helpers.ViewType;
 import com.movie_collection.bll.utilities.AlertHelper;
+import com.movie_collection.gui.DTO.MovieDTO;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
 import com.movie_collection.gui.controllers.event.RefreshEvent;
@@ -18,9 +19,13 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -53,6 +58,9 @@ public class BaseController extends RootController implements Initializable {
     private StackPane app_content;
     @FXML
     private TextField searchMovies;
+
+    @FXML
+    private GridPane watchAgainGrid;
     private final IControllerFactory controllerFactory;
 
     private final IMovieModel movieModel;
@@ -78,14 +86,55 @@ public class BaseController extends RootController implements Initializable {
         setupSpinner();
         setCategoriesScrollPane(categoryModel.getAllCategories());
         showMoviesToDelete();
+        showAndDrawWatchAgainMovies();
         eventBus.register(this);
     }
+
+    private void showAndDrawWatchAgainMovies() {
+        List<Movie> watchedMovies = movieModel.getWatchedMovies();
+        int movieCounter = 0;
+        for (var vBox : watchAgainGrid.getChildren()) {
+            if(vBox instanceof VBox){
+                Movie mov = watchedMovies.get(movieCounter);
+                MovieDTO movieDTO = movieModel.findMovieByNameAPI(mov.getName());
+                ImageView imageView = new ImageView();
+                Label label = new Label();
+                Button watchNowBtn = new Button("Watch now");
+                imageView.setFitWidth(150);
+                imageView.setFitHeight(200);
+                imageView.setPreserveRatio(true);
+                watchNowBtn.setMaxWidth(135);
+                watchNowBtn.setOnAction(e -> {
+                    setOnPlay(e,mov);
+                });
+                label.getStyleClass().add("watch-label-base");
+                label.setPadding(new Insets(10, 0, 10, 0));
+                watchNowBtn.getStyleClass().add("success");
+                if(movieDTO.Poster != null){
+                    imageView.setImage(new Image(movieDTO.Poster));
+                }
+                label.setText(mov.getName());
+                ((VBox) vBox).getChildren().addAll(imageView, label, watchNowBtn);
+                movieCounter++;
+            }
+        }
+    }
+
+
+    private void setOnPlay(ActionEvent e,Movie mov) {
+        try {
+            movieModel.playVideoDesktop(mov.getId(),mov.getPath());
+        } catch (IOException | InterruptedException ex) {
+            throw new RuntimeException(ex);
+        }
+        e.consume();
+    }
+
 
     /**
      * needs docs @patrik
      */
     private void showMoviesToDelete()  {
-        var test = movieModel.getAllMovies();
         List<Movie> moviesToDelete = movieModel.getAllMovies().stream()
                 .filter(m -> m.getRating() < 6.0 || (m.getLastview() != null && (Instant.now().toEpochMilli() - m.getLastview().toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()> 63113852000L)))
                 .collect(Collectors.toList());

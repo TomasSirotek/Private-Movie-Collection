@@ -80,14 +80,14 @@ public class MovieService implements IMovieService {
         return filterUtil.filteringMovies(listToSearch,query,buttonValue,spinnerValue);
     }
 
-//    @Override
-//    public List<Movie> searchMovie(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue) {
-//        return filterUtil.filteringMovies(listToSearch, query, buttonValue, spinnerValue);
-//    }
-
     @Override
     public MovieDTO getMovieByNameAPI(String title) {
         return apiService.getMovieByTitle(title);
+    }
+
+    @Override
+    public List<Movie> getWatchMovies() {
+        return movieDAO.getWatchedMovies();
     }
 
     public int updateMovie(Movie movie) {
