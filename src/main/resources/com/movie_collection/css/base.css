@@ -74,7 +74,7 @@
     -fx-content-display: left; /* position of the icon */
 }
 
-.allMoviesButton:hover, mediaPlayerButton:hover{
+.allMoviesButton:hover, .mediaPlayerButton:hover{
     -fx-background-color: rgba(4, 4, 4, 0.17);
     -fx-text-fill:white;
     -fx-border-width: 0px 0px 0px 0px;
