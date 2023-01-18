@@ -3,6 +3,7 @@ package com.movie_collection.gui.controllers;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
+import com.movie_collection.Main;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.EventType;
@@ -31,6 +32,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Date;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -57,14 +59,12 @@ public class MovieController extends RootController implements Initializable {
     @FXML
     private TableColumn<Movie, String> colMovieTitle, colMovieCategory;
     @FXML
-    private TableColumn<Movie, String> colMovieRating;
+    private TableColumn<Movie, Double> colMovieRating;
 
     @FXML
     private TableColumn<Movie,String> colLastViewed;
 
     private final IMovieModel movieModel;
-
-    private static String txtContent = ""; // what is this ??
 
     private final IControllerFactory controllerFactory;
 
@@ -110,8 +110,7 @@ public class MovieController extends RootController implements Initializable {
      * @param selectedMovie
      */
     private void fillDescriptionWithAPIData(MovieDTO movieDTO, Movie selectedMovie) {
-
-        if(movieDTO.Poster != null) {
+        if(movieDTO.Poster != null){
             movieImage.setImage(new Image(movieDTO.Poster));
         }
         else{
@@ -144,11 +143,12 @@ public class MovieController extends RootController implements Initializable {
         });
         // ->
         colMovieTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName())); // set movie title
-        colMovieRating.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getRating())));
         colLastViewed.setCellValueFactory(cellData -> {
             Date date = cellData.getValue().getLastview();
             return new SimpleStringProperty(date == null ? "" : date.toString());
         }); // set movie title
+        colMovieRating.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getRating()));
+
         // sets value factory for movie category column data are collected by name and joined by "," -> action,horror
         colMovieCategory.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategories().stream()
                 .map(Category::getName)
@@ -184,22 +184,6 @@ public class MovieController extends RootController implements Initializable {
             return new SimpleObjectProperty<>(deleteButton);
         });
 
-        trySetTableWithMovies();
-    }
-
-    private void playVideoDesktop(int id, String path) throws IOException, InterruptedException {
-        Runtime runTime = Runtime.getRuntime();
-        if (!txtContent.isEmpty()) {
-            String s[] = new String[]{txtContent, path};
-               int result = movieModel.updateTimeStamp(id);
-               if(result <= 0){
-                   AlertHelper.showDefaultAlert("Error: Could not update time stamp for movie as last viewed. ", Alert.AlertType.ERROR);
-               }
-            runTime.exec(s);
-        } else {
-            showMediaPlayerUnselected();
-
-        }
         trySetTableWithMovies();
     }
 
@@ -262,6 +246,8 @@ public class MovieController extends RootController implements Initializable {
     private void showMediaPlayerUnselected() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Select your Media Player");
+        alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("css/base.css")).toExternalForm());
+        alert.getDialogPane().getStyleClass().add("dialog-style");
         alert.getButtonTypes().setAll(new ButtonType("OK"));
         alert.showAndWait();
     }
@@ -282,7 +268,9 @@ public class MovieController extends RootController implements Initializable {
 
     private void actionPlay(TableColumn.CellDataFeatures<Movie, Button> col) {
         try {
-            playVideoDesktop(col.getValue().getId(), col.getValue().getPath());
+            if (!movieModel.playVideoDesktop(col.getValue().getId(), col.getValue().getPath())){
+                showMediaPlayerUnselected();
+            }
         } catch (IOException | InterruptedException ex) {
             throw new RuntimeException(ex);
         }
@@ -310,14 +298,6 @@ public class MovieController extends RootController implements Initializable {
         return movieModel.deleteMovieById(id);
     }
 
-    protected void setPath(Path fileName, String mediaPlayerPath) {
-        try {
-            Files.writeString(fileName, mediaPlayerPath);
-            txtContent = Files.readString(fileName);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
     /**
      * Registering events
      */

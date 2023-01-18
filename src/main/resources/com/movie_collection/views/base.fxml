@@ -28,9 +28,9 @@
               <rowConstraints>
                   <RowConstraints maxHeight="69.6" minHeight="10.0" prefHeight="43.999994659423834" vgrow="SOMETIMES" />
               </rowConstraints>
-              <Label alignment="BASELINE_LEFT" contentDisplay="CENTER" prefHeight="46.0" prefWidth="224.0" text=" Movie Collection" textFill="#f84b4b">
+              <Label alignment="BASELINE_LEFT" contentDisplay="CENTER" prefHeight="46.0" prefWidth="224.0" text=" Movie Collection" textFill="#f84b4b" styleClass="fontDesign">
                   <font>
-                      <Font name="Graphique W01 Regular" size="31.0" />
+                      <Font name="Graphique W01 Regular" size="31.0"/>
                   </font>
             <padding>
                <Insets left="5.0" />
@@ -88,9 +88,8 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                             <Button fx:id="fillAllMovies" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#clickMovies" prefHeight="40.0" prefWidth="231.0" styleClass="menu-bar-top-buttons" text="All Movies" />
-                              <Button alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#onActionSelectMedia" prefHeight="40.0" prefWidth="231.0" styleClass="menu-bar-top-buttons" text="Select Media Player" GridPane.rowIndex="1">
-                        </Button>
+                             <Button fx:id="fillAllMovies" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#clickMovies" prefHeight="40.0" prefWidth="231.0" styleClass="allMoviesButton" text="All Movies" />
+                              <Button alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#onActionSelectMedia" prefHeight="40.0" prefWidth="231.0" styleClass="mediaPlayerButton" text="Select Media Player" GridPane.rowIndex="1"/>
                      </children>
                      <effect>
                         <DropShadow />

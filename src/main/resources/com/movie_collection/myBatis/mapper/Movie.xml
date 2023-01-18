@@ -122,8 +122,8 @@
             id="updateMovie"
             parameterType="Movie"
             flushCache="true"
-            keyProperty="id"
-            keyColumn="id"
+            keyProperty=""
+            keyColumn=""
             statementType="PREPARED">
         -- updates movie by the id
         UPDATE Movie
@@ -148,11 +148,10 @@
         -- updates movie by the id
         UPDATE Movie
         SET lastview = #{lastView}
-        OUTPUT INSERTED.id
         WHERE id = #{movieId}
     </update>
 
-    <!--  cache should be cleared before the statement is executed  ->  ensure that stale data is not used-->
+    <!--  cache should be cleared before the statement is executed -> ensure that stale data is not used-->
     <!--     timeout 20 to prevent any issues with a query taking too long to execute -->
     <delete id="deleteMovieById"
             parameterType="Movie"

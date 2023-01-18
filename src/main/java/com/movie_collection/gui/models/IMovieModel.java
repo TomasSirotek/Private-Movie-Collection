@@ -5,6 +5,7 @@ import com.movie_collection.gui.DTO.MovieDTO;
 import com.movie_collection.be.Movie;
 import javafx.collections.ObservableList;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface IMovieModel {
@@ -24,4 +25,7 @@ public interface IMovieModel {
     MovieDTO findMovieByNameAPI(String title);
 
     List<Movie> getWatchedMovies();
+
+    boolean playVideoDesktop(int id, String path) throws IOException, InterruptedException;
+
 }

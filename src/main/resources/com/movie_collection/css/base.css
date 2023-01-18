@@ -1,28 +1,22 @@
 @import "bootstrap3.css";
+@import url("https://fonts.googleapis.com/css2?family=Caveat&family=ZCOOL+KuaiLe&display=swap");
 
-/*fill with right colors*/
-
-/*@font-face {font-family: "Graphique W01 Regular";*/
-/*    src: url("ab83b275830b2d585ea027c47e3b237a.eot"); !* IE9*!*/
-/*    src: url("ab83b275830b2d585ea027c47e3b237a.eot?#iefix") format("embedded-opentype"), !* IE6-IE8 *!*/
-/*    url("ab83b275830b2d585ea027c47e3b237a.woff2") format("woff2"), !* chrome、firefox *!*/
-/*    url("ab83b275830b2d585ea027c47e3b237a.woff") format("woff"), !* chrome、firefox *!*/
-/*    url("ab83b275830b2d585ea027c47e3b237a.ttf") format("truetype"), !* chrome、firefox、opera、Safari, Android, iOS 4.2+*!*/
-/*    url("ab83b275830b2d585ea027c47e3b237a.svg#Graphique W01 Regular") format("svg"); !* iOS 4.1- *!*/
-/*}*/
-
+.fontDesign{
+    -fx-font-family: 'Caveat', cursive;
+    -fx-font-size: 35px;
+}
 * {
-    -fx-nord0: #192C35;
-    -fx-nord1: #4FC4F4;
-    -fx-nord2: #434C5E;
-    -fx-nord3: #4C566A;
-    -fx-nord4: #D8DEE9;
-    -fx-nord5: #E5E9F0;
-    -fx-nord6: #ECEFF4;
-    -fx-nord7: #8FBCBB;
-    -fx-nord8: #88C0D0;
-    -fx-nord9: #81A1C1;
-    -fx-nord10:#5E81AC;
+ -fx-nord0: #192C35;
+ -fx-nord1: #4FC4F4;
+ -fx-nord2: #434C5E;
+ -fx-nord3: #4C566A;
+ -fx-nord4: #D8DEE9;
+ -fx-nord5: #E5E9F0;
+ -fx-nord6: #ECEFF4;
+ -fx-nord7: #8FBCBB;
+ -fx-nord8: #88C0D0;
+ -fx-nord9: #81A1C1;
+ -fx-nord10:#5E81AC;
 }
 
 /* NAVBAR */
@@ -67,7 +61,7 @@
     -fx-background-color: -fx-nord0;
 }
 
-.menu-bar-top-buttons{
+.allMoviesButton{
     -fx-cursor: hand;
     -fx-border-width: 0px 0px 0px 0px;
     -fx-border-radius: 0px;
@@ -75,16 +69,29 @@
     -fx-text-fill: white;
     -fx-background-color: -fx-nord0;
     -fx-min-height: 40;
-    -fx-graphic: url('../icons/Folder.png');
-    -fx-graphic-text-gap: 5; /* gap between icon and button text */
+    -fx-graphic: url('../icons/moviesIcon.png');
+    -fx-graphic-text-gap: 10; /* gap between icon and button text */
     -fx-content-display: left; /* position of the icon */
 }
 
-.menu-bar-top-buttons:hover{
+.allMoviesButton:hover, mediaPlayerButton:hover{
     -fx-background-color: rgba(4, 4, 4, 0.17);
     -fx-text-fill:white;
     -fx-border-width: 0px 0px 0px 0px;
     -fx-border-color:#1b0e3c;
+}
+
+.mediaPlayerButton{
+    -fx-cursor: hand;
+    -fx-border-width: 0px 0px 0px 0px;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-text-fill: white;
+    -fx-background-color: -fx-nord0;
+    -fx-min-height: 40;
+    -fx-graphic: url('../icons/mediaPlayerIcon.png');
+    -fx-graphic-text-gap: 10; /* gap between icon and button text */
+    -fx-content-display: left; /* position of the icon */
 }
 
 
@@ -160,10 +167,16 @@
 .dialog-style .button .CANCEL{
     -fx-background-color: warning;
 }
+.dialog-style .button .OK{
+    -fx-background-color: warning;
+}
 
 .dialog-style .ok-button {
     -fx-background-color: green;
     -fx-text-fill: white;
+}
+.dialog-style{
+    -fx-background-color: -fx-nord2;
 }
 
 .ok-button{
@@ -180,6 +193,7 @@
     -fx-background-color: #1f3242;
 }
 
+
 /* Base recomendation drawing*/
 
 .watch-label-base{
@@ -188,7 +202,31 @@
     -fx-font-weight: 700;
 }
 
+.dialog-style-default .label{
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-font-size: 14px;
+    -fx-font-family: "Arial Rounded MT Bold";
+}
 
+.dialog-style-default .header-panel{
+    -fx-background-color: -fx-nord0;
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-font-size: 14px;
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-effect: dropshadow(three-pass-box,rgba(0,0,0,0.8),10,0,0,0);
+}
 
+.dialog-style-default .button .OK{
+    -fx-background-color: warning;
+}
 
+.dialog-style-default .ok-button {
+    -fx-background-color: green;
+    -fx-text-fill: white;
+}
+.dialog-style-default{
+    -fx-background-color: -fx-nord2;
+}
 

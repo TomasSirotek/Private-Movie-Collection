@@ -6,7 +6,6 @@ import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 
-@Headers("Accept: application/json")
 public interface IMovie {
       @Headers({"Content-Type: application/json","apikey: {apikey}"})
       @RequestLine("GET /?t={title}")

@@ -353,7 +353,7 @@ public class BaseController extends RootController implements Initializable {
             tableView.getItems().clear();
             tableView.setItems(FXCollections.observableArrayList(list));
         } else {
-            System.out.println("The table view could not be found");
+
         }
     }
 

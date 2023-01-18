@@ -25,7 +25,7 @@ public class MediaPlayerSelectionController extends RootController implements In
     private TextField path;
 
     @FXML
-    private Button onClickSelectFile,confirm_action,cancelAction;
+    private Button onClickSelectFile, confirmAction,cancelAction;
 
     private final MovieController movieController;
 
@@ -40,11 +40,11 @@ public class MediaPlayerSelectionController extends RootController implements In
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         onClickSelectFile.setOnAction(this::selectFileChooser);
-        confirm_action.setOnAction(this::movieOnClickAction);
+        confirmAction.setOnAction(this::setConfirmAction);
         cancelAction.setOnAction(e -> getStage().close());
     }
 
-    private void movieOnClickAction(ActionEvent actionEvent) {
+    private void setConfirmAction(ActionEvent actionEvent) {
         if(!path.getText().isEmpty()){
             getStage().close();
         }else {
@@ -54,17 +54,18 @@ public class MediaPlayerSelectionController extends RootController implements In
 
     private void selectFileChooser(ActionEvent actionEvent) {
         var chooseFile = new FileChooser();
-
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("App files (*.exe,*.all)", "*.exe","*.all");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("App files (*.exe,*.app)", "*.exe", "*.app");
         chooseFile.getExtensionFilters().add(extFilter);
 
         File selectedExecutableFile = chooseFile.showOpenDialog(new Stage());
         if (selectedExecutableFile != null) {
-            path.setText(selectedExecutableFile.toURI().toString());
-            String mediaPlayerPath = selectedExecutableFile.toString();
-            File txt = new File(MEDIA_PLAYER_PATH);
-            Path fileName = Path.of(txt.getAbsolutePath());
-            movieController.setPath(fileName, mediaPlayerPath);
+            String absolutePath = selectedExecutableFile.getAbsolutePath();
+            path.setText(absolutePath);
+            try {
+                Files.writeString(Path.of(MEDIA_PLAYER_PATH), absolutePath);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

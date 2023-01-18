@@ -10,10 +10,6 @@
     -fx-background-color: -fx-nord5;
 }
 
-/*.table-view:focused{*/
-/*    -fx-background-color: transparent;*/
-/*}*/
-
 .description-container {
     -fx-border-color: black;
     -fx-border-width: 1 1 1 1;
@@ -59,18 +55,10 @@
     -fx-background-color: transparent;
 }
 
-/*.table-view .table-cell{*/
-/*    -fx-text-fill: -fx-nord0;*/
-/*}*/
 
 .table-row-cell{
     -fx-cursor: hand;
 }
-
-/*.table-row-cell:odd{*/
-/*    -fx-background-color: -fx-nord5;*/
-/*    -fx-padding: 0.0em; !* 0 *!*/
-/*}*/
 
 .table-row-cell:selected {
     -fx-background-color: rgba(4, 4, 4, 0.17);

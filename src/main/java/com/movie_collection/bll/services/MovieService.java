@@ -13,6 +13,9 @@ import com.movie_collection.dal.interfaces.IMovieDAO;
 import com.movie_collection.gui.DTO.MovieDTO;
 import javafx.scene.control.Alert;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -28,6 +31,8 @@ public class MovieService implements IMovieService {
     private final IFilter filterUtil;
 
     private final IAPIService apiService;
+    private static String playerPath;
+    private final static String MEDIA_PLAYER_PATH = "mediaPlayerPath.txt";
 
     @Inject
     public MovieService(IMovieDAO movieDAO, ICategoryService categoryService, IAPIService apiService, IFilter filterUtil) {
@@ -64,10 +69,9 @@ public class MovieService implements IMovieService {
 
     @Override
     public int updateTimeStamp(int id) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DateFormat.DAY_MONTH_YEAR.getDateFormat()); // made it more type safe :) @bearded redemption
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DateFormat.YEAR_MONTH_DAY.getDateFormat()); // made it more type safe :) @bearded redemption
         Timestamp ts = Timestamp.from(Instant.now());
         String date = dateFormat.format(ts);
-
         return movieDAO.updateTimeStamp(date,id);
     }
 
@@ -142,5 +146,32 @@ public class MovieService implements IMovieService {
                         AlertHelper.showDefaultAlert("Error: Failed to add category to movie." + category.getId(), Alert.AlertType.ERROR);
                     }
                 });
+    }
+
+    @Override
+    public boolean playVideoDesktop(int id, String path) throws IOException {
+        if (!setPath() || playerPath == null){
+            return false;
+        }
+        if (playerPath.toLowerCase().contains("vlc")) {
+            String[] s = new String[]{playerPath, "file:///" + path};
+            int result = updateTimeStamp(id);
+            if (result <= 0) {
+                AlertHelper.showDefaultAlert("Error: Could not update time stamp for movie as last viewed. ", Alert.AlertType.ERROR);
+            }
+            Runtime.getRuntime().exec(s);
+            return true;
+        } else {
+            AlertHelper.showDefaultAlert("Please use VLC media player", Alert.AlertType.ERROR);
+            return false;
+        }
+    }
+    private boolean setPath() {
+        try {
+            playerPath = Files.readString(Path.of(MEDIA_PLAYER_PATH));
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 }
