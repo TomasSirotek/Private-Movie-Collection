@@ -54,8 +54,7 @@ public class MediaPlayerSelectionController extends RootController implements In
 
     private void selectFileChooser(ActionEvent actionEvent) {
         var chooseFile = new FileChooser();
-
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("App files (*.exe,*.app)", "*.exe","*.app");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("App files (*.exe,*.app)", "*.exe", "*.app");
         chooseFile.getExtensionFilters().add(extFilter);
 
         File selectedExecutableFile = chooseFile.showOpenDialog(new Stage());
@@ -66,5 +65,10 @@ public class MediaPlayerSelectionController extends RootController implements In
             Path fileName = Path.of(txt.getAbsolutePath());
             movieController.setPath(fileName, mediaPlayerPath);
         }
+    }
+
+    public void close_stage(ActionEvent actionEvent) {
+        getStage().close();
+        actionEvent.consume();
     }
 }

@@ -1,0 +1,45 @@
+@import "bootstrap3.css";
+@import "base.css";
+
+
+.category-top-container{
+    -fx-background-color: -fx-nord0;
+    -fx-text-fill: white;
+}
+
+.category-mid-container{
+    -fx-background-color: rgba(255, 255, 255, 0.37);
+}
+.category-cta{
+    -fx-cursor: hand;
+    -fx-background-color: -fx-nord0;
+    -fx-font-family: Arial Rounded MT Bold;
+    -fx-font-weight: 700;
+    -fx-border-color: black;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-style: solid;
+    -fx-text-fill: white;
+}
+
+.category-close-btn{
+    -fx-background-color: -fx-nord0;
+    -fx-text-fill: white;
+    -fx-border-radius: 0;
+    -fx-cursor: hand;
+}
+
+
+.category-close-btn:hover{
+    -fx-background-color: transparent;
+    -fx-text-fill: red;
+    -fx-border-radius: 0;
+    -fx-cursor: hand;
+}
+
+.category-cta:hover{
+    -fx-background-color: #4FC4F4;
+    -fx-text-fill: black;
+    -fx-border-color: -fx-nord1;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-style: solid;
+}

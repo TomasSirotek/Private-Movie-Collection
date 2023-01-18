@@ -1,1 +1,69 @@
 @import "bootstrap3.css";
+@import "base.css";
+
+
+.table-view{
+    -fx-background-color: -fx-nord0;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: -fx-nord5;
+}
+
+.description-container {
+    -fx-border-color: black;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-style: solid;
+    -fx-background-color: -fx-nord0;
+    -fx-text-fill: white;
+}
+
+.description-label{
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+}
+
+.description-image{
+    -fx-border-color: black;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-style: solid;
+}
+
+.description-data-title{
+    -fx-text-fill: #FAF2AC;
+    -fx-font-weight: bold;
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-font-size: 16px;
+}
+
+.description-data-elements{
+    -fx-opacity: 0.64;
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+
+
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-nord0;
+    -fx-font-weight: 700;
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+
+.table-row-cell{
+    -fx-cursor: hand;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: rgba(4, 4, 4, 0.17);
+    -fx-text-fill:white;
+}
+
+
+

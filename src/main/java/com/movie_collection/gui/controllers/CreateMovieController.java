@@ -267,4 +267,9 @@ public class CreateMovieController extends RootController implements Initializab
         return categoryModel.getAllCategories();
 
     }
+
+    public void close_stage(ActionEvent actionEvent) {
+        getStage().close();
+        actionEvent.consume();
+    }
 }

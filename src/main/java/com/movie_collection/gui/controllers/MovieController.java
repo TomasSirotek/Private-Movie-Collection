@@ -3,6 +3,7 @@ package com.movie_collection.gui.controllers;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
+import com.movie_collection.Main;
 import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.EventType;
@@ -24,11 +25,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Date;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -41,14 +45,12 @@ public class MovieController extends RootController implements Initializable {
     @FXML
     private ImageView movieImage;
     @FXML
-    private TextArea desPlot;
-    @FXML
     private Label desReleased,
             desRunTime,
             desCast,
             desDirector,
             desImdbRating, desPrRating,
-            descrMovieTitle, desMatRating;
+            descrMovieTitle, desMatRating,desPlot;
 
     @FXML
     private TableView<Movie> moviesTable;
@@ -58,6 +60,9 @@ public class MovieController extends RootController implements Initializable {
     private TableColumn<Movie, String> colMovieTitle, colMovieCategory;
     @FXML
     private TableColumn<Movie, Double> colMovieRating;
+
+    @FXML
+    private TableColumn<Movie,String> colLastViewed;
 
     private final IMovieModel movieModel;
 
@@ -138,6 +143,7 @@ public class MovieController extends RootController implements Initializable {
         // sets value factory for play column
         colPlayMovie.setCellValueFactory(col -> {
             Button playButton = new Button("▶");
+            playButton.getStyleClass().add("success");
             playButton.setOnAction(e -> {
                 actionPlay(col);
             });
@@ -145,6 +151,10 @@ public class MovieController extends RootController implements Initializable {
         });
         // ->
         colMovieTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName())); // set movie title
+        colLastViewed.setCellValueFactory(cellData -> {
+            Date date = cellData.getValue().getLastview();
+            return new SimpleStringProperty(date == null ? "" : date.toString());
+        }); // set movie title
         colMovieRating.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getRating()));
 
         // sets value factory for movie category column data are collected by name and joined by "," -> action,horror
@@ -156,6 +166,8 @@ public class MovieController extends RootController implements Initializable {
         colEditMovies.setCellValueFactory(col -> {
             Button editButton = new Button("⚙");
             Movie updateMovie = col.getValue();
+            editButton.maxWidth(10);
+            editButton.getStyleClass().add("warning");
             editButton.setOnAction(e -> {
                 CreateMovieController controller = loadSetEditController(updateMovie);
                 showUpdateWindow(controller.getView());
@@ -164,7 +176,9 @@ public class MovieController extends RootController implements Initializable {
         });
         // sets value factory for delete  column
         colDeleteMovie.setCellValueFactory(col -> {
-            Button deleteButton = new Button("❌");
+            Button deleteButton = new Button("Delete");
+            deleteButton.getStyleClass().add("danger");
+            deleteButton.maxWidth(10);
             deleteButton.setOnAction(e -> {
                 Movie movie = col.getValue(); // get movie object from the current row
                 if (movie != null) {
@@ -218,6 +232,7 @@ public class MovieController extends RootController implements Initializable {
         stage.initOwner(getStage());
         stage.initModality(Modality.WINDOW_MODAL);
         stage.setTitle("Update Movie");
+        stage.initStyle(StageStyle.UNDECORATED);
 
         stage.setResizable(false);
         stage.setScene(scene);
@@ -256,6 +271,8 @@ public class MovieController extends RootController implements Initializable {
     private void showMediaPlayerUnselected() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Select your Media Player");
+        alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("css/base.css")).toExternalForm());
+        alert.getDialogPane().getStyleClass().add("dialog-style");
         alert.getButtonTypes().setAll(new ButtonType("OK"));
         alert.showAndWait();
     }
