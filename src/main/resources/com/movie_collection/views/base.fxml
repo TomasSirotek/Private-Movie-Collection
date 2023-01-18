@@ -90,9 +90,8 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                             <Button fx:id="fillAllMovies" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#clickMovies" prefHeight="40.0" prefWidth="231.0" styleClass="menu-bar-top-buttons" text="All Movies" />
-                              <Button alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#onActionSelectMedia" prefHeight="40.0" prefWidth="231.0" styleClass="menu-bar-top-buttons" text="Select Media Player" GridPane.rowIndex="1">
-                        </Button>
+                             <Button fx:id="fillAllMovies" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#clickMovies" prefHeight="40.0" prefWidth="231.0" styleClass="allMoviesButton" text="All Movies" />
+                              <Button alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#onActionSelectMedia" prefHeight="40.0" prefWidth="231.0" styleClass="mediaPlayerButton" text="Select Media Player" GridPane.rowIndex="1"/>
                      </children>
                      <effect>
                         <DropShadow />
