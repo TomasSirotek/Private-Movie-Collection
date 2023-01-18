@@ -18,12 +18,12 @@ public abstract class RootController implements IRootController {
     }
 
     @Override
-    public void setView(Parent node){
-       this.root = Objects.requireNonNull(node, "view must not be null.");
+    public void setView(Parent node) {
+        this.root = Objects.requireNonNull(node, "view must not be null.");
     }
 
     @Override
-    public Stage getStage(){
+    public Stage getStage() {
         return (Stage) root.getScene().getWindow();
     }
 

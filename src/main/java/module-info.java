@@ -30,14 +30,14 @@ module com.movie_collection.private_movie_collection {
     exports com.movie_collection.be to javafx.graphics, org.mybatis;
     exports com.movie_collection.gui.controllers.event;
 
-    opens com.movie_collection.gui.controllers to javafx.fxml,com.google.guice, com.google.common;
-    opens com.movie_collection to javafx.fxml,com.google.guice,org.slf4j;
-    opens com.movie_collection.bll.util to com.google.guice,javafx.fxml;
-    opens com.movie_collection.gui.controllers.abstractController to com.google.guice, javafx.fxml,com.google.common;
-    opens com.movie_collection.gui.controllers.controllerFactory to com.google.guice, javafx.fxml,com.google.common;
+    opens com.movie_collection.gui.controllers to javafx.fxml, com.google.guice, com.google.common;
+    opens com.movie_collection to javafx.fxml, com.google.guice, org.slf4j;
+    opens com.movie_collection.bll.util to com.google.guice, javafx.fxml;
+    opens com.movie_collection.gui.controllers.abstractController to com.google.guice, javafx.fxml, com.google.common;
+    opens com.movie_collection.gui.controllers.controllerFactory to com.google.guice, javafx.fxml, com.google.common;
     opens com.movie_collection.config to com.google.guice, javafx.fxml;
     opens com.movie_collection.di to com.google.guice, javafx.fxml;
-    opens myBatis to org.mybatis, javafx.fxml,org.slf4j;
+    opens com.movie_collection.dal.myBatis to org.mybatis, javafx.fxml, org.slf4j;
     opens com.movie_collection.dal.mappers to org.mybatis;
-    opens com.movie_collection.bll.services.api to com.google.guice, feign.core,feign.gson ;
+    opens com.movie_collection.bll.services.api to com.google.guice, feign.core, feign.gson;
 }

@@ -24,7 +24,7 @@ public class CategoryService implements ICategoryService {
 
 
     @Override
-    public int createCategory(Category category){
+    public int createCategory(Category category) {
         return categoryDAO.createCategory(category);
     }
 

@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  */
 public class MovieController extends RootController implements Initializable {
 
-    // -> Optional table description
+
     @FXML
     private ImageView movieImage;
     @FXML
@@ -50,8 +50,7 @@ public class MovieController extends RootController implements Initializable {
             desCategory,
             desDirector,
             desImdbRating, desPrRating,
-            descrMovieTitle, desMatRating,desPlot;
-
+            descrMovieTitle, desMatRating, desPlot;
     @FXML
     private TableView<Movie> moviesTable;
     @FXML
@@ -60,18 +59,13 @@ public class MovieController extends RootController implements Initializable {
     private TableColumn<Movie, String> colMovieTitle, colMovieCategory;
     @FXML
     private TableColumn<Movie, Double> colMovieRating;
-
     @FXML
-    private TableColumn<Movie,String> colLastViewed;
+    private TableColumn<Movie, String> colLastViewed;
 
     private final IMovieModel movieModel;
-
     private final IControllerFactory controllerFactory;
-
-    private boolean isCategoryView = false;
-
     private final EventBus eventBus;
-
+    private boolean isCategoryView = false;
     private int categoryId;
 
     @Inject
@@ -97,23 +91,22 @@ public class MovieController extends RootController implements Initializable {
         moviesTable.setOnMouseClicked(event -> {
             Movie selectedMovie = moviesTable.getSelectionModel().getSelectedItem();
             if (selectedMovie != null) {
-                // tries to find the movie by name
                 MovieDTO movieDTO = movieModel.findMovieByNameAPI(selectedMovie.getName());
-                fillDescriptionWithAPIData(movieDTO,selectedMovie);
+                fillDescriptionWithAPIData(movieDTO, selectedMovie);
             }
         });
     }
 
     /**
      * fill all the description data
-     * @param movieDTO
-     * @param selectedMovie
+     *
+     * @param movieDTO that hold potential data fetched from api call
+     * @param selectedMovie that will be displayed in the description
      */
     private void fillDescriptionWithAPIData(MovieDTO movieDTO, Movie selectedMovie) {
-        if(movieDTO.Poster != null){
+        if (movieDTO.Poster != null && !movieDTO.Poster.equals("N/A")) {
             movieImage.setImage(new Image(movieDTO.Poster));
-        }
-        else{
+        } else {
             movieImage.setImage(new Image("file:src/main/resources/com/movie_collection/images/default_image.jpeg"));
         }
 
@@ -129,7 +122,7 @@ public class MovieController extends RootController implements Initializable {
 
         List<Category> categories = selectedMovie.getCategories();
         StringBuilder sb = new StringBuilder();
-        for (Category c: categories) {
+        for (Category c : categories) {
             sb.append(c.getName()).append('\n');
         }
         desCategory.setText(sb.toString());
@@ -182,10 +175,10 @@ public class MovieController extends RootController implements Initializable {
             deleteButton.setOnAction(e -> {
                 Movie movie = col.getValue(); // get movie object from the current row
                 if (movie != null) {
-                    var resultNotify = AlertHelper.showOptionalAlertWindow("Are you sure you want delete movie with id: " + movie.getId(),"", Alert.AlertType.CONFIRMATION);
+                    var resultNotify = AlertHelper.showOptionalAlertWindow("Are you sure you want delete movie with id: " + movie.getId(), "", Alert.AlertType.CONFIRMATION);
                     if (resultNotify.isPresent() && resultNotify.get().equals(ButtonType.OK)) {
                         int result = tryDeleteMovie(movie.getId()); // tries to delete movie by id inside the row
-                        refreshTableAndNotify(result,movie.getId());
+                        refreshTableAndNotify(result, movie.getId());
                     }
                 }
             });
@@ -194,8 +187,6 @@ public class MovieController extends RootController implements Initializable {
 
         trySetTableWithMovies();
     }
-
-
 
     protected void setIsCategoryView(int categoryId) {
         this.isCategoryView = true;
@@ -206,7 +197,6 @@ public class MovieController extends RootController implements Initializable {
             trySetTableByCategory(categoryId);
         }
     }
-
 
     private void showUpdateWindow(Parent view) {
         Stage stage = new Stage();
@@ -253,7 +243,7 @@ public class MovieController extends RootController implements Initializable {
 
     private void showMediaPlayerUnselected() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText("Select your Media Player");
+        alert.setHeaderText("Select your media player");
         alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(Main.class.getResource("css/base.css")).toExternalForm());
         alert.getDialogPane().getStyleClass().add("dialog-style");
         alert.getButtonTypes().setAll(new ButtonType("OK"));
@@ -266,28 +256,28 @@ public class MovieController extends RootController implements Initializable {
      */
 
     private void refreshTable() {
-        if(moviesTable != null){
-            if(moviesTable.getItems() != null){
+        if (moviesTable != null) {
+            if (moviesTable.getItems() != null) {
                 moviesTable.getItems().clear();
-                moviesTable.getItems().setAll( movieModel.getAllMovies());
+                moviesTable.getItems().setAll(movieModel.getAllMovies());
             }
         }
     }
 
     private void actionPlay(TableColumn.CellDataFeatures<Movie, Button> col) {
         try {
-            if (movieModel.playVideoDesktop(col.getValue().getId(), col.getValue().getPath())){
+            if (movieModel.playVideoDesktop(col.getValue().getId(), col.getValue().getPath())) {
                 refreshTable();
             } else {
                 showMediaPlayerUnselected();
             }
-        } catch (IOException | InterruptedException ex) {
+        } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }
 
 
-    private void trySetTableByCategory(int categoryId){
+    private void trySetTableByCategory(int categoryId) {
         moviesTable.setItems(movieModel.getAllMoviesInTheCategory(categoryId));
     }
 
@@ -302,6 +292,7 @@ public class MovieController extends RootController implements Initializable {
     /**
      * method that tries to delete movie by id
      * result success if > 0 ... else err display/handel
+     *
      * @param id of movie that will be deleted
      */
     private int tryDeleteMovie(int id) {
@@ -312,8 +303,8 @@ public class MovieController extends RootController implements Initializable {
      * Registering events
      */
     @Subscribe
-    public void handleCategoryEvent(RefreshEvent event){
-        if(event.getEventType() == EventType.UPDATE_TABLE_VIEW){
+    public void handleCategoryEvent(RefreshEvent event) {
+        if (event.eventType() == EventType.UPDATE_TABLE_VIEW) {
             refreshTable();
         }
     }

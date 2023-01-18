@@ -6,10 +6,13 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
+
 # Private-Movie-Collection
+
 :school_satchel: Final Exam | 1st Semester | SDE & SCO
 
 ## Contributors
+
 <a href="https://github.com/TomassSimko/Private-Movie-Collection/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=TomassSimko/Private-Movie-Collection" />
 </a>
@@ -31,7 +34,9 @@
 
 # The brief
 
-A movie aficionado is buying and collecting movies in the mp4 format on an external 2 TB hard-drive. So far he has tried to use a system where he puts them in different folders, depending on their rating and the category of the movie. As the collection has grown the categories is becoming an increasing problem. Here we come with a solution !
+A movie aficionado is buying and collecting movies in the mp4 format on an external 2 TB hard-drive. So far he has tried
+to use a system where he puts them in different folders, depending on their rating and the category of the movie. As the
+collection has grown the categories is becoming an increasing problem. Here we come with a solution !
 
 <!-- TABLE OF CONTENTS -->
 <details open="open">
@@ -55,8 +60,8 @@ A movie aficionado is buying and collecting movies in the mp4 format on an exter
   </ol>
 </details>
 
-
 ## Tech stack
+
 * [Java](https://www.java.com/en/)
 * [Liberica 19](https://bell-sw.com/libericajdk/)
 * [JavaFX](https://openjfx.io/)
@@ -69,62 +74,65 @@ A movie aficionado is buying and collecting movies in the mp4 format on an exter
 * [SQLServer](https://www.microsoft.com/en-us/sql-server/)
 
 ## Style
+
 * [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference)
 * [Bootstrap](https://github.com/dicolar/jbootx)
 
-
 <!-- ABOUT THE PROJECT -->
-## Features and requirements
-- [x] MSSQL Database
-  - [x] T-SQL dialect
-  - [x] MyBatis
-  - [x] SL4J logging
-  - [x] Build in caching
-  - [x] Environmental variables
-  - [x] Config file 
-  - [x] SQL Server Driver
-- [x] Movies
-  - [x] CRUD
-    - [x] Ability to play movie
-    - [x] Get all movies
-    - [x] Get all movies in category
-    - [x] Create movie
-    - [x] Update movie
-    - [x] Remove movie
-  - [x] Updating categories for movie
-  - [x] Dynamic update in the interface
-  - [x] Custom validation
-- [x] Categories
-  - [x] CRUD impl
-    - [x] Create Category
-    - [x] Remove Category
-  - [x] Updating categories for movie
-  - [x] Dynamic update in the interface
-  - [x] Build in drawer with dynamic categories
-  - [x] Get all the movies when category assigned 
-  - [x] Custom validation
-- [x] API Contract
-  - [x] Open source RESTful web service
-  - [x] OpenFeign for smooth API calls 
-  - [x] Implemented feature to fetch possible movie title from open source api
-- [x] Dependency injection
-  - [x] Implemented DI with Guice in order to write efficient/reliable code
-- [x] Dynamic sorting/filtering
-  - [x] Table view with sortable columns
-  - [x] Linear search algorithm 
-    - [x] Search movie by title,year,category 
-    - [x] Additional search feature for specifying rating
-  - [x] Error handling
-- [x] Playable video formats
-  - [x] Works on Windows
-  - [x] Current issues with development environment and permission for mac users 
-    - [x] Implementation works as intended however only on window atm but the impl works and would work 
-  - [x] Feature to choose your own preferred movie player
-- [x] Initial warning feature requirement
-  - [x] User will get the informational option to delete movie that are less than 6 rating and have not been seen for 2 years at the start
 
+## Features and requirements
+
+- [x] MSSQL Database
+    - [x] T-SQL dialect
+    - [x] MyBatis
+    - [x] SL4J logging
+    - [x] Build in caching
+    - [x] Environmental variables
+    - [x] Config file
+    - [x] SQL Server Driver
+- [x] Movies
+    - [x] CRUD
+        - [x] Ability to play movie
+        - [x] Get all movies
+        - [x] Get all movies in category
+        - [x] Create movie
+        - [x] Update movie
+        - [x] Remove movie
+    - [x] Updating categories for movie
+    - [x] Dynamic update in the interface
+    - [x] Custom validation
+- [x] Categories
+    - [x] CRUD impl
+        - [x] Create Category
+        - [x] Remove Category
+    - [x] Updating categories for movie
+    - [x] Dynamic update in the interface
+    - [x] Build in drawer with dynamic categories
+    - [x] Get all the movies when category assigned
+    - [x] Custom validation
+- [x] API Contract
+    - [x] Open source RESTful web service
+    - [x] OpenFeign for smooth API calls
+    - [x] Implemented feature to fetch possible movie title from open source api
+- [x] Dependency injection
+    - [x] Implemented DI with Guice in order to write efficient/reliable code
+- [x] Dynamic sorting/filtering
+    - [x] Table view with sortable columns
+    - [x] Linear search algorithm
+        - [x] Search movie by title,year,category
+        - [x] Additional search feature for specifying rating
+    - [x] Error handling
+- [x] Playable video formats
+    - [x] Works on Windows
+    - [x] Current issues with development environment and permission for mac users
+        - [x] Implementation works as intended however only on window atm but the impl works and would work
+    - [x] Feature to choose your own preferred movie player
+- [x] Initial warning feature requirement
+    - [x] User will get the informational option to delete movie that are less than 6 rating and have not been seen for
+      2 years at the start
 
 ## Application design
+
 Our application was design by us in Figma
 
 ![Screenshot 2022-12-14 at 10 23 40](https://user-images.githubusercontent.com/72190589/212730849-76b34eb5-e006-4ce4-ad65-974c64932bfb.png)
@@ -139,7 +147,6 @@ MSSQL Database diagram
 
 ![UML](https://user-images.githubusecontent.com/721989/207556029-147be047-55bd-4140-9b0b-8ac60b41ad57.png)
 
-
 ## Application design patterns
 
 - [x] Singleton pattern
@@ -151,8 +158,9 @@ MSSQL Database diagram
 
 ### Data Access Object
 
-Example Method to retrieve movie by its category ID with myBatis and SL4J
- - Additional mapping included in Movie.xml 
+Example Method to retrieve movie by its category ID with com.movie_collection.dal.myBatis and SL4J
+
+- Additional mapping included in Movie.xml
 
 ``` java
 @Override
@@ -184,11 +192,11 @@ public MovieService(IMovieDAO movieDAO) {
 ### OpenFeign /w API
 
 RESTful web service to obtain movie information
-- http://www.omdbapi.com 
-- API contract call to get movie by title 
+
+- http://www.omdbapi.com
+- API contract call to get movie by title
 - Environmental variables / sensitive credentials handeling
 - Custom logger stored in logs
-
 
 ``` java
 public interface IMovie {
@@ -217,7 +225,8 @@ public RootController loadFxmlFile(ViewType fxmlFile) throws IOException {
 ```
 
 ### Abstract root controller
- - Implementation of a simple abstract class that set and retrieves Parent root object
+
+- Implementation of a simple abstract class that set and retrieves Parent root object
 
 ``` java
 public abstract class RootController implements IRootController {
@@ -248,9 +257,11 @@ Team: isEmpty() {true} <br>
 Hope you will like it! <br>
 Thank you for your attention!
 TTT :black_nib:
+
 ## Contact
 
-Tomas Simko - [@twitter](https://twitter.com/TomasSimko_) - simko.t@email.cz - [@linkedIn](https://www.linkedin.com/in/tomas-simko/)  
+Tomas Simko - [@twitter](https://twitter.com/TomasSimko_) -
+simko.t@email.cz - [@linkedIn](https://www.linkedin.com/in/tomas-simko/)  
 Patrik Valentíny [@linkedIn](https://www.linkedin.com/in/patrikvalentiny/)
 
 Project Link: [https://github.com/TomassSimko/Private-Movie-Collection]()
@@ -258,6 +269,8 @@ Project Link: [https://github.com/TomassSimko/Private-Movie-Collection]()
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [contributors-shield]: https://contrib.rocks/image?repo=TomassSimko/Private-Movie-Collection
+
 [contributors-url]: https://github.com/TomassSimko/Private-Movie-Collection/graphs/contributors
 

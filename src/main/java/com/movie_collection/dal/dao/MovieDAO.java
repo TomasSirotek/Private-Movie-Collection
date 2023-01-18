@@ -4,7 +4,7 @@ import com.movie_collection.be.Category;
 import com.movie_collection.be.Movie;
 import com.movie_collection.dal.interfaces.IMovieDAO;
 import com.movie_collection.dal.mappers.MovieMapperDAO;
-import myBatis.MyBatisConnectionFactory;
+import com.movie_collection.dal.myBatis.MyBatisConnectionFactory;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class MovieDAO implements IMovieDAO {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
             allMovies = mapper.getAllMovies();
         } catch (Exception ex) {
-             logger.error("An error occurred mapping tables", ex);
+            logger.error("An error occurred mapping tables", ex);
         }
         return allMovies;
     }
@@ -71,7 +71,7 @@ public class MovieDAO implements IMovieDAO {
         try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
             int affectedRows = mapper.createMovieTest(movie);
-            session.commit();//  after commit if rows > 0 returns the generated key
+            session.commit();
             returnedId = affectedRows > 0 ? movie.getId() : 0;
         } catch (Exception ex) {
             logger.error("An error occurred mapping tables", ex);
@@ -85,7 +85,7 @@ public class MovieDAO implements IMovieDAO {
         try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
             int affectedRows = mapper.updateMovie(movie);
-            session.commit();//  after commit if rows > 0 returns the key
+            session.commit();
             resultId = affectedRows == -1 ? movie.getId() : 0;
         } catch (Exception ex) {
             logger.error("An error occurred mapping tables", ex);
@@ -122,7 +122,6 @@ public class MovieDAO implements IMovieDAO {
     }
 
 
-
     @Override
     public int deleteMovieById(int id) {
         int finalAffectedRows = 0;
@@ -139,11 +138,11 @@ public class MovieDAO implements IMovieDAO {
 
     @Override
     // this needs to be updated and fixed
-    public int updateTimeStamp(String date,int id) {
+    public int updateTimeStamp(String date, int id) {
         int finalAffectedRows = 0;
         try (SqlSession session = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
             MovieMapperDAO mapper = session.getMapper(MovieMapperDAO.class);
-             int affectedRows = mapper.updateTimeStamp(date,id);
+            int affectedRows = mapper.updateTimeStamp(date, id);
             session.commit(); // end a unit of work -> if u want to do more open new session -> ensure no leftovers
             return affectedRows;
         } catch (Exception ex) {

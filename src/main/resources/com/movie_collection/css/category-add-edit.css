@@ -2,15 +2,16 @@
 @import "base.css";
 
 
-.category-top-container{
+.category-top-container {
     -fx-background-color: -fx-nord0;
     -fx-text-fill: white;
 }
 
-.category-mid-container{
+.category-mid-container {
     -fx-background-color: rgba(255, 255, 255, 0.37);
 }
-.category-cta{
+
+.category-cta {
     -fx-cursor: hand;
     -fx-background-color: -fx-nord0;
     -fx-font-family: Arial Rounded MT Bold;
@@ -21,7 +22,7 @@
     -fx-text-fill: white;
 }
 
-.category-close-btn{
+.category-close-btn {
     -fx-background-color: -fx-nord0;
     -fx-text-fill: white;
     -fx-border-radius: 0;
@@ -29,14 +30,14 @@
 }
 
 
-.category-close-btn:hover{
+.category-close-btn:hover {
     -fx-background-color: transparent;
     -fx-text-fill: red;
     -fx-border-radius: 0;
     -fx-cursor: hand;
 }
 
-.category-cta:hover{
+.category-cta:hover {
     -fx-background-color: #4FC4F4;
     -fx-text-fill: black;
     -fx-border-color: -fx-nord1;

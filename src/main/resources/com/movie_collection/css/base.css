@@ -1,44 +1,45 @@
 @import "bootstrap3.css";
 @import url("https://fonts.googleapis.com/css2?family=Caveat&family=ZCOOL+KuaiLe&display=swap");
 
-.fontDesign{
+.fontDesign {
     -fx-font-family: 'Caveat', cursive;
     -fx-font-size: 35px;
 }
+
 * {
- -fx-nord0: #192C35;
- -fx-nord1: #4FC4F4;
- -fx-nord2: #434C5E;
- -fx-nord3: #4C566A;
- -fx-nord4: #D8DEE9;
- -fx-nord5: #E5E9F0;
- -fx-nord6: #ECEFF4;
- -fx-nord7: #8FBCBB;
- -fx-nord8: #88C0D0;
- -fx-nord9: #81A1C1;
- -fx-nord10:#5E81AC;
+    -fx-nord0: #192C35;
+    -fx-nord1: #4FC4F4;
+    -fx-nord2: #434C5E;
+    -fx-nord3: #4C566A;
+    -fx-nord4: #D8DEE9;
+    -fx-nord5: #E5E9F0;
+    -fx-nord6: #ECEFF4;
+    -fx-nord7: #8FBCBB;
+    -fx-nord8: #88C0D0;
+    -fx-nord9: #81A1C1;
+    -fx-nord10: #5E81AC;
 }
 
 /* NAVBAR */
-.nav-bar{
+.nav-bar {
     -fx-background-color: -fx-nord0;
     -fx-border-color: black;
     -fx-border-width: 0 0 1 0;
     -fx-border-style: solid;
 }
 
-.nav-bar-search{
-    -fx-background-radius:15px;
+.nav-bar-search {
+    -fx-background-radius: 15px;
     -fx-border-radius: 15px;
 }
 
-.nav-bar-spinner{
+.nav-bar-spinner {
     -fx-border-color: black;
     -fx-border-width: 1 1 1 1;
     -fx-border-style: solid;
 }
 
-.nav-bar-spinner-button{
+.nav-bar-spinner-button {
     -fx-cursor: hand;
     -fx-background-color: transparent;
     -fx-text-fill: white;
@@ -47,7 +48,7 @@
     -fx-border-style: solid;
 }
 
-.nav-bar-spinner-button:hover{
+.nav-bar-spinner-button:hover {
     -fx-background-color: -fx-nord1;
     -fx-text-fill: black;
     -fx-border-color: -fx-nord1;
@@ -57,11 +58,11 @@
 }
 
 /* DRAWER  */
-.drawer{
+.drawer {
     -fx-background-color: -fx-nord0;
 }
 
-.allMoviesButton{
+.allMoviesButton {
     -fx-cursor: hand;
     -fx-border-width: 0px 0px 0px 0px;
     -fx-border-radius: 0px;
@@ -74,14 +75,14 @@
     -fx-content-display: left; /* position of the icon */
 }
 
-.allMoviesButton:hover, .mediaPlayerButton:hover{
+.allMoviesButton:hover, .mediaPlayerButton:hover {
     -fx-background-color: rgba(4, 4, 4, 0.17);
-    -fx-text-fill:white;
+    -fx-text-fill: white;
     -fx-border-width: 0px 0px 0px 0px;
-    -fx-border-color:#1b0e3c;
+    -fx-border-color: #1b0e3c;
 }
 
-.mediaPlayerButton{
+.mediaPlayerButton {
     -fx-cursor: hand;
     -fx-border-width: 0px 0px 0px 0px;
     -fx-border-radius: 0px;
@@ -95,17 +96,18 @@
 }
 
 
-.menu-bar-middle-container{
+.menu-bar-middle-container {
     -fx-text-fill: white;
     -fx-background-color: -fx-nord0;
     -fx-content-display: left;
 }
-.menu-bar-middle-title{
+
+.menu-bar-middle-title {
     -fx-background-color: #040404;
     -fx-opacity: 25%;
 }
 
-.menu-bar-scroll-pane{
+.menu-bar-scroll-pane {
     -fx-background-color: transparent;
     -fx-border-width: 0px 0px 0px 0px;
     -fx-border-radius: 0px;
@@ -118,7 +120,7 @@
 
 /* ACTION BUTTONS */
 
-.action-button{
+.action-button {
     -fx-font-family: Arial Rounded MT Bold;
     -fx-font-weight: 700;
     -fx-cursor: hand;
@@ -132,7 +134,7 @@
 }
 
 
-.action-button:hover{
+.action-button:hover {
     -fx-background-color: #4FC4F4;
     -fx-text-fill: black;
     -fx-border-color: -fx-nord1;
@@ -140,7 +142,7 @@
     -fx-border-style: solid;
 }
 
-.custom-button{
+.custom-button {
     -fx-cursor: hand;
     -fx-max-width: 150px;
     -fx-alignment: BOTTOM_LEFT;
@@ -148,26 +150,27 @@
 
 /* DIALOG */
 
-.dialog-style .label{
+.dialog-style .label {
     -fx-text-fill: white;
     -fx-font-weight: 700;
     -fx-font-size: 14px;
     -fx-font-family: "Arial Rounded MT Bold";
 }
 
-.dialog-style .header-panel{
+.dialog-style .header-panel {
     -fx-background-color: -fx-nord0;
     -fx-text-fill: white;
     -fx-font-weight: 700;
     -fx-font-size: 14px;
     -fx-font-family: "Arial Rounded MT Bold";
-    -fx-effect: dropshadow(three-pass-box,rgba(0,0,0,0.8),10,0,0,0);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
 }
 
-.dialog-style .button .CANCEL{
+.dialog-style .button .CANCEL {
     -fx-background-color: warning;
 }
-.dialog-style .button .OK{
+
+.dialog-style .button .OK {
     -fx-background-color: warning;
 }
 
@@ -175,11 +178,12 @@
     -fx-background-color: green;
     -fx-text-fill: white;
 }
-.dialog-style{
+
+.dialog-style {
     -fx-background-color: -fx-nord2;
 }
 
-.ok-button{
+.ok-button {
     -fx-background-color: red;
 }
 
@@ -191,34 +195,35 @@
 
 .custom-button:hover {
     -fx-background-color: #1f3242;
+    -fx-border-color: transparent;
 }
 
 
 /* Base recomendation drawing*/
 
-.watch-label-base{
+.watch-label-base {
     -fx-font-family: "Arial Rounded MT Bold";
     -fx-font-size: 16px;
     -fx-font-weight: 700;
 }
 
-.dialog-style-default .label{
+.dialog-style-default .label {
     -fx-text-fill: white;
     -fx-font-weight: 700;
     -fx-font-size: 14px;
     -fx-font-family: "Arial Rounded MT Bold";
 }
 
-.dialog-style-default .header-panel{
+.dialog-style-default .header-panel {
     -fx-background-color: -fx-nord0;
     -fx-text-fill: white;
     -fx-font-weight: 700;
     -fx-font-size: 14px;
     -fx-font-family: "Arial Rounded MT Bold";
-    -fx-effect: dropshadow(three-pass-box,rgba(0,0,0,0.8),10,0,0,0);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
 }
 
-.dialog-style-default .button .OK{
+.dialog-style-default .button .OK {
     -fx-background-color: warning;
 }
 
@@ -226,7 +231,8 @@
     -fx-background-color: green;
     -fx-text-fill: white;
 }
-.dialog-style-default{
+
+.dialog-style-default {
     -fx-background-color: -fx-nord2;
 }
 

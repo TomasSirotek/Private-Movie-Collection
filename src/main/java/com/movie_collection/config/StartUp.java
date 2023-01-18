@@ -8,12 +8,13 @@ public class StartUp {
 
     private static Injector injector;
 
-    public static void configure(){
+    public static void configure() {
         injector = Guice.createInjector(
                 new ConfigModule()
         );
     }
-    public static Injector getInjector(){
+
+    public static Injector getInjector() {
         return injector;
     }
 

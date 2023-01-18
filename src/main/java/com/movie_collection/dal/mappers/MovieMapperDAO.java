@@ -24,6 +24,7 @@ public interface MovieMapperDAO {
 
     /**
      * Retrieves all watch movies currently
+     *
      * @return list of all watched movies limited to 4
      */
     List<Movie> getWatchedMovies();
@@ -40,29 +41,26 @@ public interface MovieMapperDAO {
     /**
      * Creates a new movie in the database with given properties
      *
-     * @param movie
+     * @param movie to be created
      * @return @Identity -> id of the movie
      */
     int createMovieTest(Movie movie);
 
     /**
      * Updates a movie in the database depending on the id of the movie
-     *
-//     * @param name   of the movie
-//     * @param rating rating of the movie
-//     * @param path   absolute path for the movie file
-//     * @param id     that will be used to be recognized in the database
-//     * @return @Identity id of updated movie
+     * @param movie to be updated
+     * @return id of updated movie
      */
     int updateMovie(Movie movie);
 
     /**
      * retrieves the result of an update movie last vied time
+     *
      * @param lastView of a snapshot date as String
-     * @param id of movie that will get the updated date
+     * @param id       of movie that will get the updated date
      * @return affected rows
      */
-    int updateTimeStamp(@Param("lastView") String lastView,@Param("movieId") int id);
+    int updateTimeStamp(@Param("lastView") String lastView, @Param("movieId") int id);
 
     /**
      * Removes a movie from the database based on the id

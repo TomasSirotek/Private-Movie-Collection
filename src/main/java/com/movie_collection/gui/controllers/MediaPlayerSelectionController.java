@@ -1,6 +1,5 @@
 package com.movie_collection.gui.controllers;
 
-import com.google.inject.Inject;
 import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import javafx.event.ActionEvent;
@@ -23,19 +22,10 @@ public class MediaPlayerSelectionController extends RootController implements In
 
     @FXML
     private TextField path;
-
     @FXML
-    private Button onClickSelectFile, confirmAction,cancelAction;
-
-    private final MovieController movieController;
+    private Button onClickSelectFile, confirmAction, cancelAction;
 
     private final static String MEDIA_PLAYER_PATH = "mediaPlayerPath.txt";
-
-    @Inject
-    public MediaPlayerSelectionController(MovieController movieController) {
-        this.movieController = movieController;
-    }
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -45,9 +35,9 @@ public class MediaPlayerSelectionController extends RootController implements In
     }
 
     private void setConfirmAction(ActionEvent actionEvent) {
-        if(!path.getText().isEmpty()){
+        if (!path.getText().isEmpty()) {
             getStage().close();
-        }else {
+        } else {
             AlertHelper.showDefaultAlert("Warning: Please fill the path", Alert.AlertType.WARNING);
         }
     }
@@ -69,6 +59,7 @@ public class MediaPlayerSelectionController extends RootController implements In
         }
     }
 
+    @FXML
     public void close_stage(ActionEvent actionEvent) {
         getStage().close();
         actionEvent.consume();

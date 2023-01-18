@@ -28,21 +28,19 @@ public interface IMovieService {
     /**
      * Creates a new movie in the database with given properties
      *
-     * @param movie
+     * @param movie to be created
      * @return @Identity -> id of the movie
      */
     int createMovie(Movie movie);
 
     /**
-     * Retrieves optional Movie by its id
+     * Updates a movie in the database depending on the id of the movie
      *
-     * @param id of movie that will be retrieved
-     * @return Optional Movie by its id that might not be there
+     * @param movie that will be updated
+     * @return @Identity id of updated movie
      */
-    Optional<Movie> getMovieById(int id);
 
     int updateMovie(Movie movie);
-
 
     /**
      * Removes a movie from the database based on the id
@@ -53,43 +51,37 @@ public interface IMovieService {
     int deleteMovie(int id);
 
     /**
-     * Update timeStamp when a movie is played based on the id
+     * method to filter specific movie titles or part of title, one or multiple genres and/or specific minimum imdb rating.
      *
-     * @param id id of movie to be played
-     * @return number of rows affected
-     * @throws SQLException if the connection to the database fails
-     */
-    int updateTimeStamp(int id);
-
-    /**
-     * docs
-     *
-     * @param listToSearch
-     * @param query
-     * @param buttonValue
-     * @param spinnerValue
-     * @return
+     * @param listToSearch that will be iterated through
+     * @param query        that will be searched
+     * @param buttonValue  of spinner enums to indicate symbols
+     * @param spinnerValue rating value that will be searched
+     * @return list of desired filtered movies
      */
 
     List<Movie> searchMovie(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue);
 
     /**
      * method to retrieve movie by name with the api
+     *
      * @param title to be searched as query
-     * @return
+     * @return movie dto with fetched data
      */
     MovieDTO getMovieByNameAPI(String title);
 
     /**
-     * method to get all watched movies 
+     * method to get all watched movies
+     *
      * @return list of movies there has lastView as not null
      */
     List<Movie> getWatchMovies();
-    
+
     /**
      * method to play required files
-     * @param id of the movie
+     *
+     * @param id   of the movie
      * @param path absolute to the file location
-     */ 
+     */
     boolean playVideoDesktop(int id, String path) throws IOException;
 }

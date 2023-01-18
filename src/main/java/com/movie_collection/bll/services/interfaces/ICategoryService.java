@@ -1,6 +1,7 @@
 package com.movie_collection.bll.services.interfaces;
 
 import com.movie_collection.be.Category;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +20,15 @@ public interface ICategoryService {
      */
     int createCategory(Category category);
 
+
+    /**
+     * method to retrieve option category by name
+     * @param categoryName that will be searched
+     * @return optional category if found
+     */
+
     Optional<Category> getCategoryByName(String categoryName);
+
     /**
      * Deletes the desired Category from the Category database
      *

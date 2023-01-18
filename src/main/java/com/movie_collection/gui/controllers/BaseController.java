@@ -42,11 +42,10 @@ import java.util.stream.Collectors;
 
 /**
  * Base controller navigation with switchable content
- * Serves as a root for all the action :)
+ * Serves as a base for the app
  * injects the root controller
  */
 public class BaseController extends RootController implements Initializable {
-
 
     @FXML
     private Spinner<Double> ratingFilterSpinner;
@@ -58,19 +57,14 @@ public class BaseController extends RootController implements Initializable {
     private StackPane app_content;
     @FXML
     private TextField searchMovies;
-
     @FXML
     private GridPane watchAgainGrid;
+
+    private final ICategoryModel categoryModel;
     private final IControllerFactory controllerFactory;
-
     private final IMovieModel movieModel;
-
-    @Inject
-    private ICategoryModel categoryModel;
-
-    private CompareSigns currentCompare = CompareSigns.MORE_THAN_OR_EQUAL;
-
     private final EventBus eventBus;
+    private CompareSigns currentCompare = CompareSigns.MORE_THAN_OR_EQUAL;
 
     @Inject
     public BaseController(IControllerFactory controllerFactory, ICategoryModel categoryModel, IMovieModel movieModel, EventBus eventBus) {
@@ -80,6 +74,7 @@ public class BaseController extends RootController implements Initializable {
         this.eventBus = eventBus;
 
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         filterBar();
@@ -94,7 +89,7 @@ public class BaseController extends RootController implements Initializable {
         List<Movie> watchedMovies = movieModel.getWatchedMovies();
         int movieCounter = 0;
         for (var vBox : watchAgainGrid.getChildren()) {
-            if(vBox instanceof VBox){
+            if (vBox instanceof VBox) {
                 Movie mov = watchedMovies.get(movieCounter);
                 MovieDTO movieDTO = movieModel.findMovieByNameAPI(mov.getName());
                 ImageView imageView = new ImageView();
@@ -105,13 +100,15 @@ public class BaseController extends RootController implements Initializable {
                 imageView.setPreserveRatio(true);
                 watchNowBtn.setMaxWidth(135);
                 watchNowBtn.setOnAction(e -> {
-                    setOnPlay(e,mov);
+                    setOnPlay(e, mov);
                 });
                 label.getStyleClass().add("watch-label-base");
                 label.setPadding(new Insets(10, 0, 10, 0));
                 watchNowBtn.getStyleClass().add("success");
-                if(movieDTO.Poster != null){
+                if (movieDTO.Poster != null && !movieDTO.Poster.equals("N/A")) {
                     imageView.setImage(new Image(movieDTO.Poster));
+                } else {
+                    imageView.setImage(new Image("file:src/main/resources/com/movie_collection/images/default_image.jpeg"));
                 }
                 label.setText(mov.getName());
                 ((VBox) vBox).getChildren().addAll(imageView, label, watchNowBtn);
@@ -121,10 +118,10 @@ public class BaseController extends RootController implements Initializable {
     }
 
 
-    private void setOnPlay(ActionEvent e,Movie mov) {
+    private void setOnPlay(ActionEvent e, Movie mov) {
         try {
-            movieModel.playVideoDesktop(mov.getId(),mov.getPath());
-        } catch (IOException | InterruptedException ex) {
+            movieModel.playVideoDesktop(mov.getId(), mov.getPath());
+        } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
         e.consume();
@@ -132,22 +129,23 @@ public class BaseController extends RootController implements Initializable {
 
 
     /**
-     * needs docs @patrik
+     * When starting, the application should warn user to remember to delete movies,
+     * that has a personal rating under 6 and has not been opened from the application in more than 2 years.
      */
-    private void showMoviesToDelete()  {
+    private void showMoviesToDelete() {
         List<Movie> moviesToDelete = movieModel.getAllMovies().stream()
-                .filter(m -> m.getRating() < 6.0 || (m.getLastview() != null && (Instant.now().toEpochMilli() - m.getLastview().toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()> 63113852000L)))
+                .filter(m -> m.getRating() < 6.0 || (m.getLastview() != null && (Instant.now().toEpochMilli() - m.getLastview().toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() > 63113852000L)))
                 .collect(Collectors.toList());
 
-        String str = "";
-        if(!moviesToDelete.isEmpty()){
-            for (Movie m:moviesToDelete) {
-                str += m.getName() + "\n";
+        StringBuilder str = new StringBuilder();
+        if (!moviesToDelete.isEmpty()) {
+            for (Movie m : moviesToDelete) {
+                str.append(m.getName()).append("\n");
             }
-            var alert = AlertHelper.showOptionalAlertWindow("Do you want to delete these movies ? " , str, Alert.AlertType.CONFIRMATION);
+            var alert = AlertHelper.showOptionalAlertWindow("Do you want to delete these movies ? ", str.toString(), Alert.AlertType.CONFIRMATION);
 
-            if(alert.isPresent() && alert.get().equals(ButtonType.OK)){
-                for (Movie m: moviesToDelete) {
+            if (alert.isPresent() && alert.get().equals(ButtonType.OK)) {
+                for (Movie m : moviesToDelete) {
                     movieModel.deleteMovieById(m.getId());
                 }
             }
@@ -159,22 +157,23 @@ public class BaseController extends RootController implements Initializable {
      * and then set it back to all categories
      */
     private void refreshScrollPane() {
-        if(scroll_pane != null){
+        if (scroll_pane != null) {
             scroll_pane.setContent(null);
             setCategoriesScrollPane(categoryModel.getAllCategories());
         }
     }
 
     /**
-     * method to set all the categories from List<Category> that uses Linked hashmap to store two buttons that will be then
+     * method to set all the categories from List <Category> that uses Linked hashmap to store two buttons that will be then
      * one by one added into the empty scroll pane
      * if no categories are provided stack pane is filled with Label that notifies the user about not having any category listed yet
-     * LinkedHashMap is added here due to the reason that whenever new Button is added it is automatickly put as the last and keps the order
-     * TODO: Maybe all of the body can be exctracted into separated class since it look so hoooge
+     * LinkedHashMap is added here due to the reason that whenever new Button is added it is automatically put as the last and keps the order
+     *
      * @param allCategories list of all categories
      */
     private void setCategoriesScrollPane(List<Category> allCategories) {
         int deleteButtonWidth = 40;
+        int categoryButtonWidth = 183;
         // This code is creating a new Map object that is populated with the key-value pairs of a given Map,
         //  and then returning it.
         LinkedHashMap<Button, Button> scrollPaneContentMap = allCategories
@@ -190,7 +189,7 @@ public class BaseController extends RootController implements Initializable {
                         parent.setIsCategoryView(category.getId());
                         switchToView(parent.getView()); // switches into chosen view
                     });
-                    categoryBtn.setPrefWidth(183);
+                    categoryBtn.setPrefWidth(categoryButtonWidth);
 
                     deleteBtn.setOnAction(event -> {
                         int result = tryToDeleteCategory(category.getId());
@@ -205,12 +204,12 @@ public class BaseController extends RootController implements Initializable {
                 })
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-                // (oldValue, newValue) -> oldValue - a "merge function" that is used to resolve
-                // conflicts when two keys are mapped to the same value. In this case, if there is a conflict,
-                // the old value is kept and the new value is discarded.
+        // (oldValue, newValue) -> oldValue - a "merge function" that is used to resolve
+        // conflicts when two keys are mapped to the same value. In this case, if there is a conflict,
+        // the old value is kept and the new value is discarded.
 
-                // LinkedHashmap::new  is a function that creates a new, empty Map object. In this case, a LinkedHashMap is created.
-                // collect method is called in order to finish up what we opened at the begging stream
+        // LinkedHashmap::new  is a function that creates a new, empty Map object. In this case, a LinkedHashMap is created.
+        // collect method is called in order to finish up what we opened at the begging stream
 
         if (scrollPaneContentMap.isEmpty()) {
             scroll_pane.setContent(new Label("Empty")); // sets content if no buttons are filled
@@ -228,11 +227,12 @@ public class BaseController extends RootController implements Initializable {
 
     /**
      * method that tries to delete category by id
-     * @param id
+     *
+     * @param id of category to be deleted
      * @return for now int that must be > 0 in order to successfully delete it
      */
     private int tryToDeleteCategory(int id) {
-            return categoryModel.deleteCategory(id);
+        return categoryModel.deleteCategoryById(id);
     }
 
     /**
@@ -249,30 +249,33 @@ public class BaseController extends RootController implements Initializable {
 
     /**
      * method bound with fxml that loads the parent and shows new scene
-     * @param actionEvent event
+     *
+     * @param actionEvent event to be consumed
      */
     @FXML
     private void onActionAddMovie(ActionEvent actionEvent) throws IOException {
         RootController parent = loadNodesView(ViewType.CREATE_EDIT);
-        show(parent.getView(),"Add new Movie");
+        show(parent.getView(), "Add new Movie");
         actionEvent.consume();
     }
 
     /**
-     * method to invoke action to Choose Media Player Path
+     * method to invoke action to choose media player path
+     *
      * @param actionEvent event
      */
     @FXML
     private void onActionSelectMedia(ActionEvent actionEvent) throws IOException {
         RootController parent = loadNodesView(ViewType.MEDIA_PLAYER_SELECTION);
-        show(parent.getView(),"Select Media Player Path");
+        show(parent.getView(), "Select Media Player Path");
         actionEvent.consume();
     }
 
     /**
      * private method for showing new stages whenever its need
+     *
      * @param parent root that will be set
-     * @param title title for new stage
+     * @param title  title for new stage
      */
     private void show(Parent parent, String title) {
         Stage stage = new Stage();
@@ -290,6 +293,7 @@ public class BaseController extends RootController implements Initializable {
 
     /**
      * method bound with .fxml file and loads parent depending on the enum and switches the inner content
+     *
      * @param e event
      * @throws IOException if not able to read file
      */
@@ -298,11 +302,14 @@ public class BaseController extends RootController implements Initializable {
         RootController parent = loadNodesView(ViewType.MOVIES);
         switchToView(parent.getView());
         e.consume();
+        setupSpinner();
         movieModel.getAllMovies();
+        searchMovies.setText("");
     }
 
     /**
      * method for loading fxml file from root controller
+     *
      * @param viewType enum specifying needed view
      * @return parent loaded from factory
      */
@@ -313,9 +320,10 @@ public class BaseController extends RootController implements Initializable {
 
     /**
      * method to clear current app_content and replaces it with new parent
+     *
      * @param parent that will be inserted inside the stack pane
      */
-    private void switchToView(Parent parent){
+    private void switchToView(Parent parent) {
         app_content.getChildren().clear();
         app_content.getChildren().add(parent);
     }
@@ -323,12 +331,13 @@ public class BaseController extends RootController implements Initializable {
 
     /**
      * method to invoke action to add category
+     *
      * @param actionEvent event
      */
     @FXML
     private void onActionAddCategory(ActionEvent actionEvent) throws IOException {
         RootController parent = loadNodesView(ViewType.CATEGORY_ADD_EDIT);
-        show(parent.getView(),"Add new Category");
+        show(parent.getView(), "Add new Category");
         actionEvent.consume();
     }
 
@@ -341,7 +350,7 @@ public class BaseController extends RootController implements Initializable {
     private void ratingFilterButtonAction(ActionEvent actionEvent) {
         List<CompareSigns> buttonValues = new ArrayList<>(List.of(CompareSigns.MORE_THAN_OR_EQUAL, CompareSigns.LESS_THAN_OR_EQUAL, CompareSigns.EQUAL));
         int index = buttonValues.indexOf(currentCompare);
-        index = index+1 >= buttonValues.size() ? 0 : index + 1;
+        index = index + 1 >= buttonValues.size() ? 0 : index + 1;
         currentCompare = buttonValues.get(index);
         ratingFilterButton.setText(currentCompare.getSign());
 
@@ -349,21 +358,20 @@ public class BaseController extends RootController implements Initializable {
         actionEvent.consume();
     }
 
-    private void setupSpinner(){
-        SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(1.0, 10.0,1.0, 0.5);
+    private void setupSpinner() {
+        SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(1.0, 10.0, 1.0, 0.5);
         ratingFilterSpinner.setValueFactory(valueFactory);
 
         valueFactory.valueProperty().addListener((observable, oldValue, newValue) -> searchMovies());
     }
 
+
     private void searchMovies() {
-        TableView tableView = (TableView) getStage().getScene().lookup("#moviesTable");
+        TableView<Movie> tableView = (TableView<Movie>) getStage().getScene().lookup("#moviesTable");
         if (tableView != null) {
             List<Movie> list = movieModel.searchMovies(searchMovies.getText(), currentCompare, ratingFilterSpinner.getValue());
             tableView.getItems().clear();
             tableView.setItems(FXCollections.observableArrayList(list));
-        } else {
-
         }
     }
 
@@ -371,8 +379,8 @@ public class BaseController extends RootController implements Initializable {
      * Registering events
      */
     @Subscribe
-    public void handleCategoryEvent(RefreshEvent event){
-        if(event.getEventType() == EventType.UPDATE_TABLE){
+    public void handleCategoryEvent(RefreshEvent event) {
+        if (event.eventType() == EventType.UPDATE_TABLE) {
             refreshScrollPane();
         }
     }

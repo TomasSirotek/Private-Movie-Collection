@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Filter implements IFilter {
+
+    @Override
     public List<Movie> filteringMovies(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue) {
         List<Movie> filtered = new ArrayList<>();
         for (Movie m : listToSearch) {
-            if ((m.getName().toLowerCase().contains(query.toLowerCase()) || checkCategories(m, query)) && checkRating(m, buttonValue, spinnerValue) ) {
+            if ((m.getName().toLowerCase().contains(query.toLowerCase()) || checkCategories(m, query)) && checkRating(m, buttonValue, spinnerValue)) {
                 filtered.add(m);
             }
         }
@@ -21,20 +23,20 @@ public class Filter implements IFilter {
 
     private boolean checkCategories(Movie m, String query) {
         List<Category> categories = m.getCategories();
-        String categoryNames = "";
+        StringBuilder categoryNames = new StringBuilder();
         for (Category c : categories) {
-            categoryNames += c.getName().toLowerCase();
+            categoryNames.append(c.getName().toLowerCase());
         }
-        return categoryNames.contains(query.toLowerCase());
+        return categoryNames.toString().contains(query.toLowerCase());
     }
 
-    private boolean checkRating(Movie m, CompareSigns buttonValue, double spinnerValue){
-        if (buttonValue == CompareSigns.LESS_THAN_OR_EQUAL){
+    private boolean checkRating(Movie m, CompareSigns buttonValue, double spinnerValue) {
+        if (buttonValue == CompareSigns.LESS_THAN_OR_EQUAL) {
             return m.getRating() <= spinnerValue;
         } else if (buttonValue == CompareSigns.MORE_THAN_OR_EQUAL) {
-            return  m.getRating() >= spinnerValue;
+            return m.getRating() >= spinnerValue;
         } else {
-            return  m.getRating() == spinnerValue;
+            return m.getRating() == spinnerValue;
         }
     }
 }

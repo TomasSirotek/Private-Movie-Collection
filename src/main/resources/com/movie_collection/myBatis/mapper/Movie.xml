@@ -70,14 +70,13 @@
     <select id="getWatchedMovies"
             resultType="Movie"
             resultMap="movieResult">
-        SELECT DISTINCT
-            M.id       as movieId,
-            M.name     as movieName,
-            M.rating   as movieRating,
-            M.path     as moviePath,
-            M.lastview as lastview,
-            C.id       as idCat,
-            C.name     as nameCat
+        SELECT DISTINCT M.id       as movieId,
+                        M.name     as movieName,
+                        M.rating   as movieRating,
+                        M.path     as moviePath,
+                        M.lastview as lastview,
+                        C.id       as idCat,
+                        C.name     as nameCat
         FROM Movie AS M
                  left outer join CatMovie PT on M.id = PT.movieId
                  left outer join Category C on PT.categoryId = C.id

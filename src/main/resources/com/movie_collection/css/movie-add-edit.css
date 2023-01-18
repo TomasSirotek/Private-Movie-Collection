@@ -2,33 +2,25 @@
 @import "base.css";
 
 
-.movie-top-cont-1{
+.movie-top-cont-1 {
     -fx-background-color: -fx-nord0;
     -fx-text-fill: white;
 }
 
-.movie-close-btn{
+.movie-close-btn {
     -fx-background-color: -fx-nord0;
     -fx-text-fill: white;
     -fx-border-radius: 0;
     -fx-cursor: hand;
 }
 
-.movie-close-btn:hover{
+.movie-close-btn:hover {
     -fx-background-color: transparent;
     -fx-text-fill: red;
     -fx-border-radius: 0;
     -fx-cursor: hand;
 }
 
-.movie-top-cont-2{
-    /*-fx-background-color: #e1dede;*/
-
-}
-
-.movie-spinner{
-
-}
 
 .movie-cta-add {
     -fx-cursor: hand;
@@ -41,7 +33,7 @@
     -fx-text-fill: white;
 }
 
-.movie-cta-add:hover{
+.movie-cta-add:hover {
     -fx-background-color: #4FC4F4;
     -fx-text-fill: black;
     -fx-border-color: -fx-nord1;

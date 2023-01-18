@@ -1,8 +1,8 @@
 package com.movie_collection.gui.models;
 
 import com.google.inject.Inject;
-import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.be.Movie;
+import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.bll.services.interfaces.IMovieService;
 import com.movie_collection.gui.DTO.MovieDTO;
 import javafx.collections.FXCollections;
@@ -13,14 +13,14 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class MovieModel implements IMovieModel{
+public class MovieModel implements IMovieModel {
 
     private final IMovieService movieService;
 
     private ObservableList<Movie> allMovies;
 
     @Inject
-    public MovieModel(IMovieService movieService){
+    public MovieModel(IMovieService movieService) {
         this.movieService = movieService;
         this.allMovies = getAllMovies();
     }
@@ -41,18 +41,15 @@ public class MovieModel implements IMovieModel{
     public int createMovie(Movie movie) {
         return movieService.createMovie(movie);
     }
+
     @Override
     public int updateMovie(Movie movie) {
         return movieService.updateMovie(movie);
     }
+
     @Override
     public int deleteMovieById(int id) {
         return movieService.deleteMovie(id);
-    }
-
-    @Override
-    public int updateTimeStamp(int id) {
-        return movieService.updateTimeStamp(id);
     }
 
     @Override
@@ -67,10 +64,11 @@ public class MovieModel implements IMovieModel{
 
     @Override
     public List<Movie> searchMovies(String query, CompareSigns buttonValue, double spinnerValue) {
-       return movieService.searchMovie(allMovies,query, buttonValue, spinnerValue);
+        return movieService.searchMovie(allMovies, query, buttonValue, spinnerValue);
     }
 
-    public boolean playVideoDesktop(int id, String path) throws IOException, InterruptedException {
+    @Override
+    public boolean playVideoDesktop(int id, String path) throws IOException {
         return movieService.playVideoDesktop(id, path);
     }
 }

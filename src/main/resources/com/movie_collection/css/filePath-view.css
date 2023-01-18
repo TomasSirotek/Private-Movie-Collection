@@ -2,11 +2,11 @@
 @import "base.css";
 
 
-.media-header-container{
+.media-header-container {
     -fx-background-color: -fx-nord0;
 }
 
-.movie-close-btn{
+.movie-close-btn {
     -fx-background-color: -fx-nord0;
     -fx-text-fill: white;
     -fx-border-radius: 0;
@@ -14,14 +14,14 @@
 }
 
 
-.movie-close-btn:hover{
+.movie-close-btn:hover {
     -fx-background-color: transparent;
     -fx-text-fill: red;
     -fx-border-radius: 0;
     -fx-cursor: hand;
 }
 
-.media-save-cta{
+.media-save-cta {
     -fx-cursor: hand;
     -fx-background-color: -fx-nord0;
     -fx-font-family: Arial Rounded MT Bold;
@@ -32,7 +32,7 @@
     -fx-text-fill: white;
 }
 
-.media-save-cta:hover{
+.media-save-cta:hover {
     -fx-background-color: #4FC4F4;
     -fx-text-fill: black;
     -fx-border-color: -fx-nord1;

@@ -7,7 +7,7 @@ import feign.Param;
 import feign.RequestLine;
 
 public interface IMovie {
-      @Headers({"Content-Type: application/json","apikey: {apikey}"})
-      @RequestLine("GET /?t={title}")
-      MovieDTO movieByName(@Param("title") String title);
+    @Headers({"Content-Type: application/json", "apikey: {apikey}"})
+    @RequestLine("GET /?t={title}")
+    MovieDTO movieByName(@Param("title") String title);
 }

@@ -25,14 +25,12 @@ import java.util.Optional;
 
 public class MovieService implements IMovieService {
 
+    private final static String MEDIA_PLAYER_PATH = "mediaPlayerPath.txt";
+    private static String playerPath;
     private final IMovieDAO movieDAO;
     private final ICategoryService categoryService;
-
     private final IFilter filterUtil;
-
     private final IAPIService apiService;
-    private static String playerPath;
-    private final static String MEDIA_PLAYER_PATH = "mediaPlayerPath.txt";
 
     @Inject
     public MovieService(IMovieDAO movieDAO, ICategoryService categoryService, IAPIService apiService, IFilter filterUtil) {
@@ -45,11 +43,6 @@ public class MovieService implements IMovieService {
     @Override
     public List<Movie> getAllMovies() {
         return movieDAO.getAllMovies();
-    }
-
-    @Override
-    public Optional<Movie> getMovieById(int id) {
-        return Optional.of(movieDAO.getMovieById(id).get());
     }
 
     @Override
@@ -67,17 +60,10 @@ public class MovieService implements IMovieService {
         return result;
     }
 
-    @Override
-    public int updateTimeStamp(int id) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DateFormat.YEAR_MONTH_DAY.getDateFormat()); // made it more type safe :) @bearded redemption
-        Timestamp ts = Timestamp.from(Instant.now());
-        String date = dateFormat.format(ts);
-        return movieDAO.updateTimeStamp(date,id);
-    }
 
     @Override
     public List<Movie> searchMovie(List<Movie> listToSearch, String query, CompareSigns buttonValue, double spinnerValue) {
-        return filterUtil.filteringMovies(listToSearch,query,buttonValue,spinnerValue);
+        return filterUtil.filteringMovies(listToSearch, query, buttonValue, spinnerValue);
     }
 
     @Override
@@ -91,7 +77,7 @@ public class MovieService implements IMovieService {
     }
 
     public int updateMovie(Movie movie) {
-        int finalResult = 0; // there is plenty of ways of logic with update categories this one worked for us atm
+        int finalResult = 0;
         Objects.requireNonNull(movie, "Movie cannot be null");
 
         // tries to update movie
@@ -150,7 +136,7 @@ public class MovieService implements IMovieService {
 
     @Override
     public boolean playVideoDesktop(int id, String path) throws IOException {
-        if (!setPath() || playerPath == null){
+        if (!setPath() || playerPath == null) {
             return false;
         }
         if (playerPath.toLowerCase().contains("vlc")) {
@@ -166,6 +152,14 @@ public class MovieService implements IMovieService {
             return false;
         }
     }
+
+    private int updateTimeStamp(int id) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DateFormat.YEAR_MONTH_DAY.getDateFormat());
+        Timestamp ts = Timestamp.from(Instant.now());
+        String date = dateFormat.format(ts);
+        return movieDAO.updateTimeStamp(date, id);
+    }
+
     private boolean setPath() {
         try {
             playerPath = Files.readString(Path.of(MEDIA_PLAYER_PATH));

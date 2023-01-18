@@ -53,7 +53,6 @@ public interface IMovieDAO {
      * Updates a movie in the database depending on the id of the movie
      *
      * @param movie that will be updated
-//     * @param id    by its will be deleted -> this could be done better but works for now
      * @return @Identity id of updated movie
      */
     int updateMovieById(Movie movie);
@@ -64,7 +63,7 @@ public interface IMovieDAO {
      * @param id id of movie to be played
      * @return number of rows affected
      */
-    int updateTimeStamp(String date,int id);
+    int updateTimeStamp(String date, int id);
 
     /**
      * Removes a movie from the database based on the id
@@ -82,5 +81,10 @@ public interface IMovieDAO {
      */
     int removeCategoryFromMovie(int id);
 
+
+    /**
+     * method to get watched movies that have not been seen
+     * @return list of movies that have not been seen by user
+     */
     List<Movie> getWatchedMovies();
 }

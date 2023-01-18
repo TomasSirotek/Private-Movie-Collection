@@ -13,6 +13,7 @@
     <select id="getAllCategories"
             resultType="Category"
             resultMap="categoryResult">
+
         SELECT C.id   as idCat,
                C.name as nameCat -->
         FROM Category C;
@@ -22,10 +23,12 @@
     <select id="getCategoryByName"
             resultType="Category"
             resultMap="categoryResult">
+
         SELECT C.id   as idCat,
                C.name as nameCat-->
         FROM Category C
         WHERE C.name = #{categoryName}
+
     </select>
 
 
@@ -38,6 +41,7 @@
             keyColumn="id"
             useGeneratedKeys="true"
             timeout="20">
+
         -- insert new category into table with params still need to make them safer
         INSERT INTO Category (name) VALUES (#{name})
         -- selects the generated key

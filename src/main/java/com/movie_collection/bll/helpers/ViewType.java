@@ -11,7 +11,7 @@ public enum ViewType {
             return "views/base.fxml";
         }
     },
-    MOVIES{
+    MOVIES {
         @Override
         public String getFXMLView() {
             return "views/movies-view.fxml";
@@ -27,10 +27,12 @@ public enum ViewType {
         public String getFXMLView() {
             return "views/category-add-edit-view.fxml";
         }
-    }
-    , MEDIA_PLAYER_SELECTION {
+    }, MEDIA_PLAYER_SELECTION {
         @Override
-        public String getFXMLView() { return "views/media-player-select-view.fxml"; }
+        public String getFXMLView() {
+            return "views/media-player-select-view.fxml";
+        }
     };
+
     public abstract String getFXMLView();
 }
