@@ -149,8 +149,7 @@ public class MovieService implements IMovieService {
     }
 
     public boolean playVideoDesktop(int id, String path) throws IOException {
-        setPath();
-        if (playerPath == null){
+        if (!setPath() || playerPath == null){
             return false;
         }
         if (playerPath.toLowerCase().contains("vlc")) {
@@ -160,16 +159,18 @@ public class MovieService implements IMovieService {
                 AlertHelper.showDefaultAlert("Error: Could not update time stamp for movie as last viewed. ", Alert.AlertType.ERROR);
             }
             Runtime.getRuntime().exec(s);
+            return true;
         } else {
             AlertHelper.showDefaultAlert("Please use VLC media player", Alert.AlertType.ERROR);
+            return false;
         }
-        return true;
     }
-    private void setPath() {
+    private boolean setPath() {
         try {
             playerPath = Files.readString(Path.of(MEDIA_PLAYER_PATH));
+            return true;
         } catch (IOException e) {
-//            throw new RuntimeException(e);
+            return false;
         }
     }
 }
