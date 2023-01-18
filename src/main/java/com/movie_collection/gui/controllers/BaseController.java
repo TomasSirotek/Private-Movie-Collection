@@ -12,7 +12,6 @@ import com.movie_collection.bll.utilities.AlertHelper;
 import com.movie_collection.gui.DTO.MovieDTO;
 import com.movie_collection.gui.controllers.abstractController.RootController;
 import com.movie_collection.gui.controllers.controllerFactory.IControllerFactory;
-import com.movie_collection.gui.controllers.event.PlayEvent;
 import com.movie_collection.gui.controllers.event.RefreshEvent;
 import com.movie_collection.gui.models.ICategoryModel;
 import com.movie_collection.gui.models.IMovieModel;
@@ -87,7 +86,7 @@ public class BaseController extends RootController implements Initializable {
         setupSpinner();
         setCategoriesScrollPane(categoryModel.getAllCategories());
         showMoviesToDelete();
-        showAndDrawWatchAgainMovies();
+        //showAndDrawWatchAgainMovies();
         eventBus.register(this);
     }
 
@@ -105,7 +104,7 @@ public class BaseController extends RootController implements Initializable {
                 imageView.setFitHeight(200);
                 imageView.setPreserveRatio(true);
                 watchNowBtn.setMaxWidth(135);
-                watchNowBtn.setOnAction(e -> playMovieBase(e,mov));
+                //watchNowBtn.setOnAction(e -> playMovieBase(e,mov));
                 label.getStyleClass().add("watch-label-base");
                 label.setPadding(new Insets(10, 0, 10, 0));
                 watchNowBtn.getStyleClass().add("success");
@@ -119,9 +118,6 @@ public class BaseController extends RootController implements Initializable {
         }
     }
 
-    private void playMovieBase(ActionEvent actionEvent,Movie mov) {
-        eventBus.post(new PlayEvent(EventType.PLAY_MOVIE,mov));
-    }
 
     /**
      * needs docs @patrik
