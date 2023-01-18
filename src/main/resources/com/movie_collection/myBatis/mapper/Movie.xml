@@ -67,11 +67,10 @@
     </select>
 
 
-
     <select id="getWatchedMovies"
             resultType="Movie"
             resultMap="movieResult">
-        SELECT DISTINCT TOP 4
+        SELECT DISTINCT
             M.id       as movieId,
             M.name     as movieName,
             M.rating   as movieRating,
@@ -82,8 +81,8 @@
         FROM Movie AS M
                  left outer join CatMovie PT on M.id = PT.movieId
                  left outer join Category C on PT.categoryId = C.id
-        WHERE M.rating > 8
-        ORDER BY M.rating DESC
+        WHERE M.lastview IS NOT NULL
+        ORDER BY M.lastview DESC
     </select>
 
     <insert
@@ -111,7 +110,7 @@
             keyProperty=""
             keyColumn=""
             useGeneratedKeys="true"
-            >
+    >
         --  insert categoryId and movieId to joining table
         INSERT INTO CatMovie (categoryId, movieId)
         VALUES (#{categoryId}, #{movieId})
@@ -127,13 +126,14 @@
             keyColumn="id"
             statementType="PREPARED">
         -- updates movie by the id
-        UPDATE Movie SET
-        name = #{name},
-        rating = #{rating},
-        path = #{path}
-        -- no need for retrieving just and id this is fine since the select key
-        -- retrieves back the identity key
-        OUTPUT INSERTED.id WHERE id = #{id}
+        UPDATE Movie
+        SET name   = #{name},
+            rating = #{rating},
+            path   = #{path}
+            -- no need for retrieving just and id this is fine since the select key
+            -- retrieves back the identity key
+        OUTPUT INSERTED.id
+        WHERE id = #{id}
     </update>
 
 
@@ -146,8 +146,8 @@
             statementType="PREPARED">
 
         -- updates movie by the id
-        UPDATE Movie SET
-        lastview = #{lastView}
+        UPDATE Movie
+        SET lastview = #{lastView}
         OUTPUT INSERTED.id
         WHERE id = #{movieId}
     </update>

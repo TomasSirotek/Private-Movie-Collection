@@ -86,7 +86,7 @@ public class BaseController extends RootController implements Initializable {
         setupSpinner();
         setCategoriesScrollPane(categoryModel.getAllCategories());
         showMoviesToDelete();
-        //showAndDrawWatchAgainMovies();
+        showAndDrawWatchAgainMovies();
         eventBus.register(this);
     }
 
@@ -104,7 +104,9 @@ public class BaseController extends RootController implements Initializable {
                 imageView.setFitHeight(200);
                 imageView.setPreserveRatio(true);
                 watchNowBtn.setMaxWidth(135);
-                //watchNowBtn.setOnAction(e -> playMovieBase(e,mov));
+                watchNowBtn.setOnAction(e -> {
+                    System.out.println("clicking ");
+                });
                 label.getStyleClass().add("watch-label-base");
                 label.setPadding(new Insets(10, 0, 10, 0));
                 watchNowBtn.getStyleClass().add("success");

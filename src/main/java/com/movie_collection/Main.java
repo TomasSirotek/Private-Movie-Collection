@@ -18,7 +18,7 @@ public class Main extends Application {
         IRootController controller = factory.loadFxmlFile(ViewType.MAIN);
 
         Scene scene = new Scene(controller.getView());
-        stage.setTitle("Hello!");
+        stage.setTitle("Private Movie Collection | The Binary Aces");
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
