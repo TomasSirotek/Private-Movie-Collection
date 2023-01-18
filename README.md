@@ -252,6 +252,7 @@ TTT :black_nib:
 
 Tomas Simko - [@twitter](https://twitter.com/TomasSimko_) - simko.t@email.cz - [@linkedIn](https://www.linkedin.com/in/tomas-simko/)  
 Patrik Valentíny [@linkedIn](https://www.linkedin.com/in/patrikvalentiny/)
+Nicola Martinez Clemente [@linkedIn](https://www.linkedin.com/in/nicola-martinez-clemente-96b035176/)
 
 Project Link: [https://github.com/TomassSimko/Private-Movie-Collection]()
 
