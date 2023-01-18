@@ -264,17 +264,18 @@ public abstract class RootController implements IRootController {
 
 Distributed under the MIT License. See LICENSE for more information.
 
-Team: isEmpty() {true} <br>
-2022 SDE & SCO cs project posted here on GitHub. <br>
+Team: The Binary Aces <br>
+2023 SDE & SCO cs project posted here on GitHub. <br>
 Hope you will like it! <br>
 Thank you for your attention!
 TTT :black_nib:
 
 ## Contact
 
-Tomas Simko - [@twitter](https://twitter.com/TomasSimko_) -
-simko.t@email.cz - [@linkedIn](https://www.linkedin.com/in/tomas-simko/)  
+Tomas Simko - [@twitter](https://twitter.com/TomasSimko_) -simko.t@email.cz - [@linkedIn](https://www.linkedin.com/in/tomas-simko/)  
+
 Patrik Valentíny [@linkedIn](https://www.linkedin.com/in/patrikvalentiny/)
+
 Nicola Martinez Clemente [@linkedIn](https://www.linkedin.com/in/nicola-martinez-clemente-96b035176/)
 
 Project Link: [https://github.com/TomassSimko/Private-Movie-Collection]()
