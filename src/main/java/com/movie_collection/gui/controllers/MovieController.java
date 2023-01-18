@@ -59,14 +59,14 @@ public class MovieController extends RootController implements Initializable {
     @FXML
     private TableColumn<Movie, String> colMovieTitle, colMovieCategory;
     @FXML
-    private TableColumn<Movie, String> colMovieRating;
+    private TableColumn<Movie, Double> colMovieRating;
 
     @FXML
     private TableColumn<Movie,String> colLastViewed;
 
     private final IMovieModel movieModel;
 
-    private static String txtContent = ""; // what is this ??
+    private static String playerPath;
 
     private final IControllerFactory controllerFactory;
 
@@ -82,6 +82,12 @@ public class MovieController extends RootController implements Initializable {
         this.movieModel = movieService;
         this.controllerFactory = controllerFactory;
         this.eventBus = eventBus;
+
+        try {
+            playerPath = Files.readString(Path.of("mediaPlayerPath.txt"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -112,8 +118,7 @@ public class MovieController extends RootController implements Initializable {
      * @param selectedMovie
      */
     private void fillDescriptionWithAPIData(MovieDTO movieDTO, Movie selectedMovie) {
-
-        if(movieDTO.Poster != null) {
+        if(movieDTO.Poster != null){
             movieImage.setImage(new Image(movieDTO.Poster));
         }
         else{
@@ -146,11 +151,12 @@ public class MovieController extends RootController implements Initializable {
         });
         // ->
         colMovieTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName())); // set movie title
-        colMovieRating.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getRating())));
         colLastViewed.setCellValueFactory(cellData -> {
             Date date = cellData.getValue().getLastview();
             return new SimpleStringProperty(date == null ? "" : date.toString());
         }); // set movie title
+        colMovieRating.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getRating()));
+
         // sets value factory for movie category column data are collected by name and joined by "," -> action,horror
         colMovieCategory.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategories().stream()
                 .map(Category::getName)
@@ -190,19 +196,20 @@ public class MovieController extends RootController implements Initializable {
     }
 
     private void playVideoDesktop(int id, String path) throws IOException, InterruptedException {
-        Runtime runTime = Runtime.getRuntime();
-        if (!txtContent.isEmpty()) {
-            String s[] = new String[]{txtContent, path};
-               int result = movieModel.updateTimeStamp(id);
-               if(result <= 0){
-                   AlertHelper.showDefaultAlert("Error: Could not update time stamp for movie as last viewed. ", Alert.AlertType.ERROR);
-               }
-            runTime.exec(s);
+        if (!playerPath.isEmpty()) {
+            if (playerPath.toLowerCase().contains("vlc")) {
+                String[] s = new String[]{playerPath, "file:///" + path};
+                int result = movieModel.updateTimeStamp(id);
+                if (result <= 0) {
+                    AlertHelper.showDefaultAlert("Error: Could not update time stamp for movie as last viewed. ", Alert.AlertType.ERROR);
+                }
+                Runtime.getRuntime().exec(s);
+            } else {
+                showMediaPlayerUnselected();
+            }
         } else {
-            showMediaPlayerUnselected();
-
+            AlertHelper.showDefaultAlert("Please use VLC media player", Alert.AlertType.ERROR);
         }
-        trySetTableWithMovies();
     }
 
 
@@ -317,7 +324,7 @@ public class MovieController extends RootController implements Initializable {
     protected void setPath(Path fileName, String mediaPlayerPath) {
         try {
             Files.writeString(fileName, mediaPlayerPath);
-            txtContent = Files.readString(fileName);
+            playerPath = Files.readString(fileName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

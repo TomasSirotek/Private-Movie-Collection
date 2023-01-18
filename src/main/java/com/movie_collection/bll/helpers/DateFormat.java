@@ -1,10 +1,10 @@
 package com.movie_collection.bll.helpers;
 
 public enum DateFormat {
-    DAY_MONTH_YEAR{
+    YEAR_MONTH_DAY{
         @Override
         public String getDateFormat() {
-            return "dd/MM/yyyy";
+            return "YYYY-MM-DD";
         }
     };
 

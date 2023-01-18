@@ -54,8 +54,7 @@ public class MediaPlayerSelectionController extends RootController implements In
 
     private void selectFileChooser(ActionEvent actionEvent) {
         var chooseFile = new FileChooser();
-
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("App files (*.exe,*.all)", "*.exe","*.all");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("App files (*.exe,*.app)", "*.exe", "*.app");
         chooseFile.getExtensionFilters().add(extFilter);
 
         File selectedExecutableFile = chooseFile.showOpenDialog(new Stage());
