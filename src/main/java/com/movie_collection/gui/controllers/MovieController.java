@@ -27,8 +27,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -61,8 +59,6 @@ public class MovieController extends RootController implements Initializable {
 
     private final IMovieModel movieModel;
 
-    private static String playerPath;
-
     private final IControllerFactory controllerFactory;
 
     private boolean isCategoryView = false;
@@ -77,12 +73,6 @@ public class MovieController extends RootController implements Initializable {
         this.movieModel = movieService;
         this.controllerFactory = controllerFactory;
         this.eventBus = eventBus;
-
-        try {
-            playerPath = Files.readString(Path.of("mediaPlayerPath.txt"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -181,23 +171,6 @@ public class MovieController extends RootController implements Initializable {
         trySetTableWithMovies();
     }
 
-    private void playVideoDesktop(int id, String path) throws IOException, InterruptedException {
-        if (!playerPath.isEmpty()) {
-            if (playerPath.toLowerCase().contains("vlc")) {
-                String[] s = new String[]{playerPath, "file:///" + path};
-                int result = movieModel.updateTimeStamp(id);
-                if (result <= 0) {
-                    AlertHelper.showDefaultAlert("Error: Could not update time stamp for movie as last viewed. ", Alert.AlertType.ERROR);
-                }
-                Runtime.getRuntime().exec(s);
-            } else {
-                showMediaPlayerUnselected();
-            }
-        } else {
-            AlertHelper.showDefaultAlert("Please use VLC media player", Alert.AlertType.ERROR);
-        }
-    }
-
 
 
     protected void setIsCategoryView(int categoryId) {
@@ -276,7 +249,9 @@ public class MovieController extends RootController implements Initializable {
 
     private void actionPlay(TableColumn.CellDataFeatures<Movie, Button> col) {
         try {
-            playVideoDesktop(col.getValue().getId(), col.getValue().getPath());
+            if (!movieModel.playVideoDesktop(col.getValue().getId(), col.getValue().getPath())){
+                showMediaPlayerUnselected();
+            }
         } catch (IOException | InterruptedException ex) {
             throw new RuntimeException(ex);
         }
@@ -304,14 +279,6 @@ public class MovieController extends RootController implements Initializable {
         return movieModel.deleteMovieById(id);
     }
 
-    protected void setPath(Path fileName, String mediaPlayerPath) {
-        try {
-            Files.writeString(fileName, mediaPlayerPath);
-            playerPath = Files.readString(fileName);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
     /**
      * Registering events
      */

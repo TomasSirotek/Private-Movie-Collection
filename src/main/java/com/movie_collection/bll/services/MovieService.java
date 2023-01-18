@@ -13,6 +13,9 @@ import com.movie_collection.dal.interfaces.IMovieDAO;
 import com.movie_collection.gui.DTO.MovieDTO;
 import javafx.scene.control.Alert;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -28,6 +31,8 @@ public class MovieService implements IMovieService {
     private final IFilter filterUtil;
 
     private final IAPIService apiService;
+    private static String playerPath;
+    private final static String MEDIA_PLAYER_PATH = "mediaPlayerPath.txt";
 
     @Inject
     public MovieService(IMovieDAO movieDAO, ICategoryService categoryService, IAPIService apiService, IFilter filterUtil) {
@@ -141,5 +146,30 @@ public class MovieService implements IMovieService {
                         AlertHelper.showDefaultAlert("Error: Failed to add category to movie." + category.getId(), Alert.AlertType.ERROR);
                     }
                 });
+    }
+
+    public boolean playVideoDesktop(int id, String path) throws IOException {
+        setPath();
+        if (playerPath == null){
+            return false;
+        }
+        if (playerPath.toLowerCase().contains("vlc")) {
+            String[] s = new String[]{playerPath, "file:///" + path};
+            int result = updateTimeStamp(id);
+            if (result <= 0) {
+                AlertHelper.showDefaultAlert("Error: Could not update time stamp for movie as last viewed. ", Alert.AlertType.ERROR);
+            }
+            Runtime.getRuntime().exec(s);
+        } else {
+            AlertHelper.showDefaultAlert("Please use VLC media player", Alert.AlertType.ERROR);
+        }
+        return true;
+    }
+    private void setPath() {
+        try {
+            playerPath = Files.readString(Path.of(MEDIA_PLAYER_PATH));
+        } catch (IOException e) {
+//            throw new RuntimeException(e);
+        }
     }
 }

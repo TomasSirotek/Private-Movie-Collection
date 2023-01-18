@@ -4,6 +4,7 @@ import com.movie_collection.be.Movie;
 import com.movie_collection.bll.helpers.CompareSigns;
 import com.movie_collection.gui.DTO.MovieDTO;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -78,4 +79,5 @@ public interface IMovieService {
      * @return
      */
     MovieDTO getMovieByNameAPI(String title);
+    boolean playVideoDesktop(int id, String path) throws IOException;
 }

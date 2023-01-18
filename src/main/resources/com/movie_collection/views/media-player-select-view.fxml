@@ -54,7 +54,7 @@
       </HBox>
       <HBox alignment="CENTER_LEFT" prefHeight="63.0" prefWidth="257.0">
          <children>
-            <Button fx:id="confirm_action" mnemonicParsing="false" text="Save">
+            <Button fx:id="confirmAction" mnemonicParsing="false" text="Save">
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin>
