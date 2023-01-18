@@ -148,6 +148,7 @@ public class MovieService implements IMovieService {
                 });
     }
 
+    @Override
     public boolean playVideoDesktop(int id, String path) throws IOException {
         if (!setPath() || playerPath == null){
             return false;
