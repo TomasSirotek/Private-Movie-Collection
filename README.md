@@ -84,7 +84,7 @@ A movie aficionado is buying and collecting movies in the mp4 format on an exter
   - [x] Config file 
   - [x] SQL Server Driver
 - [x] Movies
-  - [x] Full CRUD
+  - [x] CRUD
     - [x] Ability to play movie
     - [x] Get all movies
     - [x] Get all movies in category
@@ -95,7 +95,7 @@ A movie aficionado is buying and collecting movies in the mp4 format on an exter
   - [x] Dynamic update in the interface
   - [x] Custom validation
 - [x] Categories
-  - [x] CRUD
+  - [x] CRUD impl
     - [x] Create Category
     - [x] Remove Category
   - [x] Updating categories for movie
@@ -104,27 +104,28 @@ A movie aficionado is buying and collecting movies in the mp4 format on an exter
   - [x] Get all the movies when category assigned 
   - [x] Custom validation
 - [x] API Contract
-  - [x] Open source API -> put url
-  - [x] Library Guava
+  - [x] Open source RESTful web service
+  - [x] Library Guava for smooth API calls 
   - [x] Implemented feature to fetch possible movie title from open source api
 - [x] Dependency injection
   - [x] Implemented DI with Guice in order to write efficient/reliable code
-  - [x] Implemented -> this libr
 - [x] Dynamic sorting/filtering
   - [x] Table view with sortable columns
   - [x] Linear search algorithm 
     - [x] Search movie by title,year,category 
-    - [x] Additional search for rating
+    - [x] Additional search feature for specifying rating
   - [x] Error handling
 - [x] Playable video formats
-  - [x] Works on Windows/Mac
+  - [x] Works on Windows
+  - [x] Current issues with development environment and permission for mac users 
+    - [x] Implementation works as intended however only on window atm but the impl works and would work 
   - [x] Feature to choose your own preferred movie player
 - [x] Initial warning feature requirement
   - [x] User will get the informational option to delete movie that are less than 6 rating and have not been seen for 2 years at the start
 
 
 ## Application design
-Our application was re-design by us in Figma
+Our application was design by us in Figma
 
 ![Screenshot 2022-12-14 at 10 23 40](https://user-images.githubusercontent.com/72190589/212730849-76b34eb5-e006-4ce4-ad65-974c64932bfb.png)
 
@@ -143,9 +144,10 @@ MSSQL Database diagram
 
 - [x] Singleton pattern
 - [x] Dependency injection pattern
-- [x] Abstract Factory pattern
+- [x] Factory pattern
 - [x] Publish-subscribe-style communication
-- [x] Abstraction
+- [x] Data-access-object
+- [x] Service pattern
 
 ### Data Access Object
 
@@ -179,12 +181,14 @@ public MovieService(IMovieDAO movieDAO) {
 }
 ```
 
-### GUAVA API
+### GUAVA /w API
 
-Open Source API -> 
-- API contract calls to get movie by title that used created 
-- Error handling implementation
+RESTful web service to obtain movie information
+- http://www.omdbapi.com 
+- API contract call to get movie by title 
+- Environmental variables / sensitive credentials handeling
 - Custom logger stored in logs
+
 
 ``` java
 public interface IMovie {
@@ -194,7 +198,7 @@ public interface IMovie {
 }
 ```
 
-### FXML Factory Controller with Guice di injection
+### FXML Factory Controller with Guice DI injection
 
 ``` java
 @Override
@@ -228,17 +232,8 @@ public abstract class RootController implements IRootController {
     public void setView(Parent node){
        this.root = Objects.requireNonNull(node, "view must not be null.");
     }
-
-    @Override
-    public Stage getStage(){
-        return (Stage) root.getScene().getWindow();
-    }
 }
 ```
-
-
-
-
 
 ## Application interface
 
