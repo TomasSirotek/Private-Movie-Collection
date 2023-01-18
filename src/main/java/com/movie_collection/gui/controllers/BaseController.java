@@ -105,7 +105,7 @@ public class BaseController extends RootController implements Initializable {
                 imageView.setPreserveRatio(true);
                 watchNowBtn.setMaxWidth(135);
                 watchNowBtn.setOnAction(e -> {
-                    System.out.println("clicking ");
+                    setOnPlay(e,mov);
                 });
                 label.getStyleClass().add("watch-label-base");
                 label.setPadding(new Insets(10, 0, 10, 0));
@@ -118,6 +118,16 @@ public class BaseController extends RootController implements Initializable {
                 movieCounter++;
             }
         }
+    }
+
+
+    private void setOnPlay(ActionEvent e,Movie mov) {
+        try {
+            movieModel.playVideoDesktop(mov.getId(),mov.getPath());
+        } catch (IOException | InterruptedException ex) {
+            throw new RuntimeException(ex);
+        }
+        e.consume();
     }
 
 
