@@ -83,13 +83,7 @@ public class MovieService implements IMovieService {
 
     @Override
     public List<Movie> getWatchMovies() {
-        List<Movie> watchedMovies = movieDAO.getWatchedMovies();
-        for (Movie m : watchedMovies
-             ) {
-            MovieDTO movieDTO = apiService.getMovieByTitle(m.getName());
-            m.setPath(movieDTO.Poster); // this is just quick fix in rush it does not make sense tho
-        }
-        return watchedMovies;
+        return movieDAO.getWatchedMovies();
     }
 
     public int updateMovie(Movie movie) {

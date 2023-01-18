@@ -97,6 +97,7 @@ public class BaseController extends RootController implements Initializable {
         for (var vBox : watchAgainGrid.getChildren()) {
             if(vBox instanceof VBox){
                 Movie mov = watchedMovies.get(movieCounter);
+                MovieDTO movieDTO = movieModel.findMovieByNameAPI(mov.getName());
                 ImageView imageView = new ImageView();
                 Label label = new Label();
                 Button watchNowBtn = new Button("Watch now");
@@ -108,8 +109,8 @@ public class BaseController extends RootController implements Initializable {
                 label.getStyleClass().add("watch-label-base");
                 label.setPadding(new Insets(10, 0, 10, 0));
                 watchNowBtn.getStyleClass().add("success");
-                if(mov.getPath() != null){
-                    imageView.setImage(new Image(mov.getPath()));
+                if(movieDTO.Poster != null){
+                    imageView.setImage(new Image(movieDTO.Poster));
                 }
                 label.setText(mov.getName());
                 ((VBox) vBox).getChildren().addAll(imageView, label, watchNowBtn);
